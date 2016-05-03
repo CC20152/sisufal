@@ -4,12 +4,10 @@
  * and open the template in the editor.
  */
 package cc20152.sisufal.controllers;
-import cc20152.sisufal.models.*;
+
 import cc20152.sisufal.dao.impl.DisciplinaDAO;
-import cc20152.sisufal.db.Conexao;
+import cc20152.sisufal.models.Disciplina;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,6 +17,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
+
 
 /**
  *

@@ -19,11 +19,13 @@ public class Sisufal extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("fxml/DisciplinaFXML.fxml"));
+        //System.out.println(""+getClass().getResource(""));
+        Parent root = FXMLLoader.load(getClass().getResource("fxml/TelaPrincipal.fxml"));
         
         Scene scene = new Scene(root);
-        stage.setTitle("Cadastro de disciplina");
+        stage.setTitle("Principal");
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 
