@@ -27,7 +27,7 @@ public class PrincipalController implements Initializable {
     private void menuUsuario (ActionEvent event) throws IOException{
         String path = getClass().getResource("").toString();
         path = path.replace("controllers/","");
-        URL url =  new URL(path+"fxml/ListaUsuario.fxml");
+        URL url =  new URL(path+"fxml/ListaUsuarioFXML.fxml");
         //System.out.println(url);
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);

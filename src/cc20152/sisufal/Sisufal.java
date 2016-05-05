@@ -20,7 +20,7 @@ public class Sisufal extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         //System.out.println(""+getClass().getResource(""));
-        Parent root = FXMLLoader.load(getClass().getResource("fxml/TelaPrincipal.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("fxml/TelaPrincipalFXML.fxml"));
         
         Scene scene = new Scene(root);
         stage.setTitle("Principal");
