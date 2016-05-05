@@ -23,7 +23,7 @@ import javafx.stage.Stage;
  *
  * @author Dayvson
  */
-public class CadastrarDisciplinaController implements Initializable {
+public class DisciplinaController implements Initializable {
     
     @FXML
     private Label label;
@@ -43,7 +43,7 @@ public class CadastrarDisciplinaController implements Initializable {
         String result = disciplinaDAO.save(disciplina);
         System.out.println(result);
         if(result.equals("OK")){
-//            Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+            //Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
 //            alerta.setTitle("Sucesso");
 //            alerta.setHeaderText("Disciplina cadastrada com sucesso!");
 //            alerta.show();

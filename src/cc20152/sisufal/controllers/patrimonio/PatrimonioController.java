@@ -14,7 +14,7 @@ import javafx.fxml.Initializable;
  *
  * @author AtaideAl
  */
-public class ListarPatrimonioController implements Initializable {
+public class PatrimonioController implements Initializable {
     
     
     @Override

@@ -20,7 +20,7 @@ import javafx.stage.Stage;
  *
  * @author AtaideAl
  */
-public class ListarUsuarioController implements Initializable{  
+public class UsuarioController implements Initializable{  
     String pacote = "controllers/sistema/"; //Pacote do controller
     String fxml = "fxml/cadastro/CadastroUsuarioFXML.fxml"; //Caminho do FXML
     
@@ -37,6 +37,12 @@ public class ListarUsuarioController implements Initializable{
         stage.setTitle("Cadastro Usuário");
         stage.setScene(scene);
         stage.show();
+    }
+    
+    
+    @FXML
+    private void cancelarCadastro (ActionEvent event){
+        
     }
     
     @Override

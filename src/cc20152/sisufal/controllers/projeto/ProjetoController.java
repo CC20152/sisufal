@@ -14,7 +14,7 @@ import javafx.fxml.Initializable;
  *
  * @author AtaideAl
  */
-public class ListarProjetoController implements Initializable {
+public class ProjetoController implements Initializable {
     
     
     @Override
