@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cc20152.sisufal.controllers;
+package cc20152.sisufal.controllers.monitoria;
 
 import cc20152.sisufal.dao.impl.DisciplinaDAO;
 import cc20152.sisufal.models.Disciplina;
@@ -23,7 +23,7 @@ import javafx.stage.Stage;
  *
  * @author Dayvson
  */
-public class DisciplinaController implements Initializable {
+public class ListarDisciplinaController implements Initializable {
     
     @FXML
     private Label label;

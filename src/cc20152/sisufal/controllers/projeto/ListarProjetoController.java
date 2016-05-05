@@ -3,19 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cc20152.sisufal.controllers;
+package cc20152.sisufal.controllers.projeto;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 
+
 /**
  *
- * @author Predator
+ * @author AtaideAl
  */
-public class UsuarioController implements Initializable{  
+public class ListarProjetoController implements Initializable {
+    
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+       
     }    
+    
 }

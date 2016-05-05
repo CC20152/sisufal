@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cc20152.sisufal.controllers;
+package cc20152.sisufal.controllers.sistema;
 
 import java.io.IOException;
 import java.net.URL;
@@ -19,20 +19,22 @@ import javafx.stage.Stage;
 /**
  *
  * @author AtaideAl
- * 
  */
-public class PrincipalController implements Initializable {
+public class ListarUsuarioController implements Initializable{  
+    String pacote = "controllers/sistema/"; //Pacote do controller
+    String fxml = "fxml/cadastro/CadastroUsuarioFXML.fxml"; //Caminho do FXML
     
     @FXML
-    private void menuUsuario (ActionEvent event) throws IOException{
+    private void novoUsuario (ActionEvent event) throws IOException{
+        System.out.println("---------");
         String path = getClass().getResource("").toString();
-        path = path.replace("controllers/","");
-        URL url =  new URL(path+"fxml/ListaUsuarioFXML.fxml");
+        path = path.replace(pacote,"");
+        URL url =  new URL(path+fxml);
         //System.out.println(url);
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);
         Stage stage = new Stage();
-        stage.setTitle("Usuarios");
+        stage.setTitle("Cadastro Usuário");
         stage.setScene(scene);
         stage.show();
     }
@@ -41,5 +43,4 @@ public class PrincipalController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
     }    
-    
 }
