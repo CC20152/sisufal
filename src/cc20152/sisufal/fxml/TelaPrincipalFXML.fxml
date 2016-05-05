@@ -26,8 +26,8 @@
         </Menu>
         <Menu mnemonicParsing="false" text="Corpo Institucional">
           <items>
-            <MenuItem mnemonicParsing="false" text="Discentes" />
-            <MenuItem mnemonicParsing="false" text="Servidores" />
+            <MenuItem mnemonicParsing="false" onAction="#menuDiscente" text="Discentes" />
+            <MenuItem mnemonicParsing="false" onAction="#menuServidor" text="Servidores" />
             <MenuItem mnemonicParsing="false" text="Cursos" />
           </items>
         </Menu>
@@ -36,7 +36,7 @@
                 <MenuItem mnemonicParsing="false" text="Monitorias" />
                   <MenuItem mnemonicParsing="false" text="Disciplinas" />
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="TCCs" />
+                  <MenuItem mnemonicParsing="false" onAction="#menuTCC" text="TCCs" />
               </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Patrimônio">

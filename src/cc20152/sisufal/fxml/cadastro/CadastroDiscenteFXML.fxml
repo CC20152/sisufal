@@ -8,10 +8,10 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cc20152.sisufal.controllers.corpoInstitucional.DiscenteController">
    <children>
       <Button layoutX="159.0" layoutY="356.0" mnemonicParsing="false" text="Salvar" />
-      <Button layoutX="224.0" layoutY="356.0" mnemonicParsing="false" text="Cancelar" />
+      <Button fx:id="btnCancelarCadastro" layoutX="224.0" layoutY="356.0" mnemonicParsing="false" onAction="#cancelarCadastro" text="Cancelar" />
       <TextField layoutX="16.0" layoutY="104.0" prefHeight="25.0" prefWidth="270.0" promptText="Nome" />
       <Label layoutX="21.0" layoutY="87.0" text="Nome:" />
       <Label layoutX="21.0" layoutY="132.0" text="Matricula:" />
@@ -22,7 +22,7 @@
       <TextField layoutX="16.0" layoutY="278.0" prefWidth="270.0" />
       <ImageView fitHeight="76.0" fitWidth="307.0" layoutX="-5.0" layoutY="-1.0" pickOnBounds="true">
          <image>
-            <Image url="@imgs/IC.png" />
+            <Image url="@../imgs/IC.png" />
          </image>
       </ImageView>
       <Label layoutX="21.0" layoutY="216.0" text="Periodo:" />

@@ -24,18 +24,63 @@ import javafx.stage.Stage;
 public class TelaPrincipalController implements Initializable {
     
     String pacote = "controllers/"; //Pacote do controller
-    String fxml = "fxml/lista/ListaUsuarioFXML.fxml"; //Caminho do FXML
+    String fxmlListaUsuario = "fxml/lista/ListaUsuarioFXML.fxml"; 
+    String fxmlListaTCC = "fxml/lista/ListaTCCFXML.fxml"; 
+    String fxmlListaDiscente = "fxml/lista/ListaDiscenteFXML.fxml"; 
+    String fxmlListaServidor = "fxml/lista/ListaServidorFXML.fxml"; 
     
     @FXML
     private void menuUsuario (ActionEvent event) throws IOException{
         String path = getClass().getResource("").toString();
         path = path.replace(pacote,"");
-        URL url =  new URL(path+fxml);
+        URL url =  new URL(path+fxmlListaUsuario);
         //System.out.println(url);
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setTitle("Usuarios");
+        stage.setScene(scene);
+        stage.show();
+    }
+    
+    @FXML
+    private void menuTCC (ActionEvent event) throws IOException{
+        String path = getClass().getResource("").toString();
+        path = path.replace(pacote,"");
+        URL url =  new URL(path+fxmlListaTCC);
+        //System.out.println(url);
+        Parent root = FXMLLoader.load(url);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setTitle("TCCs");
+        stage.setScene(scene);
+        stage.show();
+    }
+    
+    @FXML
+    private void menuDiscente(ActionEvent event) throws IOException{
+        String path = getClass().getResource("").toString();
+        path = path.replace(pacote,"");
+        URL url =  new URL(path+fxmlListaDiscente);
+        //System.out.println(url);
+        Parent root = FXMLLoader.load(url);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setTitle("Discentes");
+        stage.setScene(scene);
+        stage.show();
+    }
+    
+    @FXML
+    private void menuServidor(ActionEvent event) throws IOException{
+        String path = getClass().getResource("").toString();
+        path = path.replace(pacote,"");
+        URL url =  new URL(path+fxmlListaServidor);
+        //System.out.println(url);
+        Parent root = FXMLLoader.load(url);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setTitle("Servidores");
         stage.setScene(scene);
         stage.show();
     }
