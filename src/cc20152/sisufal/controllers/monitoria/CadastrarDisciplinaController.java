@@ -23,7 +23,7 @@ import javafx.stage.Stage;
  *
  * @author Dayvson
  */
-public class ListarDisciplinaController implements Initializable {
+public class CadastrarDisciplinaController implements Initializable {
     
     @FXML
     private Label label;

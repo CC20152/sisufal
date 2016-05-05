@@ -26,7 +26,7 @@ public class ListarUsuarioController implements Initializable{
     
     @FXML
     private void novoUsuario (ActionEvent event) throws IOException{
-        System.out.println("---------");
+        //System.out.println("---------");
         String path = getClass().getResource("").toString();
         path = path.replace(pacote,"");
         URL url =  new URL(path+fxml);
