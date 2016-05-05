@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 //import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -43,7 +44,11 @@ public class DisciplinaController implements Initializable {
         String result = disciplinaDAO.save(disciplina);
         System.out.println(result);
         if(result.equals("OK")){
-            //Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+            Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+            alerta.setTitle("Sucesso");
+            alerta.setHeaderText("Disciplina cadastrada com sucesso!");
+            alerta.show();
+           //Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
 //            alerta.setTitle("Sucesso");
 //            alerta.setHeaderText("Disciplina cadastrada com sucesso!");
 //            alerta.show();
