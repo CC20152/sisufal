@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fitHeight="108.0" fitWidth="700.0" layoutY="-2.0" pickOnBounds="true">
+         <image>
+            <Image url="@imgs/IC.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="35.0" layoutY="146.0" prefHeight="15.0" prefWidth="46.0" text="Titulo:" />
+      <Label layoutX="35.0" layoutY="205.0" text="Data de Inicio:" />
+      <Label layoutX="300.0" layoutY="205.0" text="Data de Fim:" />
+      <Label layoutX="501.0" layoutY="146.0" text="Tipo:" />
+      <TextField layoutX="35.0" layoutY="162.0" prefHeight="25.0" prefWidth="414.0" promptText="Titulo" />
+      <DatePicker layoutX="35.0" layoutY="220.0" prefHeight="25.0" prefWidth="225.0" promptText="Data de Inicio" />
+      <DatePicker layoutX="300.0" layoutY="220.0" prefHeight="25.0" prefWidth="225.0" promptText="Data de Fim" />
+      <TextField layoutX="499.0" layoutY="162.0" prefHeight="25.0" prefWidth="160.0" promptText="Tipo" />
+      <Label layoutX="35.0" layoutY="270.0" text="Coordenador:" />
+      <ComboBox layoutX="35.0" layoutY="285.0" prefHeight="25.0" prefWidth="225.0" promptText="Coordenador" />
+      <ComboBox layoutX="300.0" layoutY="285.0" prefHeight="25.0" prefWidth="225.0" promptText="Instituiçao Financiadora" />
+      <Label layoutX="300.0" layoutY="270.0" text="Instituiçao Financiadora:" />
+      <Button layoutX="35.0" layoutY="342.0" mnemonicParsing="false" text="Criar Grupo" />
+      <Button layoutX="150.0" layoutY="342.0" mnemonicParsing="false" text="Criar Bolsa" />
+      <Button layoutX="602.0" layoutY="411.0" mnemonicParsing="false" text="Salvar" />
+      <Button layoutX="516.0" layoutY="411.0" mnemonicParsing="false" text="Cancelar" />
+   </children>
+</AnchorPane>
