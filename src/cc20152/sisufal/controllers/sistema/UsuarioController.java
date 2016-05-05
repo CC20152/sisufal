@@ -14,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 /**
@@ -23,6 +24,10 @@ import javafx.stage.Stage;
 public class UsuarioController implements Initializable{  
     String pacote = "controllers/sistema/"; //Pacote do controller
     String fxml = "fxml/cadastro/CadastroUsuarioFXML.fxml"; //Caminho do FXML
+    @FXML
+        private Button btnCancelarCadastro;
+    @FXML
+        private Button btnVoltarLista;
     
     @FXML
     private void novoUsuario (ActionEvent event) throws IOException{
@@ -42,8 +47,16 @@ public class UsuarioController implements Initializable{
     
     @FXML
     private void cancelarCadastro (ActionEvent event){
-        
+        Stage stage = (Stage) btnCancelarCadastro.getScene().getWindow();
+        stage.close();
     }
+    
+    @FXML
+    private void fecharLista (ActionEvent event){
+        Stage stage = (Stage) btnVoltarLista.getScene().getWindow();
+        stage.close();
+    }
+    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
