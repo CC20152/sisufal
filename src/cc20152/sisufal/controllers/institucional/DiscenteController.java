@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cc20152.sisufal.controllers.corpoInstitucional;
+package cc20152.sisufal.controllers.institucional;
 
 import java.io.IOException;
 import java.net.URL;

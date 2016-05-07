@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cc20152.sisufal.controllers.monitoria;
+package cc20152.sisufal.controllers.ensino.monitoria;
 
 import cc20152.sisufal.dao.impl.DisciplinaDAO;
 import cc20152.sisufal.models.Disciplina;

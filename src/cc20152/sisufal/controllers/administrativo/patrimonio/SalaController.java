@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cc20152.sisufal.controllers.projeto;
+package cc20152.sisufal.controllers.administrativo.patrimonio;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -14,7 +14,7 @@ import javafx.fxml.Initializable;
  *
  * @author AtaideAl
  */
-public class ProjetoController implements Initializable {
+public class SalaController implements Initializable {
     
     
     @Override

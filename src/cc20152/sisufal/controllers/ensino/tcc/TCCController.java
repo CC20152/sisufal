@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cc20152.sisufal.controllers.corpoInstitucional;
+package cc20152.sisufal.controllers.ensino.tcc;
 
 import java.io.IOException;
 import java.net.URL;
@@ -14,7 +14,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart.Data;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 
@@ -22,29 +24,41 @@ import javafx.stage.Stage;
  *
  * @author AtaideAl
  */
-public class ServidorController implements Initializable {
-    String pacote = "controllers/corpoInstitucional/"; //Pacote do controller
-    String fxml = "fxml/cadastro/CadastroServidorFXML.fxml"; //Caminho do FXML
+public class TCCController implements Initializable {
+    String pacote = "controllers/ensino/tcc/"; //Pacote do controller
+    String fxmlCadastro = "fxml/cadastro/CadastroTCCFXML.fxml"; 
+    
     @FXML
         private Button btnCancelarCadastro;
     @FXML
         private Button btnVoltarLista;
+    @FXML
+        private TextField txtTitulo;
+    @FXML
+        private Data dataInicio;
+    @FXML
+        private Data dataFim;
+    
     
     @FXML
-    private void novoServidor (ActionEvent event) throws IOException{
+    private void novoTCC (ActionEvent event) throws IOException{
         //System.out.println("---------");
         String path = getClass().getResource("").toString();
         path = path.replace(pacote,"");
-        URL url =  new URL(path+fxml);
+        URL url =  new URL(path+fxmlCadastro);
         //System.out.println(url);
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);
         Stage stage = new Stage();
-        stage.setTitle("Cadastro Servidor");
+        stage.setTitle("Cadastro TCC");
         stage.setScene(scene);
         stage.show();
     }
     
+    @FXML
+    private void cadastrarTCC (ActionEvent event){
+        
+    }
     
     @FXML
     private void cancelarCadastro (ActionEvent event){
@@ -57,7 +71,6 @@ public class ServidorController implements Initializable {
         Stage stage = (Stage) btnVoltarLista.getScene().getWindow();
         stage.close();
     }
-    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
        

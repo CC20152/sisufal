@@ -7,12 +7,12 @@ public class Servidor {
 
 	private String siape;
 
-	private Curso cargo;
+	private String cargo;
 
-	private String periodoIngresso;
+	private String CPF;
 
-	private ClasseDocente classe;
-
+	private ClasseDocente classe = new ClasseDocente();
+        
         public int getId() {
             return id;
         }
@@ -37,20 +37,20 @@ public class Servidor {
             this.siape = siape;
         }
 
-        public Curso getCargo() {
+        public String getCargo() {
             return cargo;
         }
 
-        public void setCargo(Curso cargo) {
+        public void setCargo(String cargo) {
             this.cargo = cargo;
         }
 
-        public String getPeriodoIngresso() {
-            return periodoIngresso;
+        public String getCPF() {
+            return CPF;
         }
 
-        public void setPeriodoIngresso(String periodoIngresso) {
-            this.periodoIngresso = periodoIngresso;
+        public void setCPF(String CPF) {
+            this.CPF = CPF;
         }
 
         public ClasseDocente getClasse() {
@@ -59,6 +59,11 @@ public class Servidor {
 
         public void setClasse(ClasseDocente classe) {
             this.classe = classe;
+        }
+        
+        @Override
+        public String toString() {
+                return nome;
         }
         
 }
