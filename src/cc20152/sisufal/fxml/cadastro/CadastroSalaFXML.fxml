@@ -18,7 +18,7 @@
       <Button layoutX="527.0" layoutY="353.0" mnemonicParsing="false" text="Cancelar" />
       <ImageView fitHeight="106.0" fitWidth="614.0" pickOnBounds="true">
          <image>
-            <Image url="@imgs/IC.png" />
+            <Image url="@../imgs/IC.png" />
          </image>
       </ImageView>
    </children>
