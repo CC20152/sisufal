@@ -7,7 +7,6 @@ package cc20152.sisufal.controllers.ensino.monitoria;
 
 import cc20152.sisufal.dao.impl.CursoDAO;
 import cc20152.sisufal.dao.impl.DisciplinaDAO;
-import cc20152.sisufal.models.Curso;
 import cc20152.sisufal.models.Disciplina;
 import cc20152.sisufal.models.Servidor;
 import java.io.IOException;
@@ -15,7 +14,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.function.UnaryOperator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -27,17 +25,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import javafx.util.converter.IntegerStringConverter;
 
 
 /**
