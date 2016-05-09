@@ -66,7 +66,7 @@ public class DisciplinaController implements Initializable {
     
     @FXML
     private void btnSalvar(ActionEvent event) {
-        Disciplina disciplina = new Disciplina();
+        
         Alert aviso = new Alert(Alert.AlertType.ERROR);
         aviso.setTitle("Erro");
         
@@ -87,7 +87,7 @@ public class DisciplinaController implements Initializable {
             aviso.show();
             return ;
         }
-        
+        Disciplina disciplina = new Disciplina();
         disciplina.setNome(this.txtNome.getText());
         disciplina.setCargaHoraria(this.txtCargaHoraria.getText());
         disciplina.getCurso().setId(Integer.parseInt((this.cmbCurso.getValue().toString().split("-"))[0]));
