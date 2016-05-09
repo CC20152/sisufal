@@ -13,7 +13,38 @@ public class Disciplina {
     
     private Integer id;
     private String nome;
+    private Curso curso;
+    private String cargaHoraria;
+    private String turno;
 
+    public Disciplina(){
+        this.curso = new Curso();
+    }
+    
+    public Curso getCurso() {
+        return curso;
+    }
+
+    public void setCurso(Curso curso) {
+        this.curso = curso;
+    }
+
+    public String getCargaHoraria() {
+        return cargaHoraria;
+    }
+
+    public void setCargaHoraria(String cargaHoraria) {
+        this.cargaHoraria = cargaHoraria;
+    }
+
+    public String getTurno() {
+        return turno;
+    }
+
+    public void setTurno(String turno) {
+        this.turno = turno;
+    }
+    
     public Integer getId() {
         return id;
     }
@@ -29,5 +60,5 @@ public class Disciplina {
     public void setNome(String nome) {
         this.nome = nome;
     }
-    
+   
 }
