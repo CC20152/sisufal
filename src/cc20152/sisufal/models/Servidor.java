@@ -2,16 +2,15 @@ package cc20152.sisufal.models;
 public class Servidor {
 
 	private int id;
-
 	private String nome;
-
 	private String siape;
-
 	private String cargo;
-
 	private String CPF;
-
-	private ClasseDocente classe = new ClasseDocente();
+	private ClasseDocente classe;
+        
+        public Servidor(){
+            this.classe = new ClasseDocente();
+        }
         
         public int getId() {
             return id;

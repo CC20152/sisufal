@@ -23,11 +23,14 @@ import javafx.stage.Stage;
  */
 public class TelaPrincipalController implements Initializable {
     
-    String pacote = "controllers/"; //Pacote do controller
-    String fxmlListaUsuario = "fxml/lista/ListaUsuarioFXML.fxml"; 
-    String fxmlListaTCC = "fxml/lista/ListaTCCFXML.fxml"; 
-    String fxmlListaDiscente = "fxml/lista/ListaDiscenteFXML.fxml"; 
-    String fxmlListaServidor = "fxml/lista/ListaServidorFXML.fxml"; 
+    final String pacote = "controllers/"; //Pacote do controller
+    final String fxmlListaUsuario = "fxml/lista/ListaUsuarioFXML.fxml"; 
+    final String fxmlListaTCC = "fxml/lista/ListaTCCFXML.fxml"; 
+    final String fxmlListaDiscente = "fxml/lista/ListaDiscenteFXML.fxml"; 
+    final String fxmlListaServidor = "fxml/lista/ListaServidorFXML.fxml"; 
+    
+    final String listaMonitoriaFXML = "fxml/lista/ListaMonitoriaFXML.fxml"; 
+    final String listaDisciplinaFXML = "fxml/lista/ListaDisciplinaFXML.fxml"; 
     
     @FXML
     private void menuUsuario (ActionEvent event) throws IOException{
@@ -81,6 +84,32 @@ public class TelaPrincipalController implements Initializable {
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setTitle("Servidores");
+        stage.setScene(scene);
+        stage.show();
+    }
+    
+    @FXML
+    private void menuDisciplina(ActionEvent event) throws IOException{
+        String path = getClass().getResource("").toString();
+        path = path.replace(pacote,"");
+        URL url =  new URL(path + this.listaDisciplinaFXML);
+        Parent root = FXMLLoader.load(url);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setTitle("Disciplina");
+        stage.setScene(scene);
+        stage.show();
+    }
+    
+     @FXML
+    private void menuMonitoria(ActionEvent event) throws IOException{
+        String path = getClass().getResource("").toString();
+        path = path.replace(pacote,"");
+        URL url =  new URL(path + this.listaMonitoriaFXML);
+        Parent root = FXMLLoader.load(url);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setTitle("Monitoria");
         stage.setScene(scene);
         stage.show();
     }

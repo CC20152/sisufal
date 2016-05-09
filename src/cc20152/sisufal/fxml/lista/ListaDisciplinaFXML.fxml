@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="622.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cc20152.sisufal.controllers.ensino.monitoria.DisciplinaController">
+   <children>
+      <Button fx:id="btnVoltarLista" layoutX="50.0" layoutY="573.0" mnemonicParsing="false" onAction="#btnCancelar" text="Voltar" />
+      <Button fx:id="btnNovo" layoutX="50.0" layoutY="26.0" mnemonicParsing="false" onAction="#novaDisciplina" prefHeight="39.0" prefWidth="125.0" styleClass="classe" stylesheets="@../style.css" text="Nova Disciplina" textAlignment="CENTER" />
+      <TextField fx:id="txtNome" layoutX="98.0" layoutY="75.0" prefHeight="25.0" prefWidth="125.0" promptText="Nome" />
+      <Button fx:id="btnBuscar" layoutX="646.0" layoutY="75.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="105.0" text="Buscar" />
+      <TableView fx:id="tbDisciplina" layoutX="54.0" layoutY="131.0" prefHeight="386.0" prefWidth="697.0">
+        <columns>
+          <TableColumn prefWidth="220.0" text="Nome" />
+          <TableColumn prefWidth="156.0" text="Carga Horaria" />
+            <TableColumn prefWidth="121.0" text="Curso" />
+            <TableColumn prefWidth="137.0" text="Turno" />
+            <TableColumn minWidth="0.0" prefWidth="62.0" />
+        </columns>
+      </TableView>
+      <Label layoutX="50.0" layoutY="79.0" style="-fx-background-image: ../imgs/;" text="Nome:" />
+      <ComboBox fx:id="cmbTurno" layoutX="490.0" layoutY="75.0" prefWidth="150.0" />
+      <Label layoutX="447.0" layoutY="79.0" prefHeight="17.0" prefWidth="42.0" text="Turno:" />
+      <Label layoutX="246.0" layoutY="79.0" prefHeight="17.0" prefWidth="36.0" text="Curso:" />
+      <ComboBox fx:id="cmbCurso" layoutX="285.0" layoutY="75.0" prefWidth="150.0" />
+   </children>
+</AnchorPane>

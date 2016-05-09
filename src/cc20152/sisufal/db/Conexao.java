@@ -27,8 +27,7 @@ public class Conexao
         Class.forName("com.mysql.jdbc.Driver");  
        
         // Registrado o driver, vamos estabelecer uma conexão  
-        //conexao = DriverManager.getConnection("jdbc:postgresql://localhost:5432/bessaste_hosp","bessashosp","postgres"); 
-        conexao = DriverManager.getConnection("jdbc:mysql://localhost:3306/bd_sistemaic", "root", ""); 
+        conexao = DriverManager.getConnection("jdbc:mysql://localhost:3306/sisic", "root", "1234"); 
        
     }
 
