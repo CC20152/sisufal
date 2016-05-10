@@ -183,6 +183,7 @@ public class DisciplinaController implements Initializable {
         listaTurno.add("VESPERTINO");
         listaTurno.add("NOTURNO");
         
+        
         this.cmbCurso.getItems().addAll(new CursoDAO().listAll());
         this.cmbTurno.getItems().addAll(listaTurno);
         

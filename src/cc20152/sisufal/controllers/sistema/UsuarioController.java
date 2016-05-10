@@ -57,7 +57,8 @@ public class UsuarioController implements Initializable{
         stage.setTitle("Cadastro Usuário");
         stage.setScene(scene);
         stage.show();
-       
+        
+        
     }
     
     
@@ -69,8 +70,27 @@ public class UsuarioController implements Initializable{
     
     @FXML
     private void cadastroUsuario (ActionEvent event){
-        System.out.println("SALVOU");
-        ObservableList<Servidor> data = FXCollections.observableArrayList();
+        
+
+    }
+    
+    @FXML
+    private void fecharLista (ActionEvent event){
+        Stage stage = (Stage) btnVoltarLista.getScene().getWindow();
+        stage.close();
+    }
+    
+    
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        if(url.getPath().contains(this.fxml)){
+            listarComboServidores();
+        }
+
+    }
+
+    private void listarComboServidores() {
+        /*ObservableList<Servidor> data = FXCollections.observableArrayList();
         List<Servidor> listaServidores = new ArrayList<Servidor>();
         listaServidores = servidorDao.listAll();
         for(Servidor servidor: listaServidores){
@@ -99,19 +119,7 @@ public class UsuarioController implements Initializable{
             }
         });
         
-        cmbServidores.setItems(data);
-
-    }
-    
-    @FXML
-    private void fecharLista (ActionEvent event){
-        Stage stage = (Stage) btnVoltarLista.getScene().getWindow();
-        stage.close();
-    }
-    
-    
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        
+        cmbServidores.setItems(data);*/
+        cmbServidores.getItems().addAll(servidorDao.listAll());
     }
 }

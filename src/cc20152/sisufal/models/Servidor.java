@@ -62,7 +62,7 @@ public class Servidor {
         
         @Override
         public String toString() {
-                return nome;
+                return this.nome;
         }
         
 }

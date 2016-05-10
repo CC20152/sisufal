@@ -14,7 +14,6 @@
       <Button layoutX="159.0" layoutY="356.0" mnemonicParsing="false" onAction="#cadastroUsuario" text="Salvar" />
       <Button fx:id="btnCancelarCadastro" layoutX="224.0" layoutY="356.0" mnemonicParsing="false" onAction="#cancelarCadastro" text="Cancelar" />
       <Label layoutX="20.0" layoutY="92.0" text="Servidor" />
-      <ComboBox id="cmbServidores" fx:id="cmbServidores" layoutX="15.0" layoutY="109.0" prefWidth="270.0" />
       <Label layoutX="21.0" layoutY="191.0" text="Senha" />
       <ImageView fitHeight="76.0" fitWidth="307.0" layoutX="-5.0" layoutY="-1.0" pickOnBounds="true">
          <image>
@@ -25,5 +24,6 @@
       <TextField layoutX="16.0" layoutY="161.0" prefWidth="270.0" />
       <PasswordField layoutX="16.0" layoutY="211.0" prefHeight="25.0" prefWidth="270.0" />
       <Button layoutX="16.0" layoutY="247.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="148.0" text="Permissões" />
+      <ComboBox fx:id="cmbServidores" layoutX="18.0" layoutY="111.0" prefHeight="25.0" prefWidth="270.0" />
    </children>
 </AnchorPane>
