@@ -9,14 +9,17 @@ public class Discente {
 
 	private Curso curso;
 
-	private String periodoIngresso;
+	private Periodo periodoIngresso;
 
 	private String cpf;
 
 	private boolean emProjeto;
 
 	private String tipoEmProjeto;
-
+        
+        public Discente(){
+            periodoIngresso = new Periodo();
+        }
         public Integer getId() {
             return id;
         }
@@ -49,11 +52,11 @@ public class Discente {
             this.curso = curso;
         }
 
-        public String getPeriodoIngresso() {
+        public Periodo getPeriodoIngresso() {
             return periodoIngresso;
         }
 
-        public void setPeriodoIngresso(String periodoIngresso) {
+        public void setPeriodoIngresso(Periodo periodoIngresso) {
             this.periodoIngresso = periodoIngresso;
         }
 
