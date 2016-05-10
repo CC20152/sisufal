@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
@@ -18,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="702.0" prefWidth="873.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cc20152.sisufal.controllers.TelaPrincipalController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="702.0" prefWidth="873.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cc20152.sisufal.controllers.TelaPrincipalController">
    <children>
       <MenuBar>
       <menus>
@@ -34,13 +28,13 @@
           <items>
             <MenuItem mnemonicParsing="false" onAction="#menuDiscente" text="Discentes" />
             <MenuItem mnemonicParsing="false" onAction="#menuServidor" text="Servidores" />
-            <MenuItem mnemonicParsing="false" text="Cursos" />
           </items>
         </Menu>
             <Menu mnemonicParsing="false" text="Ensino">
               <items>
                 <MenuItem mnemonicParsing="false" onAction="#menuMonitoria" text="Monitorias" />
                   <MenuItem mnemonicParsing="false" onAction="#menuDisciplina" text="Disciplinas" />
+            <MenuItem mnemonicParsing="false" onAction="#menuCurso" text="Cursos" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" onAction="#menuTCC" text="TCCs" />
               </items>

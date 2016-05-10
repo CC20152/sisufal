@@ -101,11 +101,11 @@ public class CursoDAO implements IBaseDAO {
 	ArrayList<Curso> listaCurso = new ArrayList();
         
 	while(rs.next()){
-            Curso disciplina = new Curso();
-            disciplina.setId(rs.getInt("ID_CURSO"));
-            disciplina.setNome(rs.getString("NOME"));
-            disciplina.setCodigo(rs.getInt("CODIGO"));
-            listaCurso.add(disciplina);
+            Curso curso = new Curso();
+            curso.setId(rs.getInt("ID_CURSO"));
+            curso.setNome(rs.getString("NOME"));
+            curso.setCodigo(rs.getInt("CODIGO"));
+            listaCurso.add(curso);
 	}
         
 	return listaCurso;
