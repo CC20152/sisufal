@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 import cc20152.sisufal.models.Usuario;
+import java.sql.ResultSet;
 /**
  *
  * @author Predator
@@ -52,8 +53,38 @@ public class DiscenteDAO implements IBaseDAO {
     }
     
     @Override
-    public List<Disciplina> listAll(){
-        return new ArrayList<>();
+    public List<Discente> listAll(){
+        ArrayList<Discente> lista = new ArrayList<Discente>();
+        conexao = Conexao.getConexao();
+        String sql = "SELECT * FROM `discentes` "
+                + "INNER JOIN periodo ON periodo.id_periodo = discentes.id_periodo_ingresso "
+                + "INNER JOIN cursos ON cursos.id_curso = discentes.curso";
+        
+        try{
+            PreparedStatement st = conexao.prepareStatement(sql);
+            ResultSet rs;
+
+            rs = st.executeQuery();
+            while ( rs.next() ) {
+                Discente discente = new Discente();
+                discente.setId(rs.getInt("discentes.id_discente"));
+                discente.setNome(rs.getString("discentes.nome"));
+                discente.setCpf(rs.getString("discentes.cpf"));
+                discente.setMatricula(rs.getString("discentes.matricula"));
+                discente.getCurso().setId(rs.getInt("cursos.id_curso"));
+                discente.getCurso().setNome(rs.getString("cursos.nome"));
+                discente.getCurso().setCodigo(rs.getString("cursos.codigo"));
+                discente.getPeriodoIngresso().setId(rs.getInt("periodo.id_periodo"));
+                discente.getPeriodoIngresso().setNome(rs.getString("periodo.periodo"));
+                
+                lista.add(discente);
+            }
+            //conexao.close();
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return null;
+        }
+        return lista;
     }
     
     @Override

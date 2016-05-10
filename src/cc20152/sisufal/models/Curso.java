@@ -3,7 +3,7 @@ public class Curso {
 
 	private Integer id;
 
-	private Integer codigo;
+	private String codigo;
 
 	private String nome;
 
@@ -15,11 +15,11 @@ public class Curso {
             this.id = id;
         }
 
-        public Integer getCodigo() {
+        public String getCodigo() {
             return codigo;
         }
 
-        public void setCodigo(Integer codigo) {
+        public void setCodigo(String codigo) {
             this.codigo = codigo;
         }
 
@@ -32,7 +32,7 @@ public class Curso {
         }
 
         public String toString(){
-            return this.id + "-" + this.nome;
+            return this.id + " - " + this.nome;
         }
 
 }

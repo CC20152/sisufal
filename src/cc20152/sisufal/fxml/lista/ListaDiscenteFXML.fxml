@@ -12,9 +12,9 @@
    <children>
       <Button fx:id="btnVoltarLista" layoutX="50.0" layoutY="573.0" mnemonicParsing="false" onAction="#fecharLista" text="Voltar" />
       <Button fx:id="btnNovo" layoutX="706.0" layoutY="573.0" mnemonicParsing="false" onAction="#novoDiscente" text="Novo" textAlignment="CENTER" />
-      <TextField layoutX="50.0" layoutY="75.0" prefHeight="25.0" prefWidth="406.0" />
-      <Button layoutX="646.0" layoutY="75.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="105.0" text="Localizar" />
-      <TableView editable="true" layoutX="52.0" layoutY="140.0" prefHeight="386.0" prefWidth="697.0">
+      <TextField fx:id="txtPesquisa" layoutX="50.0" layoutY="75.0" prefHeight="25.0" prefWidth="406.0" />
+      <Button layoutX="654.0" layoutY="75.0" mnemonicParsing="false" onAction="#pesquisar" prefHeight="25.0" prefWidth="105.0" text="Localizar" />
+      <TableView fx:id="tableDiscentes" editable="true" layoutX="52.0" layoutY="140.0" prefHeight="386.0" prefWidth="697.0">
         <columns>
           <TableColumn prefWidth="218.0" text="Nome" />
           <TableColumn prefWidth="157.0" text="Matrícula" />
@@ -25,6 +25,6 @@
         </columns>
       </TableView>
       <Label layoutX="52.0" layoutY="58.0" text="Discente:" />
-      <ComboBox layoutX="474.0" layoutY="75.0" prefWidth="150.0" />
+      <ComboBox fx:id="cmbPesquisa" layoutX="474.0" layoutY="75.0" prefWidth="150.0" />
    </children>
 </AnchorPane>

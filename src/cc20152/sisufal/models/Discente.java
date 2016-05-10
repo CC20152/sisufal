@@ -18,6 +18,7 @@ public class Discente {
 	private String tipoEmProjeto;
         
         public Discente(){
+            curso = new Curso();
             periodoIngresso = new Periodo();
         }
         public Integer getId() {

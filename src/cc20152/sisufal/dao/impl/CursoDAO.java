@@ -30,7 +30,7 @@ public class CursoDAO implements IBaseDAO {
         try{
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, ((Curso) object).getNome());
-            st.setInt(2, ((Curso) object).getCodigo());
+            st.setString(2, ((Curso) object).getCodigo());
             st.execute();
         }catch(Exception ex){
             ex.printStackTrace();
@@ -46,7 +46,7 @@ public class CursoDAO implements IBaseDAO {
         try{
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, ((Curso) object).getNome());
-            st.setInt(2, ((Curso) object).getCodigo());
+            st.setString(2, ((Curso) object).getCodigo());
             st.setInt(3, ((Curso) object).getId());
             st.execute();
         }catch(Exception ex){
@@ -104,7 +104,7 @@ public class CursoDAO implements IBaseDAO {
             Curso curso = new Curso();
             curso.setId(rs.getInt("ID_CURSO"));
             curso.setNome(rs.getString("NOME"));
-            curso.setCodigo(rs.getInt("CODIGO"));
+            curso.setCodigo(rs.getString("CODIGO"));
             listaCurso.add(curso);
 	}
         
