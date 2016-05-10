@@ -23,7 +23,7 @@ import javafx.stage.Stage;
  * @author AtaideAl
  */
 public class DiscenteController implements Initializable {
-    String pacote = "controllers/corpoInstitucional/"; //Pacote do controller
+    String pacote = "controllers/institucional/"; //Pacote do controller
     String fxml = "fxml/cadastro/CadastroDiscenteFXML.fxml"; //Caminho do FXML
     @FXML
         private Button btnCancelarCadastro;

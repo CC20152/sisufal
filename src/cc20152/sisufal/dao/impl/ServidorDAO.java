@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import cc20152.sisufal.models.*;
 import java.sql.ResultSet;
+import java.util.HashMap;
 /**
  *
  * @author Predator
@@ -25,10 +26,20 @@ public class ServidorDAO implements IBaseDAO {
     @Override
     public String save(Object object){
         conexao = Conexao.getConexao();
-        String sql = "INSERT INTO disciplina(nome) VALUES(?)";   
+        String sql = "INSERT INTO `servidor`(`siape`, `nome`, `cargo`, `cpf`, `docente`, `id_classe`) VALUES (?,?,?,?,?,?)";   
         try{
             PreparedStatement st = conexao.prepareStatement(sql);
-            st.setString(1, ((Disciplina) object).getNome());
+            st.setString(1, ((Servidor) object).getSiape());
+            st.setString(2, ((Servidor) object).getNome());
+            st.setString(3, ((Servidor) object).getCargo());
+            st.setString(4, ((Servidor) object).getCPF());
+            if(((Servidor)object).getClasse().getId()==null){
+                st.setInt(5, 0);
+                st.setNull(6,java.sql.Types.INTEGER);
+            }else{
+                st.setInt(5, 1);
+                st.setInt(6,((Servidor) object).getClasse().getId());
+            }
             st.execute();
         }catch(Exception ex){
             ex.printStackTrace();
@@ -82,7 +93,48 @@ public class ServidorDAO implements IBaseDAO {
     }
     
     @Override
-    public List<Disciplina> listWithParams(Object object){
-        return new ArrayList<>();
+    public List<Servidor> listWithParams(Object object){
+        ArrayList<Servidor> lista = new ArrayList<Servidor>();
+        conexao = Conexao.getConexao();
+        
+        String tipo = ((HashMap) object).get("tipo").toString().toLowerCase();
+        String pesquisa = ((HashMap) object).get("texto").toString();
+        String sql;
+        //System.out.println(tipo);
+        if(tipo.equals("siape") ||tipo.equals("nome") || tipo.equals("cargo") ){
+            sql = "SELECT * FROM servidor "
+                + "LEFT JOIN classedocente on servidor.id_classe = classedocente.id_classe_docente "
+                + "WHERE servidor."+tipo+" LIKE '%"+pesquisa+"%'";
+        }else{
+             sql = "SELECT * FROM servidor "
+                + "LEFT JOIN classedocente on servidor.id_classe = classedocente.id_classe_docente "
+                + "WHERE classedocente.nome LIKE '%"+pesquisa+"%'";
+        }
+       
+        try{
+            PreparedStatement st = conexao.prepareStatement(sql);
+            ResultSet rs;
+
+            rs = st.executeQuery();
+            while ( rs.next() ) {
+                Servidor servidor = new Servidor();
+                servidor.setId(rs.getInt("servidor.id_servidor"));
+                servidor.setNome(rs.getString("servidor.nome"));
+                servidor.setSiape(rs.getString("servidor.siape"));
+                servidor.setCargo(rs.getString("servidor.cargo"));
+                servidor.setCPF(rs.getString("servidor.cpf"));
+                int docente = rs.getInt("servidor.docente");
+                if(docente==1){
+                    servidor.getClasse().setId(rs.getInt("classedocente.id_classe_docente"));
+                    servidor.getClasse().setNome(rs.getString("classedocente.nome"));
+                }
+                lista.add(servidor);
+            }
+            //conexao.close();
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return null;
+        }
+        return lista;
     }
 }
