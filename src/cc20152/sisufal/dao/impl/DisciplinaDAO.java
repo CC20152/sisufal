@@ -94,9 +94,59 @@ public class DisciplinaDAO implements IBaseDAO {
         return listaDisciplina;
     }
     
+    /*
+    * Eu escrevi isso sem ter a certeza se é um bom método
+    */
     @Override
     public List<Disciplina> listWithParams(Object object){
-        return new ArrayList<>();
+        ArrayList<Disciplina> listaDisciplina = new ArrayList();
+        this.conn = Conexao.getConexao();
+        Disciplina disciplina = (Disciplina) object;
+        String sql = "SELECT d.id_disciplinas, d.nome, c.nome as NOME_CURSO, d.carga_horaria, d.turno, d.id_curso FROM cursos c, disciplinas d WHERE d.id_curso = c.id_curso";
+        
+        try{
+            
+            
+            int i = 1;
+            
+            if(disciplina.getCurso().getId() != null){
+                sql += " AND c.id_curso = ?";
+            }
+        
+            if(disciplina.getTurno() != null){
+                sql += " AND d.turno = ?";
+            }
+
+            if(disciplina.getNome() != null){
+                sql += " AND upper(d.nome) LIKE upper(?)";
+            }
+            
+            System.out.println(sql);
+            
+            PreparedStatement st = this.conn.prepareStatement(sql);
+            ResultSet rs;
+            
+            if(disciplina.getCurso().getId() != null){
+                st.setInt(i, disciplina.getCurso().getId());
+                i++;
+            }
+        
+            if(disciplina.getTurno() != null){
+                st.setString(i, disciplina.getTurno());
+                i++;
+            }
+
+            if(disciplina.getNome() != null){
+                st.setString(i, "%" + disciplina.getNome() + "%");
+                i++;
+            }
+            
+            rs = st.executeQuery();
+            listaDisciplina = mapearResultSet(rs);
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+        return listaDisciplina;
     }
     
     
@@ -105,14 +155,14 @@ public class DisciplinaDAO implements IBaseDAO {
 	ArrayList<Disciplina> listaDisciplina = new ArrayList();
         
 	while(rs.next()){
-		Disciplina disciplina = new Disciplina();
-                disciplina.setId(rs.getInt("ID_DISCIPLINAS"));
-                disciplina.setNome(rs.getString("NOME"));
-                disciplina.setCargaHoraria(rs.getString("CARGA_HORARIA"));
-                disciplina.getCurso().setId(rs.getInt("ID_CURSO"));
-                disciplina.getCurso().setNome(rs.getString("NOME_CURSO"));
-                disciplina.setTurno(rs.getString("TURNO"));
-		listaDisciplina.add(disciplina);
+            Disciplina disciplina = new Disciplina();
+            disciplina.setId(rs.getInt("ID_DISCIPLINAS"));
+            disciplina.setNome(rs.getString("NOME"));
+            disciplina.setCargaHoraria(rs.getString("CARGA_HORARIA"));
+            disciplina.getCurso().setId(rs.getInt("ID_CURSO"));
+            disciplina.getCurso().setNome(rs.getString("NOME_CURSO"));
+            disciplina.setTurno(rs.getString("TURNO"));
+            listaDisciplina.add(disciplina);
 	}
         
 	return listaDisciplina;
