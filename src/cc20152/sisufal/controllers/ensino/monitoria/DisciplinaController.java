@@ -41,6 +41,7 @@ import javafx.util.Callback;
  */
 public class DisciplinaController implements Initializable {
     
+    private ObservableList<Disciplina> data;
     final String pacote = "controllers/ensino/monitoria/"; //Pacote do controller
     final String fxml = "fxml/cadastro/CadastroDisciplinaFXML.fxml"; //Caminho do FXML
     
@@ -60,6 +61,24 @@ public class DisciplinaController implements Initializable {
     private TableView<Disciplina> tbDisciplina;
     
     @FXML
+    private void btnBuscar(ActionEvent event){
+        DisciplinaDAO disciplinaDAO = new DisciplinaDAO();
+        Disciplina disciplina = new Disciplina();
+        if(!this.txtNome.getText().equals("")){
+            disciplina.setNome(this.txtNome.getText());
+        }
+        if(this.cmbCurso.getValue() != null && !this.cmbCurso.getSelectionModel().isSelected(0)){
+            disciplina.getCurso().setId(Integer.parseInt((this.cmbCurso.getValue().toString().split("-"))[0]));
+        }
+        if(this.cmbTurno.getValue() != null && !this.cmbTurno.getSelectionModel().isSelected(0)){
+            disciplina.setTurno(this.cmbTurno.getValue().toString());
+        }
+        List<Disciplina> list = disciplinaDAO.listWithParams(disciplina);
+        this.data.clear();
+        this.data.addAll(list);
+    }
+    
+    @FXML
     private void btnSalvar(ActionEvent event) {
         
         Alert aviso = new Alert(Alert.AlertType.ERROR);
@@ -73,15 +92,16 @@ public class DisciplinaController implements Initializable {
             aviso.setHeaderText("Campo carga horária não pode estar vazio");
             aviso.show();
             return ;
-        }else if(this.cmbCurso.getValue() == null){
+        }else if(this.cmbCurso.getValue() == null && this.cmbCurso.getSelectionModel().isSelected(0)){
             aviso.setHeaderText("Campo curso não pode estar vazio");
             aviso.show();
             return ;
-        }else if(this.cmbTurno.getValue() == null){
+        }else if(this.cmbTurno.getValue() == null && this.cmbTurno.getSelectionModel().isSelected(0)){
             aviso.setHeaderText("Campo turno não pode estar vazio");
             aviso.show();
             return ;
         }
+        
         Disciplina disciplina = new Disciplina();
         disciplina.setNome(this.txtNome.getText());
         disciplina.setCargaHoraria(this.txtCargaHoraria.getText());
@@ -123,7 +143,7 @@ public class DisciplinaController implements Initializable {
         stage.showAndWait();
     }
     private void listarDisciplinas(){
-       ObservableList<Disciplina> data = FXCollections.observableArrayList();
+       data = FXCollections.observableArrayList();
        List<Disciplina> listaDisciplina = new ArrayList<>();
        listaDisciplina = new DisciplinaDAO().listAll();
        this.tbDisciplina.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("nome"));
@@ -182,9 +202,13 @@ public class DisciplinaController implements Initializable {
         listaTurno.add("MATUTINO");
         listaTurno.add("VESPERTINO");
         listaTurno.add("NOTURNO");
-        
+       
+        this.cmbCurso.getItems().add("Escolha um curso");
         this.cmbCurso.getItems().addAll(new CursoDAO().listAll());
+        this.cmbTurno.getItems().add("Escolha um turno");
         this.cmbTurno.getItems().addAll(listaTurno);
+        this.cmbCurso.getSelectionModel().selectFirst();
+        this.cmbTurno.getSelectionModel().selectFirst();
         
         if(!url.getPath().contains(this.fxml)){
             listarDisciplinas();
