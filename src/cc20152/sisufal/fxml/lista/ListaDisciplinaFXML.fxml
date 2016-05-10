@@ -16,7 +16,7 @@
       <Button fx:id="btnVoltarLista" layoutX="50.0" layoutY="573.0" mnemonicParsing="false" onAction="#btnCancelar" text="Voltar" />
       <Button fx:id="btnNovo" layoutX="50.0" layoutY="26.0" mnemonicParsing="false" onAction="#novaDisciplina" prefHeight="39.0" prefWidth="125.0" styleClass="classe" stylesheets="@../style.css" text="Nova Disciplina" textAlignment="CENTER" />
       <TextField fx:id="txtNome" layoutX="98.0" layoutY="75.0" prefHeight="25.0" prefWidth="125.0" promptText="Nome" />
-      <Button fx:id="btnBuscar" layoutX="646.0" layoutY="75.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="105.0" text="Buscar" />
+      <Button layoutX="646.0" layoutY="75.0" mnemonicParsing="false" onAction="#btnBuscar" prefHeight="25.0" prefWidth="105.0" text="Buscar" />
       <TableView fx:id="tbDisciplina" layoutX="54.0" layoutY="131.0" prefHeight="386.0" prefWidth="697.0">
         <columns>
           <TableColumn prefWidth="220.0" text="Nome" />
