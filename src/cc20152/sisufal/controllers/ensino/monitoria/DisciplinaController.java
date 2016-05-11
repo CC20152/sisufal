@@ -7,27 +7,23 @@ package cc20152.sisufal.controllers.ensino.monitoria;
 
 import cc20152.sisufal.dao.impl.CursoDAO;
 import cc20152.sisufal.dao.impl.DisciplinaDAO;
+import cc20152.sisufal.models.Curso;
 import cc20152.sisufal.models.Disciplina;
-import cc20152.sisufal.models.Servidor;
 import cc20152.sisufal.util.BotoesLista;
-import com.sun.prism.impl.Disposer;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -38,7 +34,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import com.sun.prism.impl.Disposer.Record;
-import javafx.beans.property.SimpleBooleanProperty;
+import java.util.Objects;
+import java.util.Optional;
+import javafx.scene.control.ButtonType;
 
 /**
  *
@@ -74,16 +72,21 @@ public class DisciplinaController implements Initializable {
     private void btnBuscar(ActionEvent event){
         DisciplinaDAO disciplinaDAO = new DisciplinaDAO();
         Disciplina disciplina = new Disciplina();
+        
         if(!this.txtNome.getText().equals("")){
             disciplina.setNome(this.txtNome.getText());
         }
+        
         if(this.cmbCurso.getValue() != null && !this.cmbCurso.getSelectionModel().isSelected(0)){
             disciplina.getCurso().setId(Integer.parseInt((this.cmbCurso.getValue().toString().split("-"))[0]));
         }
+        
         if(this.cmbTurno.getValue() != null && !this.cmbTurno.getSelectionModel().isSelected(0)){
             disciplina.setTurno(this.cmbTurno.getValue().toString());
         }
+        
         List<Disciplina> list = disciplinaDAO.listWithParams(disciplina);
+        
         this.data.clear();
         this.data.addAll(list);
     }
@@ -101,38 +104,54 @@ public class DisciplinaController implements Initializable {
             aviso.setHeaderText("Campo carga horária não pode estar vazio");
             aviso.show();
             return ;
-        }else if(this.cmbCurso.getValue() == null && this.cmbCurso.getSelectionModel().isSelected(0)){
+        }else if(this.cmbCurso.getValue() == null || this.cmbCurso.getSelectionModel().isSelected(0)){
             aviso.setHeaderText("Campo curso não pode estar vazio");
             aviso.show();
             return ;
-        }else if(this.cmbTurno.getValue() == null && this.cmbTurno.getSelectionModel().isSelected(0)){
+        }else if(this.cmbTurno.getValue() == null || this.cmbTurno.getSelectionModel().isSelected(0)){
             aviso.setHeaderText("Campo turno não pode estar vazio");
             aviso.show();
             return ;
         }
         
-        Disciplina disciplina = new Disciplina();
-        disciplina.setNome(this.txtNome.getText());
-        disciplina.setCargaHoraria(this.txtCargaHoraria.getText());
-        disciplina.getCurso().setId(Integer.parseInt((this.cmbCurso.getValue().toString().trim().split("-"))[0]));
-        disciplina.getCurso().setNome(((this.cmbCurso.getValue().toString().trim().split("-"))[1]));
-        disciplina.setTurno(this.cmbTurno.getValue().toString());
-       
+        Disciplina old = this.disciplina;
+        if(this.disciplina == null){
+            this.disciplina = new Disciplina();
+        }
+        
+        this.disciplina.setNome(this.txtNome.getText());
+        this.disciplina.setCargaHoraria(this.txtCargaHoraria.getText());
+        this.disciplina.getCurso().setId(Integer.parseInt((this.cmbCurso.getValue().toString().trim().split("-"))[0]));
+        this.disciplina.getCurso().setNome(((this.cmbCurso.getValue().toString().trim().split("-"))[1]));
+        this.disciplina.setTurno(this.cmbTurno.getValue().toString());
+        
         DisciplinaDAO disciplinaDAO = new DisciplinaDAO();
-        String result = disciplinaDAO.save(disciplina);
+        String result = null;
+        if(this.tipo == null){
+            result = disciplinaDAO.save(disciplina);
+        }else{
+            result = disciplinaDAO.update(disciplina);
+        }
         
         if(result.equals("OK")){
            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
            alerta.setTitle("Sucesso");
-           alerta.setHeaderText("Disciplina cadastrada com sucesso!");
+           alerta.setHeaderText("Disciplina salva com sucesso!");
            alerta.show();
-           this.data.add(disciplina);
+           
+           if(this.tipo == null){
+                this.data.add(disciplina);
+           }else{
+                this.data.remove(old);
+                this.data.add(disciplina);
+           }
+           
            Stage stage = (Stage) txtNome.getScene().getWindow();
            stage.close();
         }else{
            Alert alerta = new Alert(Alert.AlertType.ERROR);
            alerta.setTitle("Sucesso");
-           alerta.setHeaderText("Erro ao cadastrar disciplina!");
+           alerta.setHeaderText("Erro ao salvar disciplina!");
            alerta.show();
         }
     }
@@ -159,12 +178,12 @@ public class DisciplinaController implements Initializable {
         stage.showAndWait();
     }
     
-    
-    
     private void listarDisciplinas(){
        data = FXCollections.observableArrayList();
+       
        List<Disciplina> listaDisciplina = new ArrayList<>();
        listaDisciplina = new DisciplinaDAO().listAll();
+       
        this.tbDisciplina.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("nome"));
        this.tbDisciplina.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("cargaHoraria"));
        this.tbDisciplina.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("curso"));
@@ -182,7 +201,7 @@ public class DisciplinaController implements Initializable {
        colDeletar.setCellFactory(new Callback<TableColumn<Record, Boolean>, TableCell<Record, Boolean>>() {
            @Override
            public TableCell<Record, Boolean> call(TableColumn<Record, Boolean> p) {
-               return new BotoesLista(data, Disciplina.class, DisciplinaDAO.class).new DeletarCell();
+               return new BotoesLista(data, Disciplina.class, DisciplinaController.class).new DeletarCell();
            }
        });
       
@@ -198,13 +217,16 @@ public class DisciplinaController implements Initializable {
         this.txtNome.setTooltip(new Tooltip("Digite o nome da disciplina"));
         ArrayList<String> listaTurno = new ArrayList<>();
         
+        listaTurno.add("Escolha um turno");
         listaTurno.add("MATUTINO");
         listaTurno.add("VESPERTINO");
         listaTurno.add("NOTURNO");
-       
-        this.cmbCurso.getItems().add("Escolha um curso");
+        
+        Curso c = new Curso();
+        c.setId(0); c.setNome("Escolha um curso");
+        
+        this.cmbCurso.getItems().add(c);
         this.cmbCurso.getItems().addAll(new CursoDAO().listAll());
-        this.cmbTurno.getItems().add("Escolha um turno");
         this.cmbTurno.getItems().addAll(listaTurno);
         this.cmbCurso.getSelectionModel().selectFirst();
         this.cmbTurno.getSelectionModel().selectFirst();
@@ -225,10 +247,31 @@ public class DisciplinaController implements Initializable {
         preencherCampos();
     }
     
+    public void deletar(Disciplina disciplina, ObservableList<?> _data){
+        Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+        alerta.setTitle("Atençao!");
+        alerta.setHeaderText("Deseja realmente excluir este registro?");
+        alerta.setContentText("Você não poderá voltar atrás!");
+        Optional<ButtonType> res = alerta.showAndWait();
+        if(res.get() == ButtonType.OK){
+            DisciplinaDAO disciplinaDAO = new DisciplinaDAO();
+            disciplinaDAO.delete(disciplina);
+            _data.remove(disciplina);
+        }
+    }
+    
     private void preencherCampos(){
         this.txtNome.setText(this.disciplina.getNome());
         this.txtCargaHoraria.setText(this.disciplina.getCargaHoraria());
-        this.cmbCurso.setValue(this.disciplina.getCurso());
+        ObservableList<Curso> cc = this.cmbCurso.getItems();
+        int i = 0;
+        for(Curso c : cc){
+            if(Objects.equals(c.getId(), this.disciplina.getCurso().getId())){
+                this.cmbCurso.getSelectionModel().select(i);
+            }
+            i++;
+        }
+        if(i == 0) this.cmbCurso.getSelectionModel().select(i);
         this.cmbTurno.setValue(this.disciplina.getTurno());
     }
     
