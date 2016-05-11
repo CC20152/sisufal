@@ -9,14 +9,18 @@ import cc20152.sisufal.dao.impl.CursoDAO;
 import cc20152.sisufal.dao.impl.DisciplinaDAO;
 import cc20152.sisufal.models.Disciplina;
 import cc20152.sisufal.models.Servidor;
+import cc20152.sisufal.util.BotoesLista;
+import com.sun.prism.impl.Disposer;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -33,7 +37,8 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-
+import com.sun.prism.impl.Disposer.Record;
+import javafx.beans.property.SimpleBooleanProperty;
 
 /**
  *
@@ -42,8 +47,13 @@ import javafx.util.Callback;
 public class DisciplinaController implements Initializable {
     
     private ObservableList<Disciplina> data;
+    
     final String pacote = "controllers/ensino/monitoria/"; //Pacote do controller
     final String fxml = "fxml/cadastro/CadastroDisciplinaFXML.fxml"; //Caminho do FXML
+    
+    private String tipo;
+    
+    private Disciplina disciplina;
     
     @FXML
     private TextField txtCargaHoraria;
@@ -80,7 +90,6 @@ public class DisciplinaController implements Initializable {
     
     @FXML
     private void btnSalvar(ActionEvent event) {
-        
         Alert aviso = new Alert(Alert.AlertType.ERROR);
         aviso.setTitle("Erro");
         
@@ -105,17 +114,21 @@ public class DisciplinaController implements Initializable {
         Disciplina disciplina = new Disciplina();
         disciplina.setNome(this.txtNome.getText());
         disciplina.setCargaHoraria(this.txtCargaHoraria.getText());
-        disciplina.getCurso().setId(Integer.parseInt((this.cmbCurso.getValue().toString().split("-"))[0]));
+        disciplina.getCurso().setId(Integer.parseInt((this.cmbCurso.getValue().toString().trim().split("-"))[0]));
+        disciplina.getCurso().setNome(((this.cmbCurso.getValue().toString().trim().split("-"))[1]));
         disciplina.setTurno(this.cmbTurno.getValue().toString());
-        
+       
         DisciplinaDAO disciplinaDAO = new DisciplinaDAO();
         String result = disciplinaDAO.save(disciplina);
-        System.out.println(result);
+        
         if(result.equals("OK")){
            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
            alerta.setTitle("Sucesso");
            alerta.setHeaderText("Disciplina cadastrada com sucesso!");
            alerta.show();
+           this.data.add(disciplina);
+           Stage stage = (Stage) txtNome.getScene().getWindow();
+           stage.close();
         }else{
            Alert alerta = new Alert(Alert.AlertType.ERROR);
            alerta.setTitle("Sucesso");
@@ -135,13 +148,19 @@ public class DisciplinaController implements Initializable {
         String path = getClass().getResource("").toString();
         path = path.replace(this.pacote, "");
         URL url =  new URL(path + this.fxml);
-        Parent root = FXMLLoader.load(url);
+        FXMLLoader loader = new FXMLLoader(url);
+        Parent root = (Parent)loader.load();
+        DisciplinaController controller = loader.getController();
+        controller.setData(this.data);
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setTitle("Cadastro de Disciplina");
         stage.setScene(scene);
         stage.showAndWait();
     }
+    
+    
+    
     private void listarDisciplinas(){
        data = FXCollections.observableArrayList();
        List<Disciplina> listaDisciplina = new ArrayList<>();
@@ -151,41 +170,21 @@ public class DisciplinaController implements Initializable {
        this.tbDisciplina.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("curso"));
        this.tbDisciplina.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("turno"));
       
-        Callback<TableColumn<Servidor, String>, TableCell<Servidor, String>> cellFactory = //
-            new Callback<TableColumn<Servidor, String>, TableCell<Servidor, String>>()
-            {
-                @Override
-                public TableCell call( final TableColumn<Servidor, String> param )
-                {
-                    final TableCell<Servidor, String> cell = new TableCell<Servidor, String>()
-                    {
-                        final Button btn = new Button( "Just Do It" );
-
-                        @Override
-                        public void updateItem( String item, boolean empty )
-                        {
-                            super.updateItem( item, empty );
-                            if ( empty )
-                            {
-                                setGraphic( null );
-                                setText( null );
-                            }
-                            else
-                            {
-                                btn.setOnAction( ( ActionEvent event ) ->
-                                        {
-                                            Servidor servidor = getTableView().getItems().get( getIndex() );
-                                            System.out.println( servidor.toString() );
-                                } );
-                                setGraphic( btn );
-                                setText( null );
-                            }
-                        }
-                    };
-                    return cell;
-                }
-            };
-       this.tbDisciplina.getColumns().get(4).setCellValueFactory(new PropertyValueFactory<>("editar"));
+       TableColumn colEditar = this.tbDisciplina.getColumns().get(4);
+       colEditar.setCellFactory(new Callback<TableColumn<Record, Boolean>, TableCell<Record, Boolean>>() {
+           @Override
+           public TableCell<Record, Boolean> call(TableColumn<Record, Boolean> p) {
+               return new BotoesLista(data, Disciplina.class, fxml).new EditarCell();
+           }
+       });
+       
+       TableColumn colDeletar = this.tbDisciplina.getColumns().get(5);
+       colDeletar.setCellFactory(new Callback<TableColumn<Record, Boolean>, TableCell<Record, Boolean>>() {
+           @Override
+           public TableCell<Record, Boolean> call(TableColumn<Record, Boolean> p) {
+               return new BotoesLista(data, Disciplina.class, DisciplinaDAO.class).new DeletarCell();
+           }
+       });
       
        for (Disciplina e : listaDisciplina) {
            data.add(e);
@@ -214,5 +213,23 @@ public class DisciplinaController implements Initializable {
             listarDisciplinas();
         }
     }    
+    
+    public void setData(ObservableList<Disciplina> data){
+        this.data = data;
+    }
+    
+    public void setEditar(String tipo, ObservableList<?> data, Disciplina disciplina){
+        this.tipo = tipo;
+        this.data = (ObservableList<Disciplina>)data;
+        this.disciplina = (Disciplina) disciplina;
+        preencherCampos();
+    }
+    
+    private void preencherCampos(){
+        this.txtNome.setText(this.disciplina.getNome());
+        this.txtCargaHoraria.setText(this.disciplina.getCargaHoraria());
+        this.cmbCurso.setValue(this.disciplina.getCurso());
+        this.cmbTurno.setValue(this.disciplina.getTurno());
+    }
     
 }

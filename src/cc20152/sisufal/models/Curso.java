@@ -32,7 +32,7 @@ public class Curso {
         }
 
         public String toString(){
-            return this.id + " - " + this.nome;
+            return this.id + "-" + this.nome;
         }
 
 }
