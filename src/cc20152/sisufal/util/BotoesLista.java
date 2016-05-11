@@ -5,8 +5,6 @@
  */
 package cc20152.sisufal.util;
 
-import cc20152.sisufal.controllers.ensino.monitoria.DisciplinaController;
-import cc20152.sisufal.models.Disciplina;
 import com.sun.prism.impl.Disposer;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -16,7 +14,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -43,10 +40,10 @@ public class BotoesLista {
         this.fxml = fxml;
     }
     
-    public BotoesLista(ObservableList<?> data, Class<?> object, Class<?> classeDAO){
+    public BotoesLista(ObservableList<?> data, Class<?> object, Class<?> controller){
         this.data = data;
         this.classe = object;
-        this.classeDAO = classeDAO;
+        this.controller = controller;
     }
     
     public class EditarCell extends TableCell<Disposer.Record, Boolean> {
@@ -90,7 +87,12 @@ public class BotoesLista {
         public DeletarCell(){
             cellButton.setOnAction((ActionEvent t) -> {
                 Object obj = classe.cast(DeletarCell.this.getTableView().getItems().get(DeletarCell.this.getIndex()));
-                data.remove(obj);
+                try {
+                    Method mth = controller.getMethod("deletar", classe, ObservableList.class);
+                    mth.invoke(controller.newInstance(), obj, data);
+                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | InstantiationException ex) {
+                    Logger.getLogger(BotoesLista.class.getName()).log(Level.SEVERE, null, ex);
+                }
             });
         }
 

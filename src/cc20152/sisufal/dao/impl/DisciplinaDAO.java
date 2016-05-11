@@ -121,8 +121,6 @@ public class DisciplinaDAO implements IBaseDAO {
                 sql += " AND upper(d.nome) LIKE upper(?)";
             }
             
-            System.out.println(sql);
-            
             PreparedStatement st = this.conn.prepareStatement(sql);
             ResultSet rs;
             
