@@ -62,6 +62,9 @@ public class Servidor {
         
         @Override
         public String toString() {
+            if(this.id != 0)
+                return this.id + " - " + this.nome;
+            else
                 return this.nome;
         }
         

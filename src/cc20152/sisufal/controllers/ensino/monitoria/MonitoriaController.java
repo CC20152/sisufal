@@ -10,8 +10,12 @@ import cc20152.sisufal.models.Monitoria;
 import cc20152.sisufal.models.Disciplina;
 import cc20152.sisufal.models.Orientador;
 import cc20152.sisufal.models.Periodo;
+import cc20152.sisufal.util.AutoCompleteComboBoxListener;
 import cc20152.sisufal.util.BotoesLista;
 import cc20152.sisufal.util.DataUtil;
+import cc20152.sisufal.util.DiscenteConverter;
+import cc20152.sisufal.util.DisciplinaConverter;
+import cc20152.sisufal.util.OrientadorConverter;
 import com.sun.prism.impl.Disposer;
 import java.io.IOException;
 import java.net.URL;
@@ -45,6 +49,7 @@ import java.util.Date;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.util.StringConverter;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -130,23 +135,23 @@ public class MonitoriaController implements Initializable{
     private void btnSalvar(ActionEvent event) {
         Alert aviso = new Alert(Alert.AlertType.ERROR);
         aviso.setTitle("Erro");
-        if(this.cmbDiscente.getValue() == null || this.cmbDiscente.getSelectionModel().isSelected(0)){
+        if(this.cmbDiscente.getValue() == null){
             aviso.setHeaderText("Campo discente não pode estar vazio");
             aviso.show();
             return ;
-        }else if(this.cmbDisciplina.getValue() == null || this.cmbDisciplina.getSelectionModel().isSelected(0)){
+        }else if(this.cmbDisciplina.getValue() == null){
             aviso.setHeaderText("Campo disciplina não pode estar vazio");
             aviso.show();
             return ;
-        }else if(this.cmbOrientador.getValue() == null || this.cmbOrientador.getSelectionModel().isSelected(0)){
+        }else if(this.cmbOrientador.getValue() == null){
             aviso.setHeaderText("Campo orientador não pode estar vazio");
             aviso.show();
             return ;
-        }else if(this.cmbSituacao.getValue() == null || this.cmbSituacao.getSelectionModel().isSelected(0)){
+        }else if(this.cmbSituacao.getValue() == null){
             aviso.setHeaderText("Campo situação não pode estar vazio");
             aviso.show();
             return ;
-        }else if(this.cmbPeriodo.getValue() == null || this.cmbPeriodo.getSelectionModel().isSelected(0)){
+        }else if(this.cmbPeriodo.getValue() == null){
             aviso.setHeaderText("Campo período não pode estar vazio");
             aviso.show();
             return ;
@@ -206,7 +211,7 @@ public class MonitoriaController implements Initializable{
     
     @FXML
     private void btnCancelar(ActionEvent event) {
-        Stage stage = (Stage) txtNome.getScene().getWindow();
+        Stage stage = (Stage) cmbDisciplina.getScene().getWindow();
         stage.close();
     }
     
@@ -294,11 +299,9 @@ public class MonitoriaController implements Initializable{
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        Disciplina disciplina = new Disciplina();
-        disciplina.setId(0); disciplina.setNome("Escolha uma Disciplina");
-        this.cmbDisciplina.getItems().add(disciplina);
         this.cmbDisciplina.getItems().addAll(new DisciplinaDAO().listAll());
-        this.cmbDisciplina.getSelectionModel().selectFirst();
+        this.cmbDisciplina.setConverter(new DisciplinaConverter());
+        new AutoCompleteComboBoxListener<>(this.cmbDisciplina, "Escolha uma Disciplina");
         
         if(!url.getPath().contains(this.fxml)){
             listarMonitorias();
@@ -310,30 +313,20 @@ public class MonitoriaController implements Initializable{
             listaSituacao.add("NÃO EMITIDO");
             listaSituacao.add("EM PROCESSO");
 
-            
 
-            Discente discente = new Discente();
-            discente.setId(0); discente.setNome("Escolha um discente");
-
-            Orientador orientador = new Orientador();
-            orientador.setId(0); orientador.setNome("Escolha um orientador");
-
-            Periodo periodo = new Periodo();
-            periodo.setId(0); periodo.setNome("Escolha um período");
-
-            this.cmbOrientador.getItems().add(orientador);
             this.cmbOrientador.getItems().addAll(new OrientadorDAO().listAll());
-            this.cmbDiscente.getItems().add(discente);
+            this.cmbOrientador.setConverter(new OrientadorConverter());
+            new AutoCompleteComboBoxListener<>(this.cmbOrientador, "Escolha um Orientador");
             this.cmbDiscente.getItems().addAll(new DiscenteDAO().listAll());
-            
+            this.cmbDiscente.setConverter(new DiscenteConverter());
+            new AutoCompleteComboBoxListener<>(this.cmbDiscente, "Escolha um Discente");
             this.cmbSituacao.getItems().addAll(listaSituacao);
-            this.cmbPeriodo.getItems().add(periodo);
-            this.cmbPeriodo.getItems().addAll(new PeriodoDAO().listAll());
-
-            this.cmbOrientador.getSelectionModel().selectFirst();
-            this.cmbDiscente.getSelectionModel().selectFirst();
-            this.cmbPeriodo.getSelectionModel().selectFirst();
             this.cmbSituacao.getSelectionModel().selectFirst();
+            Periodo p = new Periodo();
+            p.setId(0); p.setNome("Escolha um Período");
+            this.cmbPeriodo.getItems().add(p);
+            this.cmbPeriodo.getItems().addAll(new PeriodoDAO().listAll());
+            this.cmbPeriodo.getSelectionModel().selectFirst();
         }
     }    
     
