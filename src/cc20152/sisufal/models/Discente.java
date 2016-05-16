@@ -18,8 +18,8 @@ public class Discente {
 	private String tipoEmProjeto;
         
         public Discente(){
-            curso = new Curso();
-            periodoIngresso = new Periodo();
+            this.curso = new Curso();
+            this.periodoIngresso = new Periodo();
         }
         public Integer getId() {
             return id;
@@ -83,6 +83,15 @@ public class Discente {
 
         public void setTipoEmProjeto(String tipoEmProjeto) {
             this.tipoEmProjeto = tipoEmProjeto;
+        }
+        
+        @Override
+        public String toString(){
+            if(this.id != 0){
+                return this.id + " - " + this.nome;
+            }else{
+                return this.nome;
+            }
         }
 
 }
