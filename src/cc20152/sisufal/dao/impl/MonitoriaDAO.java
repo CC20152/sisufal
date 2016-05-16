@@ -49,7 +49,7 @@ public class MonitoriaDAO implements IBaseDAO {
     @Override
     public String update(Object object){
         this.conn = Conexao.getConexao();
-        String sql = "UPDATE monitoria SET id_disciplina = ?, id_orientador = ?, situacao_certificado = ?, data_fim = ?, data_inicio = ?, id_discente = ?, id_periodo = ? WHERE id_monitoria = ?";   
+        String sql = "UPDATE monitoria SET id_disciplina = ?, id_orientador = ?, situacao_certificado = ?, data_inicio = ?, data_fim = ?, id_discente = ?, id_periodo = ? WHERE id_monitoria = ?";   
         try{
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, ((Monitoria) object).getDisciplina().getId());
