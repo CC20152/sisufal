@@ -37,11 +37,13 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import java.util.Date;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -104,6 +106,7 @@ public class MonitoriaController implements Initializable{
         }
         
         if(this.dataInicial.getValue() != null){
+            System.out.println(this.dataInicial.getValue());
             LocalDate local = this.dataInicial.getValue();
             Date date = Date.from(local.atStartOfDay(ZoneId.systemDefault()).toInstant());
             monitoria.setDataInicio(date);
@@ -126,7 +129,6 @@ public class MonitoriaController implements Initializable{
     private void btnSalvar(ActionEvent event) {
         Alert aviso = new Alert(Alert.AlertType.ERROR);
         aviso.setTitle("Erro");
-        
         if(this.cmbDiscente.getValue() == null || this.cmbDiscente.getSelectionModel().isSelected(0)){
             aviso.setHeaderText("Campo discente não pode estar vazio");
             aviso.show();
@@ -191,7 +193,7 @@ public class MonitoriaController implements Initializable{
                 this.data.add(monitoria);
            }
            
-           Stage stage = (Stage) txtNome.getScene().getWindow();
+           Stage stage = (Stage) cmbPeriodo.getScene().getWindow();
            stage.close();
         }else{
            Alert alerta = new Alert(Alert.AlertType.ERROR);
@@ -229,12 +231,44 @@ public class MonitoriaController implements Initializable{
        List<Monitoria> listaMonitoria = new ArrayList<>();
        listaMonitoria = new MonitoriaDAO().listAll();
        
-       this.tbMonitoria.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("nome"));
-       this.tbMonitoria.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("cargaHoraria"));
-       this.tbMonitoria.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("curso"));
-       this.tbMonitoria.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("turno"));
+       TableColumn colNome = this.tbMonitoria.getColumns().get(0);
+       colNome.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Monitoria, String>, ObservableValue<String>>() {
+           public ObservableValue<String> call(TableColumn.CellDataFeatures<Monitoria, String> p) {
+               return new SimpleObjectProperty(p.getValue().getDiscente().getNome());
+           }
+       });
+       
+       TableColumn colPeriodo = this.tbMonitoria.getColumns().get(1);
+       colPeriodo.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Monitoria, String>, ObservableValue<String>>() {
+           public ObservableValue<String> call(TableColumn.CellDataFeatures<Monitoria, String> p) {
+               return new SimpleObjectProperty(p.getValue().getPeriodo().getNome());
+           }
+       });
+       
+       TableColumn colDataInicio = this.tbMonitoria.getColumns().get(2);
+       colDataInicio.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Monitoria, String>, ObservableValue<String>>() {
+           public ObservableValue<String> call(TableColumn.CellDataFeatures<Monitoria, String> p) {
+               return new SimpleObjectProperty(p.getValue().getDataInicio().toString());
+           }
+       });
+       
+       TableColumn colDataFim = this.tbMonitoria.getColumns().get(3);
+       colDataFim.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Monitoria, String>, ObservableValue<String>>() {
+           public ObservableValue<String> call(TableColumn.CellDataFeatures<Monitoria, String> p) {
+               return new SimpleObjectProperty(p.getValue().getDataFim().toString());
+           }
+       });
       
-       TableColumn colEditar = this.tbMonitoria.getColumns().get(4);
+       TableColumn colOrientador = this.tbMonitoria.getColumns().get(4);
+       colOrientador.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Monitoria, String>, ObservableValue<String>>() {
+           public ObservableValue<String> call(TableColumn.CellDataFeatures<Monitoria, String> p) {
+               return new SimpleObjectProperty(p.getValue().getOrientador().getNome());
+           }
+       });
+       
+       this.tbMonitoria.getColumns().get(5).setCellValueFactory(new PropertyValueFactory<>("sitCertificado"));
+      
+       TableColumn colEditar = this.tbMonitoria.getColumns().get(6);
        colEditar.setCellFactory(new Callback<TableColumn<Disposer.Record, Boolean>, TableCell<Disposer.Record, Boolean>>() {
            @Override
            public TableCell<Disposer.Record, Boolean> call(TableColumn<Disposer.Record, Boolean> p) {
@@ -242,7 +276,7 @@ public class MonitoriaController implements Initializable{
            }
        });
        
-       TableColumn colDeletar = this.tbMonitoria.getColumns().get(5);
+       TableColumn colDeletar = this.tbMonitoria.getColumns().get(7);
        colDeletar.setCellFactory(new Callback<TableColumn<Disposer.Record, Boolean>, TableCell<Disposer.Record, Boolean>>() {
            @Override
            public TableCell<Disposer.Record, Boolean> call(TableColumn<Disposer.Record, Boolean> p) {
@@ -297,7 +331,7 @@ public class MonitoriaController implements Initializable{
 
             this.cmbOrientador.getSelectionModel().selectFirst();
             this.cmbDiscente.getSelectionModel().selectFirst();
-            
+            this.cmbPeriodo.getSelectionModel().selectFirst();
             this.cmbSituacao.getSelectionModel().selectFirst();
         }
     }    
@@ -328,8 +362,8 @@ public class MonitoriaController implements Initializable{
     
     private void preencherCampos(){
         
-        this.dataInicial.setValue(this.monitoria.getDataInicio().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-        this.dataFinal.setValue(this.monitoria.getDataFim().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        this.dataInicial.setValue(new Date(this.monitoria.getDataInicio().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        this.dataFinal.setValue(new Date(this.monitoria.getDataFim().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         
         ObservableList<Disciplina> dd = this.cmbDisciplina.getItems();
         ObservableList<Periodo> pp = this.cmbPeriodo.getItems();

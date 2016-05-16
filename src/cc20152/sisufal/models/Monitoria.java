@@ -18,8 +18,6 @@ public class Monitoria {
             this.orientador = new Orientador();
             this.disciplina = new Disciplina();
             this.periodo = new Periodo();
-            this.dataInicio = new Date();
-            this.dataFim = new Date();
         }
         
         public int getId() {
