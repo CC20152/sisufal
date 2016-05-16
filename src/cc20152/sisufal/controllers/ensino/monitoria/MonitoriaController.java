@@ -11,6 +11,7 @@ import cc20152.sisufal.models.Disciplina;
 import cc20152.sisufal.models.Orientador;
 import cc20152.sisufal.models.Periodo;
 import cc20152.sisufal.util.BotoesLista;
+import cc20152.sisufal.util.DataUtil;
 import com.sun.prism.impl.Disposer;
 import java.io.IOException;
 import java.net.URL;
@@ -248,14 +249,14 @@ public class MonitoriaController implements Initializable{
        TableColumn colDataInicio = this.tbMonitoria.getColumns().get(2);
        colDataInicio.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Monitoria, String>, ObservableValue<String>>() {
            public ObservableValue<String> call(TableColumn.CellDataFeatures<Monitoria, String> p) {
-               return new SimpleObjectProperty(p.getValue().getDataInicio().toString());
+               return new SimpleObjectProperty(DataUtil.getDataApresentacao(p.getValue().getDataInicio()));
            }
        });
        
        TableColumn colDataFim = this.tbMonitoria.getColumns().get(3);
        colDataFim.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Monitoria, String>, ObservableValue<String>>() {
            public ObservableValue<String> call(TableColumn.CellDataFeatures<Monitoria, String> p) {
-               return new SimpleObjectProperty(p.getValue().getDataFim().toString());
+               return new SimpleObjectProperty(DataUtil.getDataApresentacao(p.getValue().getDataFim()));
            }
        });
       
