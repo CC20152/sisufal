@@ -60,5 +60,14 @@ public class Disciplina {
     public void setNome(String nome) {
         this.nome = nome;
     }
-   
+ 
+    @Override
+    public String toString(){
+        if(this.id != 0){
+            return this.id + " - " + this.nome; 
+        }else{
+            return this.nome;
+        }
+    }
+    
 }

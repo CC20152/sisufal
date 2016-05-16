@@ -13,11 +13,11 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="622.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cc20152.sisufal.controllers.ensino.monitoria.MonitoriaController">
    <children>
-      <Button fx:id="btnVoltarLista" layoutX="50.0" layoutY="573.0" mnemonicParsing="false" onAction="#fecharLista" text="Voltar" />
-      <Button fx:id="btnNovo" layoutX="50.0" layoutY="26.0" mnemonicParsing="false" onAction="#novoServidor" prefHeight="39.0" prefWidth="125.0" styleClass="classe" stylesheets="@../style.css" text="Nova Monitoria" textAlignment="CENTER" />
-      <TextField fx:id="txtNome" layoutX="98.0" layoutY="75.0" prefHeight="25.0" prefWidth="125.0" promptText="Nome" />
-      <Button fx:id="btnBuscar" layoutX="646.0" layoutY="75.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="105.0" text="Buscar" />
-      <TableView fx:id="tbMonitoria" layoutX="52.0" layoutY="128.0" prefHeight="386.0" prefWidth="697.0">
+      <Button fx:id="btnVoltarLista" layoutX="50.0" layoutY="573.0" mnemonicParsing="false" onAction="#btnCancelar" text="Voltar" />
+      <Button fx:id="btnNovo" layoutX="50.0" layoutY="26.0" mnemonicParsing="false" onAction="#novaMonitoria" prefHeight="39.0" prefWidth="125.0" styleClass="classe" stylesheets="@../style.css" text="Nova Monitoria" textAlignment="CENTER" />
+      <TextField fx:id="txtNome" layoutX="98.0" layoutY="75.0" prefHeight="25.0" prefWidth="125.0" promptText="Discente" />
+      <Button layoutX="646.0" layoutY="75.0" mnemonicParsing="false" onAction="#btnBuscar" prefHeight="25.0" prefWidth="105.0" text="Buscar" />
+      <TableView fx:id="tbMonitoria" layoutX="52.0" layoutY="145.0" prefHeight="386.0" prefWidth="697.0">
         <columns>
           <TableColumn prefWidth="172.0" text="Nome" />
           <TableColumn prefWidth="74.0" text="Período" />
@@ -33,5 +33,7 @@
       <Label layoutX="440.0" layoutY="79.0" style="-fx-background-image: ../imgs/;" text="Data Final:" />
       <Label layoutX="229.0" layoutY="79.0" style="-fx-background-image: ../imgs/;" text="Data Inicial:" />
       <DatePicker fx:id="dataInicial" layoutX="292.0" layoutY="75.0" prefHeight="25.0" prefWidth="140.0" />
+      <Label layoutX="52.0" layoutY="112.0" style="-fx-background-image: ../imgs/;" text="Disciplina:" />
+      <ComboBox fx:id="cmbDisciplina" layoutX="113.0" layoutY="108.0" prefHeight="25.0" prefWidth="312.0" />
    </children>
 </AnchorPane>

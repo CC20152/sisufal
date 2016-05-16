@@ -5,21 +5,23 @@ import java.util.Date;
 public class Monitoria {
 
 	private int id;
-
 	private Disciplina disciplina;
-
 	private Orientador orientador;
-
 	private String sitCertificado;
-
 	private Date dataInicio;
-
 	private Date dataFim;
-
 	private Discente discente;
+	private Periodo periodo;
 
-	private String periodo;
-
+        public Monitoria(){
+            this.discente = new Discente();
+            this.orientador = new Orientador();
+            this.disciplina = new Disciplina();
+            this.periodo = new Periodo();
+            this.dataInicio = new Date();
+            this.dataFim = new Date();
+        }
+        
         public int getId() {
             return id;
         }
@@ -76,11 +78,11 @@ public class Monitoria {
             this.discente = discente;
         }
 
-        public String getPeriodo() {
+        public Periodo getPeriodo() {
             return periodo;
         }
 
-        public void setPeriodo(String periodo) {
+        public void setPeriodo(Periodo periodo) {
             this.periodo = periodo;
         }
                 
