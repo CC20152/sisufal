@@ -142,7 +142,7 @@ public class MonitoriaDAO implements IBaseDAO {
             int i = 1;
             
             if(monitoria.getDiscente().getNome() != null){
-                sql += " AND UPPER(dis.nome) LIKE UPPER(?))";
+                sql += " AND UPPER(dis.nome) LIKE UPPER(?)";
             }
         
             if(monitoria.getDataInicio() != null){
@@ -166,12 +166,12 @@ public class MonitoriaDAO implements IBaseDAO {
             }
         
             if(monitoria.getDataInicio() != null){
-                st.setDate(i, (Date) monitoria.getDataInicio());
+                st.setDate(i,  new java.sql.Date(monitoria.getDataInicio().getTime()));
                 i++;
             }
             
             if(monitoria.getDataFim() != null){
-                st.setDate(i, (Date) monitoria.getDataFim());
+                st.setDate(i,  new java.sql.Date(monitoria.getDataFim().getTime()));
                 i++;
             }
             
