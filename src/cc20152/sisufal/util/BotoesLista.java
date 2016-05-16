@@ -66,6 +66,7 @@ public class BotoesLista {
                     stage.setScene(scene1);
                     stage.show();
                 }catch(IOException e){}catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                   
                     Logger.getLogger(BotoesLista.class.getName()).log(Level.SEVERE, null, ex);
                 }
             });

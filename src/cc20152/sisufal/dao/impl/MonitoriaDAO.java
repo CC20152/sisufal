@@ -33,8 +33,8 @@ public class MonitoriaDAO implements IBaseDAO {
             st.setInt(1, ((Monitoria) object).getDisciplina().getId());
             st.setInt(2, ((Monitoria) object).getOrientador().getId());
             st.setString(3, ((Monitoria) object).getSitCertificado());
-            st.setDate(4, (Date) ((Monitoria) object).getDataInicio());
-            st.setDate(5, (Date) ((Monitoria) object).getDataFim());
+            st.setDate(4, new java.sql.Date(((Monitoria) object).getDataInicio().getTime()));
+            st.setDate(5, new java.sql.Date(((Monitoria) object).getDataFim().getTime()));
             st.setInt(6, ((Monitoria) object).getDiscente().getId());
             st.setInt(7, ((Monitoria) object).getPeriodo().getId());
             
@@ -55,8 +55,8 @@ public class MonitoriaDAO implements IBaseDAO {
             st.setInt(1, ((Monitoria) object).getDisciplina().getId());
             st.setInt(2, ((Monitoria) object).getOrientador().getId());
             st.setString(3, ((Monitoria) object).getSitCertificado());
-            st.setDate(4, (Date) ((Monitoria) object).getDataInicio());
-            st.setDate(5, (Date) ((Monitoria) object).getDataFim());
+            st.setDate(4, new java.sql.Date(((Monitoria) object).getDataInicio().getTime()));
+            st.setDate(5, new java.sql.Date(((Monitoria) object).getDataFim().getTime()));
             st.setInt(6, ((Monitoria) object).getDiscente().getId());
             st.setInt(7, ((Monitoria) object).getPeriodo().getId());
             st.setInt(8, ((Monitoria) object).getId());
@@ -88,7 +88,7 @@ public class MonitoriaDAO implements IBaseDAO {
     public List<Monitoria> listAll(){
         ArrayList<Monitoria> listaMonitoria = new ArrayList();
         this.conn = Conexao.getConexao();
-        String sql = "SELECT d.id_disciplinas, d.nome as NOME_DISCIPLINA, m.*, dis.id_discente, dis.nome AS NOME_DISCENTE, s.id_servidor AS ID_ORIENTADOR, s.siape, s.nome AS NOME_ORIENTADOR FROM monitoria m, disciplinas d, discentes dis, servidor s  WHERE d.id_disciplinas = m.id_disciplina AND m.id_discente = dis.id_discente AND s.id_servidor = m.id_orientador";
+        String sql = "SELECT d.id_disciplinas, d.nome as NOME_DISCIPLINA, m.*, dis.id_discente, dis.nome AS NOME_DISCENTE, s.id_servidor AS ID_ORIENTADOR, s.siape, s.nome AS NOME_ORIENTADOR, p.id_periodo, p.periodo AS NOME_PERIODO FROM monitoria m, disciplinas d, discentes dis, servidor s, periodo p  WHERE m.id_periodo = p.id_periodo AND d.id_disciplinas = m.id_disciplina AND m.id_discente = dis.id_discente AND s.id_servidor = m.id_orientador";
         
         try{
             PreparedStatement st = this.conn.prepareStatement(sql);
@@ -134,7 +134,7 @@ public class MonitoriaDAO implements IBaseDAO {
         
         this.conn = Conexao.getConexao();
         Monitoria monitoria = (Monitoria) object;
-        String sql = "SELECT d.id_disciplinas, d.nome as NOME_DISCIPLINA, m.*, dis.id_discente, dis.nome AS NOME_DISCENTE, s.id_servidor AS ID_ORIENTADOR, s.siape, s.nome AS NOME_ORIENTADOR FROM monitoria m, disciplinas d, discentes dis, servidor s  WHERE d.id_disciplinas = m.id_disciplina AND m.id_discente = dis.id_discente AND s.id_servidor = m.id_orientador";
+        String sql = "SELECT d.id_disciplinas, d.nome as NOME_DISCIPLINA, m.*, dis.id_discente, dis.nome AS NOME_DISCENTE, s.id_servidor AS ID_ORIENTADOR, s.siape, s.nome AS NOME_ORIENTADOR, p.id_periodo, p.periodo AS NOME_PERIODO FROM monitoria m, disciplinas d, discentes dis, servidor s, periodo p  WHERE m.id_periodo = p.id_periodo AND d.id_disciplinas = m.id_disciplina AND m.id_discente = dis.id_discente AND s.id_servidor = m.id_orientador";
         
         try{
             
@@ -142,7 +142,7 @@ public class MonitoriaDAO implements IBaseDAO {
             int i = 1;
             
             if(monitoria.getDiscente().getNome() != null){
-                sql += " AND UPPER(dis.nome) LIKE UPPER(?))";
+                sql += " AND UPPER(dis.nome) LIKE UPPER(?)";
             }
         
             if(monitoria.getDataInicio() != null){
@@ -166,12 +166,12 @@ public class MonitoriaDAO implements IBaseDAO {
             }
         
             if(monitoria.getDataInicio() != null){
-                st.setDate(i, (Date) monitoria.getDataInicio());
+                st.setDate(i,  new java.sql.Date(monitoria.getDataInicio().getTime()));
                 i++;
             }
             
             if(monitoria.getDataFim() != null){
-                st.setDate(i, (Date) monitoria.getDataFim());
+                st.setDate(i,  new java.sql.Date(monitoria.getDataFim().getTime()));
                 i++;
             }
             
