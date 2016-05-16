@@ -49,10 +49,10 @@ import javafx.scene.control.ButtonType;
  *
  * @author Gabriel Fabrício
  */
-public class PatrimonioController implements Initializable {
+public class PatrimonioPermanenteController implements Initializable {
     private PatrimonioDAO patrimonioDAO = new PatrimonioDAO();
     String pacote = "controllers/administrativo/patrimonio/"; //Pacote do controller
-    String fxml = "fxml/cadastro/CadastroPatrimonioFXML.fxml";
+    String fxml = "fxml/cadastro/CadastroPatrimonioPermanenteFXML.fxml";
     ObservableList<Patrimonio> data = FXCollections.observableArrayList();
     
     private String tipo;
