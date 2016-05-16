@@ -3,39 +3,28 @@ import java.util.Date;
 
 public class Movimentacao {
 
-	private Integer id;
+	private int id;
+
 	private int nomeSala;
-	private int numeroSala;
+
+	private int codigoSala;
+
 	private int idSala;
+
 	private int nomeBloco;
-	private int numeroBloco;
+
+	private int codigoBloco;
+
 	private int idBloco;
-    private Sala sala;
-    private Bloco bloco = sala.getBloco();
+
 	private Date data;
 
-        public Integer getId() {
+        public int getId() {
             return id;
         }
 
-        public void setId(Integer id) {
+        public void setId(int id) {
             this.id = id;
-        }
-
-        public Sala getSala() {
-            return sala;
-        }
-
-        public void setSala(Sala sala) {
-            this.sala = sala;
-        }
-
-        public Bloco getBloco() {
-            return bloco;
-        }
-
-        public void setBloco(Bloco bloco) {
-            this.bloco = bloco;
         }
 
         public int getNomeSala() {
@@ -46,12 +35,12 @@ public class Movimentacao {
             this.nomeSala = nomeSala;
         }
 
-        public int getNumeroSala() {
-            return numeroSala;
+        public int getCodigoSala() {
+            return codigoSala;
         }
 
-        public void setNumeroSala(int numeroSala) {
-            this.numeroSala = numeroSala;
+        public void setCodigoSala(int codigoSala) {
+            this.codigoSala = codigoSala;
         }
 
         public int getIdSala() {
@@ -70,12 +59,12 @@ public class Movimentacao {
             this.nomeBloco = nomeBloco;
         }
 
-        public int getNumeroBloco() {
-            return numeroBloco;
+        public int getCodigoBloco() {
+            return codigoBloco;
         }
 
-        public void setNumeroBloco(int numeroBloco) {
-            this.numeroBloco = numeroBloco;
+        public void setCodigoBloco(int codigoBloco) {
+            this.codigoBloco = codigoBloco;
         }
 
         public int getIdBloco() {
