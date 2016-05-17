@@ -29,7 +29,8 @@ public class TelaPrincipalController implements Initializable {
     final String fxmlListaDiscente = "fxml/lista/ListaDiscenteFXML.fxml"; 
     final String fxmlListaServidor = "fxml/lista/ListaServidorFXML.fxml"; 
     final String fxmlListaCurso = "fxml/lista/ListaCursoFXML.fxml"; 
-    
+    final String fxmlListaProjeto = "fxml/lista/ListaProjetoFXML.fxml"; 
+    final String fxmlListainstituicaoFinanciadora = "fxml/lista/ListaInstituicaoFinanciadoraFXML.fxml"; 
     final String listaMonitoriaFXML = "fxml/lista/ListaMonitoriaFXML.fxml"; 
     final String listaDisciplinaFXML = "fxml/lista/ListaDisciplinaFXML.fxml"; 
     
@@ -91,6 +92,7 @@ public class TelaPrincipalController implements Initializable {
     
     @FXML
     private void menuDisciplina(ActionEvent event) throws IOException{
+        System.out.println("Pora");
         String path = getClass().getResource("").toString();
         path = path.replace(pacote,"");
         URL url =  new URL(path + this.listaDisciplinaFXML);
@@ -124,6 +126,32 @@ public class TelaPrincipalController implements Initializable {
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setTitle("Curso");
+        stage.setScene(scene);
+        stage.show();
+    }
+    
+    @FXML
+    private void menuProjeto(ActionEvent event) throws IOException{
+        String path = getClass().getResource("").toString();
+        path = path.replace(pacote,"");
+        URL url =  new URL(path + this.fxmlListaProjeto);
+        Parent root = FXMLLoader.load(url);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setTitle("Projeto");
+        stage.setScene(scene);
+        stage.show();
+    }
+    
+    @FXML
+    private void menuInstituicaoFinanciadora(ActionEvent event) throws IOException{
+        String path = getClass().getResource("").toString();
+        path = path.replace(pacote,"");
+        URL url =  new URL(path + this.fxmlListainstituicaoFinanciadora);
+        Parent root = FXMLLoader.load(url);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setTitle("Instituiçoes Financiadoras");
         stage.setScene(scene);
         stage.show();
     }
