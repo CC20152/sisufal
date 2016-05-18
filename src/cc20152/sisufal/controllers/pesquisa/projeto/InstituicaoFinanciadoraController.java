@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,6 +25,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -41,6 +43,9 @@ public class InstituicaoFinanciadoraController implements Initializable   {
     
     final String pacote = "controllers/pesquisa/projeto/";
     private String fxml = "fxml/cadastro/CadastroInstituicaoFinanciadoraFXML.fxml";
+    
+    private String tipo;
+    private InstituicaoFinanciadora instituicaoFinanciadora;
     
     @FXML
     private TextField txtNome;
@@ -61,6 +66,29 @@ public class InstituicaoFinanciadoraController implements Initializable   {
     public void initialize(URL url, ResourceBundle resources) {
         if(!url.getPath().contains(this.fxml)){
             listarInstituicoesFinanciadoras();
+        }
+    }
+    
+    @FXML
+    private void btnBuscar(ActionEvent event){
+        InstituicaoFinanciadoraDAO instituicaoFinanciadoraDAO = new InstituicaoFinanciadoraDAO();
+        InstituicaoFinanciadora instituicaoFinanciadora = new InstituicaoFinanciadora();
+        
+        if(this.txtCodigo.getText().equals("") && this.txtNome.getText().equals("")) {
+            listarInstituicoesFinanciadoras();
+        } else {
+            if(!this.txtCodigo.getText().equals("")){
+                instituicaoFinanciadora.setCodigo(this.txtCodigo.getText());
+            }
+
+            if(!this.txtNome.getText().equals("")){
+                instituicaoFinanciadora.setNome(this.txtNome.getText());
+            }
+
+            List<InstituicaoFinanciadora> list = instituicaoFinanciadoraDAO.listWithParams(instituicaoFinanciadora);
+
+            this.data.clear();
+            this.data.addAll(list);
         }
     }
     
@@ -95,16 +123,26 @@ public class InstituicaoFinanciadoraController implements Initializable   {
             return ;
         } 
         
-        InstituicaoFinanciadora instituicaoFinanciadora = new InstituicaoFinanciadora();
-        instituicaoFinanciadora.setCodigo(this.txtCodigo.getText());
-        instituicaoFinanciadora.setNome(this.txtNome.getText());
+        InstituicaoFinanciadora old = this.instituicaoFinanciadora;
+        if(this.instituicaoFinanciadora == null){
+            this.instituicaoFinanciadora = new InstituicaoFinanciadora();
+        }
+        
+        this.instituicaoFinanciadora.setNome(this.txtNome.getText());
+        this.instituicaoFinanciadora.setCodigo(this.txtCodigo.getText());
         
         InstituicaoFinanciadoraDAO instituicaoFinanciadoraDAO = new InstituicaoFinanciadoraDAO();
-        String result = instituicaoFinanciadoraDAO.save(instituicaoFinanciadora);
-        System.out.println(result);
-        if(result.equals("OK")){
-           data.add(instituicaoFinanciadora);
-           
+        String result = null;
+        if(this.tipo == null){
+            result = instituicaoFinanciadoraDAO.save(instituicaoFinanciadora);
+        }else{
+            result = instituicaoFinanciadoraDAO.update(instituicaoFinanciadora);
+        }
+        
+        if(result.equals("OK")){ 
+           if(this.tipo == null) this.data.add(instituicaoFinanciadora); 
+           else this.data.set(this.data.indexOf(instituicaoFinanciadora), instituicaoFinanciadora);
+               
            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
            alerta.setTitle("Sucesso");
            alerta.setHeaderText("Instituiçao Financiadora cadastrado com sucesso!");
@@ -165,5 +203,30 @@ public class InstituicaoFinanciadoraController implements Initializable   {
        }
        
        tableInstituicoesFinanciadoras.setItems(data);       
+    }
+    
+    public void setEditar(String tipo, ObservableList<?> data, InstituicaoFinanciadora instituicaoFinanciadora){
+        this.tipo = tipo;
+        this.data = (ObservableList<InstituicaoFinanciadora>)data;
+        this.instituicaoFinanciadora = (InstituicaoFinanciadora) instituicaoFinanciadora;
+        preencherCampos();
+    }
+    
+    public void deletar(InstituicaoFinanciadora instituicaoFinanciadora, ObservableList<?> _data){
+        Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+        alerta.setTitle("Atençao!");
+        alerta.setHeaderText("Deseja realmente excluir este registro?");
+        alerta.setContentText("Você não poderá voltar atrás!");
+        Optional<ButtonType> res = alerta.showAndWait();
+        if(res.get() == ButtonType.OK){
+            InstituicaoFinanciadoraDAO instituicaoFinanciadoraDAO = new InstituicaoFinanciadoraDAO();
+            instituicaoFinanciadoraDAO.delete(instituicaoFinanciadora);
+            _data.remove(instituicaoFinanciadora);
+        }
+    }
+    
+    private void preencherCampos(){
+        this.txtNome.setText(this.instituicaoFinanciadora.getNome());
+        this.txtCodigo.setText(this.instituicaoFinanciadora.getCodigo());
     }
 }

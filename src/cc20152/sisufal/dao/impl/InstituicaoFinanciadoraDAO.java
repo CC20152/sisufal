@@ -103,8 +103,48 @@ public class InstituicaoFinanciadoraDAO implements IBaseDAO{
     }
 
     @Override
-    public List<?> listWithParams(Object object) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<InstituicaoFinanciadora> listWithParams(Object object){
+        ArrayList<InstituicaoFinanciadora> listaInstituicoesFinanciadoras = new ArrayList();
+        this.conexao = Conexao.getConexao();
+        InstituicaoFinanciadora instituicaoFinanciadora = (InstituicaoFinanciadora) object;
+        String sql = "SELECT * FROM instituicaofinanciadora WHERE";
+        
+        try{          
+            int i = 1;
+            
+            if(instituicaoFinanciadora.getCodigo()!= null){
+                sql += " codigo LIKE ? ";
+            }
+
+            if(instituicaoFinanciadora.getNome() != null){
+                if(instituicaoFinanciadora.getCodigo()!= null) sql += "";
+                sql += " upper(nome) LIKE upper(?)";
+            }
+            
+            PreparedStatement st = this.conexao.prepareStatement(sql);
+            ResultSet rs;
+            
+            if(instituicaoFinanciadora.getCodigo()!= null){
+                st.setString(i, instituicaoFinanciadora.getCodigo());
+                i++;
+            }
+
+            if(instituicaoFinanciadora.getNome() != null){
+                st.setString(i, "%" + instituicaoFinanciadora.getNome() + "%");
+                i++;
+            }
+            
+            System.out.println(sql);
+            
+            rs = st.executeQuery();
+            listaInstituicoesFinanciadoras = mapearResultSet(rs);
+            
+            Conexao.desconectar();
+        } catch(Exception ex){
+            ex.printStackTrace();
+        }
+        
+        return listaInstituicoesFinanciadoras;
     }
     
     private ArrayList<InstituicaoFinanciadora> mapearResultSet(ResultSet rs) throws SQLException{
