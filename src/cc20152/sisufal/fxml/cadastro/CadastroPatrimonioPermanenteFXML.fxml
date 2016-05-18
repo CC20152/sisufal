@@ -11,7 +11,7 @@
       <Label layoutX="21.0" layoutY="165.0" text="Nome do Patrimônio:" />
       <Label layoutX="21.0" layoutY="217.0" text="Código do Patrimônio:" />
       <TextField fx:id="txtNome" layoutX="16.0" layoutY="182.0" prefWidth="270.0" promptText="Nome" />
-      <TextField fx:id="txtNumero" layoutX="16.0" layoutY="234.0" prefWidth="270.0" promptText="Código" />
+      <TextField fx:id="txtCodigo" layoutX="16.0" layoutY="234.0" prefWidth="270.0" promptText="Código" />
       <ComboBox fx:id="cmbBloco" layoutX="308.0" layoutY="120.0" prefWidth="270.0" />
       <Label layoutX="313.0" layoutY="155.0" text="Sala:" />
       <Label layoutX="313.0" layoutY="103.0" text="Bloco:" />
@@ -22,7 +22,7 @@
       </ImageView>
       <Button fx:id="btnCancelarCadastro" layoutX="224.0" layoutY="356.0" mnemonicParsing="false" onAction="#cancelarCadastro" text="Cancelar" />
       <Button layoutX="159.0" layoutY="356.0" mnemonicParsing="false" onAction="#btnSalvar" text="Salvar" />
-      <TableView fx:id="tableSala" layoutX="308.0" layoutY="172.0" prefHeight="134.0" prefWidth="270.0">
+      <TableView layoutX="308.0" layoutY="172.0" prefHeight="134.0" prefWidth="270.0">
         <columns>
           <TableColumn prefWidth="269.0" text="Salas" />
         </columns>

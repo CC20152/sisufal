@@ -28,7 +28,9 @@ public class TelaPrincipalController implements Initializable {
     final String fxmlListaTCC = "fxml/lista/ListaTCCFXML.fxml"; 
     final String fxmlListaDiscente = "fxml/lista/ListaDiscenteFXML.fxml"; 
     final String fxmlListaServidor = "fxml/lista/ListaServidorFXML.fxml"; 
-    final String fxmlListaCurso = "fxml/lista/ListaCursoFXML.fxml"; 
+    final String fxmlListaCurso = "fxml/lista/ListaCursoFXML.fxml";
+    final String fxmlListaPatrimonio = "fxml/lista/ListaPatrimonioFXML.fxml";
+    final String fxmlListaPatrimonioPermanente = "fxml/lista/ListaPatrimonioPermanenteFXML.fxml";
     final String fxmlListaProjeto = "fxml/lista/ListaProjetoFXML.fxml"; 
     final String fxmlListainstituicaoFinanciadora = "fxml/lista/ListaInstituicaoFinanciadoraFXML.fxml"; 
     final String listaMonitoriaFXML = "fxml/lista/ListaMonitoriaFXML.fxml"; 
@@ -126,6 +128,34 @@ public class TelaPrincipalController implements Initializable {
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setTitle("Curso");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
+    private void menuPatrimonioPermanente (ActionEvent event) throws IOException{
+        String path = getClass().getResource("").toString();
+        path = path.replace(pacote,"");
+        URL url = new URL(path + this.fxmlListaPatrimonioPermanente);
+        //System.out.println(url);
+        Parent root = FXMLLoader.load(url);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setTitle("Patrimônios Permanentes");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
+    private void menuPatrimonioConsumo (ActionEvent event) throws IOException{
+        String path = getClass().getResource("").toString();
+        path = path.replace(pacote,"");
+        URL url = new URL(path + this.fxmlListaPatrimonio);
+        //System.out.println(url);
+        Parent root = FXMLLoader.load(url);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setTitle("Patrimônios de Consumo");
         stage.setScene(scene);
         stage.show();
     }

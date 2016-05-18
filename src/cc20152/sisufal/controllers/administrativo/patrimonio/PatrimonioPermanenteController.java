@@ -49,10 +49,10 @@ import javafx.scene.control.ButtonType;
  *
  * @author Gabriel Fabrício
  */
-public class PatrimonioController implements Initializable {
+public class PatrimonioPermanenteController implements Initializable {
     private PatrimonioDAO patrimonioDAO = new PatrimonioDAO();
     String pacote = "controllers/administrativo/patrimonio/"; //Pacote do controller
-    String fxml = "fxml/cadastro/CadastroPatrimonioFXML.fxml";
+    String fxml = "fxml/cadastro/CadastroPatrimonioPermanenteFXML.fxml";
     ObservableList<Patrimonio> data = FXCollections.observableArrayList();
     
     private String tipo;
@@ -167,14 +167,20 @@ public class PatrimonioController implements Initializable {
         Stage stage = (Stage) btnVoltarLista.getScene().getWindow();
         stage.close();
     }
-    
+    /*
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        if(!url.getPath().contains(this.fxml)){
+       if(!url.getPath().contains(this.fxml)){
+            tablePatrimonio.setItems(data);
             listarGridPatrimonio();
-        }       
+            listarCombotxtNumero();
+        }else{
+            listarComboBloco();
+            listarTableSala();
+        }
+       
     }
-    /*
+    */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.txtNome.setTooltip(new Tooltip("Digite o nome do patrimônio"));
@@ -193,7 +199,7 @@ public class PatrimonioController implements Initializable {
             listarGridPatrimonio();
         }
     }
-    */
+    
     private void listarComboBloco() {
         List<Bloco> listaBloco = new ArrayList<>();
         listaBloco = new BlocoDAO().listAll();

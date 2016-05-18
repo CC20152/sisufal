@@ -47,10 +47,10 @@
             </Menu>
             <Menu mnemonicParsing="false" text="Patrimônio">
               <items>
-                <MenuItem mnemonicParsing="false" text="Patrimônios Permanentes" />
+                <MenuItem mnemonicParsing="false" onAction="#menuPatrimonioPermanente" text="Patrimônios Permanentes" />
                   <MenuItem mnemonicParsing="false" text="Movimentar Patrimônio Permanente" />
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Patrimônios de Consumo" />
+                  <MenuItem mnemonicParsing="false" onAction="#menuPatrimonioConsumo" text="Patrimônios de Consumo" />
                   <MenuItem mnemonicParsing="false" text="Movimentar Patrimônio de Consumo" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" text="Blocos" />
