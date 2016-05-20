@@ -251,7 +251,6 @@ public class ConcursoController implements Initializable {
        TableColumn colSupervisor = this.tbConcurso.getColumns().get(5);
        colSupervisor.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Concurso, String>, ObservableValue<String>>() {
            public ObservableValue<String> call(TableColumn.CellDataFeatures<Concurso, String> p) {
-               System.out.println(p.getValue().getSupervisor());
                return new SimpleObjectProperty(p.getValue().getSupervisor().getNome());
            }
        });
