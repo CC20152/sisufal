@@ -6,12 +6,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cc20152.sisufal.controllers.administrativo.patrimonio.BlocoController">
    <children>
       <Label layoutX="21.0" layoutY="109.0" text="Nome do Bloco:" />
       <Label layoutX="21.0" layoutY="161.0" text="Código do Bloco:" />
-      <TextField layoutX="16.0" layoutY="126.0" prefWidth="270.0" promptText="Nome" />
-      <TextField layoutX="16.0" layoutY="178.0" prefWidth="270.0" promptText="Código" />
+      <TextField fx:id="txtNome" layoutX="16.0" layoutY="126.0" prefWidth="270.0" promptText="Nome" />
+      <TextField fx:id="txtNumero" layoutX="16.0" layoutY="178.0" prefWidth="270.0" promptText="Código" />
       <ImageView fitHeight="76.0" fitWidth="300.0" pickOnBounds="true">
          <image>
             <Image url="@../imgs/IC.png" />

@@ -4,8 +4,8 @@ import java.util.Date;
 public class Movimentacao {
 
 	private Integer id;
-    private Sala sala;
-    private Bloco bloco = sala.getBloco();
+    private Integer id_patrimonio;
+    private Integer id_sala_destino;
 	private Date data;
 
         public Integer getId() {
@@ -16,20 +16,20 @@ public class Movimentacao {
             this.id = id;
         }
 
-        public Sala getSala() {
-            return sala;
+        public Integer getSala() {
+            return id_sala_destino;
         }
 
-        public void setSala(Sala sala) {
-            this.sala = sala;
+        public void setSala(Integer id_sala_destino) {
+            this.id_sala_destino = id_sala_destino;
         }
 
-        public Bloco getBloco() {
-            return bloco;
+        public Integer getPatrimonio() {
+            return patrimonio;
         }
 
-        public void setBloco(Bloco bloco) {
-            this.bloco = bloco;
+        public void setPatrimonio(Integer patrimonio) {
+            this.patrimonio = patrimonio;
         }
 
         public Date getData() {

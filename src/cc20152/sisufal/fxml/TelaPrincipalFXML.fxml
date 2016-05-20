@@ -53,8 +53,8 @@
                   <MenuItem mnemonicParsing="false" onAction="#menuPatrimonioConsumo" text="Patrimônios de Consumo" />
                   <MenuItem mnemonicParsing="false" text="Movimentar Patrimônio de Consumo" />
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Blocos" />
-                  <MenuItem mnemonicParsing="false" text="Salas" />
+                  <MenuItem mnemonicParsing="false" onAction="#menuBloco" text="Blocos" />
+                  <MenuItem mnemonicParsing="false" onAction="#menuSala" text="Salas" />
               </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Projeto">

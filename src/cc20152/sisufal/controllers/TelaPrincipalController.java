@@ -29,6 +29,8 @@ public class TelaPrincipalController implements Initializable {
     final String fxmlListaDiscente = "fxml/lista/ListaDiscenteFXML.fxml"; 
     final String fxmlListaServidor = "fxml/lista/ListaServidorFXML.fxml"; 
     final String fxmlListaCurso = "fxml/lista/ListaCursoFXML.fxml";
+    final String fxmlListaBloco = "fxml/lista/ListaBlocoFXML.fxml";
+    final String fxmlListaSala = "fxml/lista/ListaSalaFXML.fxml";
     final String fxmlListaPatrimonio = "fxml/lista/ListaPatrimonioFXML.fxml";
     final String fxmlListaPatrimonioPermanente = "fxml/lista/ListaPatrimonioPermanenteFXML.fxml";
     final String fxmlListaProjeto = "fxml/lista/ListaProjetoFXML.fxml"; 
@@ -182,6 +184,34 @@ public class TelaPrincipalController implements Initializable {
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setTitle("Instituiçoes Financiadoras");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
+    private void menuSala (ActionEvent event) throws IOException{
+        String path = getClass().getResource("").toString();
+        path = path.replace(pacote,"");
+        URL url = new URL(path + this.fxmlListaSala);
+        //System.out.println(url);
+        Parent root = FXMLLoader.load(url);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setTitle("Salas");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
+    private void menuBloco (ActionEvent event) throws IOException{
+        String path = getClass().getResource("").toString();
+        path = path.replace(pacote,"");
+        URL url = new URL(path + this.fxmlListaBloco);
+        //System.out.println(url);
+        Parent root = FXMLLoader.load(url);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setTitle("Blocos");
         stage.setScene(scene);
         stage.show();
     }

@@ -6,8 +6,8 @@ public class Patrimonio {
 	private String numero;
 	private String nome;
     private Movimentacao ultimaMovimentacao;
-    private Sala sala = ultimaMovimentacao.getSala();
-    private Bloco bloco = ultimaMovimentacao.getBloco();
+    private Integer id_sala;
+    private Integer id_bloco;
 	private Integer idServidorResponsavel;
 	private Integer idDiscenteResponsavel;
 
@@ -35,20 +35,20 @@ public class Patrimonio {
             this.nome = nome;
         }
 
-        public Sala getSala() {
-            return sala;
+        public Integer getSala() {
+            return id_sala;
         }
 
-        public void setSala(Sala sala) {
-            this.sala = sala;
+        public void setSala(Integer id_sala) {
+            this.id_sala = id_sala;
         }
 
-        public Bloco getBloco() {
-            return bloco;
+        public Integer getBloco() {
+            return id_bloco;
         }
 
-        public void setBloco(Bloco bloco) {
-            this.bloco = bloco;
+        public void setBloco(Integer id_bloco) {
+            this.id_bloco = id_bloco;
         }
 
         public Movimentacao getUltimaMovimentacao() {

@@ -19,14 +19,14 @@ import java.util.ArrayList;
  *
  * @author Gabriel Fabrício
  */
-public class PatrimonioDAO implements IBaseDAO {
+public class PatrimonioPermanenteDAO implements IBaseDAO {
     
     private Connection conn;
     
     @Override
     public String save(Object object){
         this.conn = Conexao.getConexao();
-        String sql = "INSERT INTO patrimonioconsumo(nome, numero, id_bloco, id_sala) VALUES(?, ?, ?, ?)";   
+        String sql = "INSERT INTO patrimoniopermanente(nome, numero, id_bloco, id_sala) VALUES(?, ?, ?, ?)";   
         try{
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, ((Patrimonio) object).getNome());
@@ -44,7 +44,7 @@ public class PatrimonioDAO implements IBaseDAO {
     @Override
     public String update(Object object){
         this.conn = Conexao.getConexao();
-        String sql = "UPDATE patrimonioconsumo SET nome = ?, numero = ?, id_bloco = ?, id_sala = ? WHERE id_patrimonio = ?";   
+        String sql = "UPDATE patrimoniopermanente SET nome = ?, numero = ?, id_bloco = ?, id_sala = ? WHERE id_patrimonio = ?";   
         try{
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, ((Patrimonio) object).getNome());
@@ -63,7 +63,7 @@ public class PatrimonioDAO implements IBaseDAO {
     @Override
     public String delete(Object object){
         this.conn = Conexao.getConexao();
-        String sql = "DELETE FROM patrimonioconsumo WHERE id_patrimonio = ?";   
+        String sql = "DELETE FROM patrimoniopermanente WHERE id_patrimonio = ?";   
         try{
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, ((Patrimonio) object).getId());
@@ -79,7 +79,7 @@ public class PatrimonioDAO implements IBaseDAO {
     public List<Patrimonio> listAll(){
         ArrayList<Patrimonio> listaPatrimonio = new ArrayList();
         this.conn = Conexao.getConexao();
-        String sql = "SELECT * FROM patrimonioconsumo";
+        String sql = "SELECT * FROM patrimoniopermanente";
         try{
             PreparedStatement st = this.conn.prepareStatement(sql);
             ResultSet rs;
@@ -121,7 +121,7 @@ public class PatrimonioDAO implements IBaseDAO {
         ArrayList<Patrimonio> listaPatrimonio = new ArrayList();
         this.conn = Conexao.getConexao();
         Patrimonio patrimonio = (Patrimonio) object;
-        String sql = "SELECT d.id_patrimonios, d.nome, c.nome as NOME_BLOCO, d.numero, d.id_sala FROM salas c, d.id_bloco FROM blocos c, patrimonioconsumo d WHERE d.id_bloco = c.id_bloco";
+        String sql = "SELECT d.id_patrimonios, d.nome, c.nome as NOME_BLOCO, d.numero, d.id_sala FROM salas c, d.id_bloco FROM blocos c, patrimoniopermanente d WHERE d.id_bloco = c.id_bloco";
         
         try{
             
@@ -180,10 +180,8 @@ public class PatrimonioDAO implements IBaseDAO {
             patrimonio.setId(rs.getInt("ID_PATRIMONIO"));
             patrimonio.setNome(rs.getString("NOME"));
             patrimonio.setNumero(rs.getString("NUMERO"));
-            patrimonio.getBloco().setId(rs.getInt("ID_BLOCO"));
-            patrimonio.getBloco().setNome(rs.getString("NOME_BLOCO"));
-            patrimonio.getSala().setId(rs.getInt("ID_SALA"));
-            patrimonio.getSala().setNome(rs.getString("NOME_SALA"));
+            patrimonio.setBloco(rs.getInt("ID_BLOCO"));
+            patrimonio.setSala(rs.getInt("ID_SALA"));
             listaPatrimonio.add(patrimonio);
     }
         

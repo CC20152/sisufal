@@ -1,11 +1,14 @@
 package cc20152.sisufal.models;
+import java.util.ArrayList;
 
 public class Sala {
 
 	private Integer id;
 	private String nome;
 	private String codigo;
-    private Bloco bloco;
+    private Integer id_bloco;
+    private ArrayList<Patrimonio> patrimonios;
+       
 	
         public Integer getId() {
             return id;
@@ -30,13 +33,13 @@ public class Sala {
         public void setCodigo(String codigo) {
             this.codigo = codigo;
         }
-        
-        public Bloco getBloco() {
-            return bloco;
+
+        public Integer getBloco() {
+            return id_bloco;
         }
 
-        public void setBloco(Bloco bloco) {
-            this.bloco = bloco;
+        public void setBloco(Integer id_bloco) {
+            this.id_bloco = id_bloco;
         }
 
         @Override

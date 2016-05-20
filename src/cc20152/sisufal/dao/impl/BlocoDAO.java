@@ -42,7 +42,7 @@ public class BlocoDAO implements IBaseDAO {
     @Override
     public String update(Object object){
         this.conn = Conexao.getConexao();
-        String sql = "UPDATE blocos SET nome = ?, codigo = ? WHERE id_bloco = ?";   
+        String sql = "UPDATE bloco SET nome = ?, codigo = ? WHERE id_bloco = ?";   
         try{
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, ((Bloco) object).getNome());
@@ -75,7 +75,7 @@ public class BlocoDAO implements IBaseDAO {
     public List<Bloco> listAll(){
         ArrayList<Bloco> listaBloco = new ArrayList();
         this.conn = Conexao.getConexao();
-        String sql = "SELECT d.id_bloco, d.nome, d.codigo";
+        String sql = "SELECT * FROM bloco";
         
         try{
             PreparedStatement st = this.conn.prepareStatement(sql);
@@ -98,7 +98,7 @@ public class BlocoDAO implements IBaseDAO {
         ArrayList<Bloco> listaBloco = new ArrayList();
         this.conn = Conexao.getConexao();
         Bloco bloco = (Bloco) object;
-        String sql = "SELECT d.id_blocos, d.nome, d.codigo";
+        String sql = "SELECT * FROM bloco";
         
         try{
             

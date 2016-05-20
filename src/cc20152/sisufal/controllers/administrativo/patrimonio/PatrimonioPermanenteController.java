@@ -5,7 +5,7 @@
  */
 package cc20152.sisufal.controllers.administrativo.patrimonio;
 
-import cc20152.sisufal.dao.impl.PatrimonioDAO;
+import cc20152.sisufal.dao.impl.PatrimonioPermanenteDAO;
 import cc20152.sisufal.dao.impl.BlocoDAO;
 import cc20152.sisufal.dao.impl.SalaDAO;
 import cc20152.sisufal.controllers.administrativo.patrimonio.*;
@@ -50,7 +50,7 @@ import javafx.scene.control.ButtonType;
  * @author Gabriel Fabrício
  */
 public class PatrimonioPermanenteController implements Initializable {
-    private PatrimonioDAO patrimonioDAO = new PatrimonioDAO();
+    private PatrimonioPermanenteDAO patrimonioDAO = new PatrimonioPermanenteDAO();
     String pacote = "controllers/administrativo/patrimonio/"; //Pacote do controller
     String fxml = "fxml/cadastro/CadastroPatrimonioPermanenteFXML.fxml";
     ObservableList<Patrimonio> data = FXCollections.observableArrayList();
@@ -77,7 +77,7 @@ public class PatrimonioPermanenteController implements Initializable {
     
     @FXML
     private void btnBuscar(ActionEvent event){
-        PatrimonioDAO patrimonioDAO = new PatrimonioDAO();
+        PatrimonioPermanenteDAO patrimonioDAO = new PatrimonioPermanenteDAO();
         Patrimonio patrimonio = new Patrimonio();
         
         if(!this.txtNome.getText().equals("")){
@@ -85,11 +85,11 @@ public class PatrimonioPermanenteController implements Initializable {
         }
         
         if(this.cmbBloco.getSelectionModel() != null && !this.cmbBloco.getSelectionModel().isSelected(0)){
-            patrimonio.getBloco().setId(this.cmbBloco.getValue().getId());
+            patrimonio.setBloco(this.cmbBloco.getValue().getId());
         }
         
         if(this.cmbSala.getSelectionModel() != null && !this.cmbSala.getSelectionModel().isSelected(0)){
-            patrimonio.getSala().setId(this.cmbSala.getValue().getId());
+            patrimonio.setSala(this.cmbSala.getValue().getId());
         }
         
         List<Patrimonio> list = patrimonioDAO.listWithParams(patrimonio);
@@ -136,8 +136,8 @@ public class PatrimonioPermanenteController implements Initializable {
         Patrimonio patrimonio = new Patrimonio();
         patrimonio.setNome(this.txtNome.getText());
         patrimonio.setNumero(this.txtNumero.getText());
-        patrimonio.setBloco(this.cmbBloco.getValue());
-        patrimonio.setSala(this.tableSala.getSelectionModel().getSelectedItem());
+        patrimonio.setBloco(this.cmbBloco.getValue().getId());
+        patrimonio.setSala(this.tableSala.getSelectionModel().getSelectedItem().getId());
         
         String result = patrimonioDAO.save(patrimonio);
         System.out.println(result);
@@ -167,20 +167,14 @@ public class PatrimonioPermanenteController implements Initializable {
         Stage stage = (Stage) btnVoltarLista.getScene().getWindow();
         stage.close();
     }
-    /*
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-       if(!url.getPath().contains(this.fxml)){
-            tablePatrimonio.setItems(data);
+        if(!url.getPath().contains(this.fxml)){
             listarGridPatrimonio();
-            listarCombotxtNumero();
-        }else{
-            listarComboBloco();
-            listarTableSala();
-        }
-       
+        }       
     }
-    */
+    /*
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.txtNome.setTooltip(new Tooltip("Digite o nome do patrimônio"));
@@ -199,23 +193,23 @@ public class PatrimonioPermanenteController implements Initializable {
             listarGridPatrimonio();
         }
     }
-    
+    */
     private void listarComboBloco() {
         List<Bloco> listaBloco = new ArrayList<>();
         listaBloco = new BlocoDAO().listAll();
         this.cmbBloco.getItems().setAll(listaBloco);
         this.cmbBloco.getSelectionModel().selectFirst();
     }
-
+    /*
     private void listarCombotxtNumero() {
         List<Bloco> listaBloco = new ArrayList<>();
         listaBloco = new BlocoDAO().listAll();
         this.cmbBloco.getItems().setAll(listaBloco);
         this.cmbBloco.getSelectionModel().selectFirst();
     }
-
+    */
     private void listarTableSala() {
-        List<Sala> listaSala = new ArrayList<>();
+        List<Sala> listaSala = this.cmbBloco.getValue().getSalas();
         listaSala = new SalaDAO().listAll();
         this.tableSala.getItems().setAll(listaSala);
         this.tableSala.getSelectionModel().selectFirst();
@@ -223,9 +217,9 @@ public class PatrimonioPermanenteController implements Initializable {
 
     private void listarGridPatrimonio(){
        List<Patrimonio> listaPatrimonio = new ArrayList<>();
-       listaPatrimonio = new PatrimonioDAO().listAll();
+       listaPatrimonio = new PatrimonioPermanenteDAO().listAll();
        this.tablePatrimonio.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("nome"));
-       this.tablePatrimonio.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("código"));
+       this.tablePatrimonio.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("numero"));
        this.tablePatrimonio.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("bloco"));
        this.tablePatrimonio.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("sala"));
       
@@ -270,7 +264,7 @@ public class PatrimonioPermanenteController implements Initializable {
         alerta.setContentText("Você não poderá voltar atrás!");
         Optional<ButtonType> res = alerta.showAndWait();
         if(res.get() == ButtonType.OK){
-            PatrimonioDAO patrimonioDAO = new PatrimonioDAO();
+            PatrimonioPermanenteDAO patrimonioDAO = new PatrimonioPermanenteDAO();
             patrimonioDAO.delete(patrimonio);
             _data.remove(patrimonio);
         }
@@ -283,14 +277,14 @@ public class PatrimonioPermanenteController implements Initializable {
         ObservableList<Sala> gg = this.tableSala.getItems();
         int i = 0;
         for(Bloco c : cc){
-            if(Objects.equals(c.getId(), this.patrimonio.getBloco().getId())){
+            if(Objects.equals(c.getId(), this.patrimonio.getBloco())){
                 this.cmbBloco.getSelectionModel().select(i);
             }
             i++;
         }
         if(i == 0) this.cmbBloco.getSelectionModel().select(i);
         for(Sala g : gg){
-            if(Objects.equals(g.getId(), this.patrimonio.getSala().getId())){
+            if(Objects.equals(g.getId(), this.patrimonio.getSala())){
                 this.tableSala.getSelectionModel().select(i);
             }
             i++;

@@ -85,11 +85,11 @@ public class PatrimonioController implements Initializable {
         }
         
         if(this.cmbBloco.getSelectionModel() != null && !this.cmbBloco.getSelectionModel().isSelected(0)){
-            patrimonio.getBloco().setId(this.cmbBloco.getValue().getId());
+            patrimonio.setBloco(this.cmbBloco.getValue().getId());
         }
         
         if(this.cmbSala.getSelectionModel() != null && !this.cmbSala.getSelectionModel().isSelected(0)){
-            patrimonio.getSala().setId(this.cmbSala.getValue().getId());
+            patrimonio.setSala(this.cmbSala.getValue().getId());
         }
         
         List<Patrimonio> list = patrimonioDAO.listWithParams(patrimonio);
@@ -136,8 +136,8 @@ public class PatrimonioController implements Initializable {
         Patrimonio patrimonio = new Patrimonio();
         patrimonio.setNome(this.txtNome.getText());
         patrimonio.setNumero(this.txtNumero.getText());
-        patrimonio.setBloco(this.cmbBloco.getValue());
-        patrimonio.setSala(this.tableSala.getSelectionModel().getSelectedItem());
+        patrimonio.setBloco(this.cmbBloco.getValue().getId());
+        patrimonio.setSala(this.tableSala.getSelectionModel().getSelectedItem().getId());
         
         String result = patrimonioDAO.save(patrimonio);
         System.out.println(result);
@@ -219,7 +219,7 @@ public class PatrimonioController implements Initializable {
        List<Patrimonio> listaPatrimonio = new ArrayList<>();
        listaPatrimonio = new PatrimonioDAO().listAll();
        this.tablePatrimonio.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("nome"));
-       this.tablePatrimonio.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("código"));
+       this.tablePatrimonio.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("numero"));
        this.tablePatrimonio.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("bloco"));
        this.tablePatrimonio.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("sala"));
       
@@ -277,14 +277,14 @@ public class PatrimonioController implements Initializable {
         ObservableList<Sala> gg = this.tableSala.getItems();
         int i = 0;
         for(Bloco c : cc){
-            if(Objects.equals(c.getId(), this.patrimonio.getBloco().getId())){
+            if(Objects.equals(c.getId(), this.patrimonio.getBloco())){
                 this.cmbBloco.getSelectionModel().select(i);
             }
             i++;
         }
         if(i == 0) this.cmbBloco.getSelectionModel().select(i);
         for(Sala g : gg){
-            if(Objects.equals(g.getId(), this.patrimonio.getSala().getId())){
+            if(Objects.equals(g.getId(), this.patrimonio.getSala())){
                 this.tableSala.getSelectionModel().select(i);
             }
             i++;
