@@ -4,21 +4,19 @@ import java.util.Date;
 public class Concurso {
 
 	private Integer id;
-
 	private String numeroEdital;
-
-	private Integer areaEstudo;
-
+	private String areaEstudo;
 	private Servidor supervisor;
-
 	private Date dataInicio;
-
 	private Date dataFim;
-
 	private String modalidade;
-
 	private BancaConcurso banca;
 
+        public Concurso(){
+            this.banca = new BancaConcurso();
+            this.supervisor = new Servidor();
+        }
+        
         public Integer getId() {
             return id;
         }
@@ -35,11 +33,11 @@ public class Concurso {
             this.numeroEdital = numeroEdital;
         }
 
-        public Integer getAreaEstudo() {
+        public String getAreaEstudo() {
             return areaEstudo;
         }
 
-        public void setAreaEstudo(Integer areaEstudo) {
+        public void setAreaEstudo(String areaEstudo) {
             this.areaEstudo = areaEstudo;
         }
 
@@ -82,6 +80,4 @@ public class Concurso {
         public void setBanca(BancaConcurso banca) {
             this.banca = banca;
         }
-
-
 }
