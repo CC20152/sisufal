@@ -31,8 +31,8 @@ public class PatrimonioDAO implements IBaseDAO {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, ((Patrimonio) object).getNome());
             st.setString(2, ((Patrimonio) object).getNumero());
-            st.setInt(3, ((Patrimonio) object).getBloco().getId());
-            st.setInt(4, ((Patrimonio) object).getSala().getId());
+            st.setInt(3, ((Patrimonio) object).getBloco());
+            st.setInt(4, ((Patrimonio) object).getSala());
             st.execute();
         }catch(Exception ex){
             ex.printStackTrace();
@@ -49,8 +49,8 @@ public class PatrimonioDAO implements IBaseDAO {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, ((Patrimonio) object).getNome());
             st.setString(2, ((Patrimonio) object).getNumero());
-            st.setInt(3, ((Patrimonio) object).getBloco().getId());
-            st.setInt(4, ((Patrimonio) object).getSala().getId());
+            st.setInt(3, ((Patrimonio) object).getBloco());
+            st.setInt(4, ((Patrimonio) object).getSala());
             st.setInt(5, ((Patrimonio) object).getId());
             st.execute();
         }catch(Exception ex){
@@ -128,11 +128,11 @@ public class PatrimonioDAO implements IBaseDAO {
             
             int i = 1;
             
-            if(patrimonio.getBloco().getId() != null){
+            if(patrimonio.getBloco() != null){
                 sql += " AND c.id_bloco = ?";
             }
         
-            if(patrimonio.getSala().getId() != null){
+            if(patrimonio.getSala() != null){
                 sql += " AND c.id_sala = ?";
             }
 
@@ -147,13 +147,13 @@ public class PatrimonioDAO implements IBaseDAO {
             PreparedStatement st = this.conn.prepareStatement(sql);
             ResultSet rs;
             
-            if(patrimonio.getBloco().getId() != null){
-                st.setInt(i, patrimonio.getBloco().getId());
+            if(patrimonio.getBloco() != null){
+                st.setInt(i, patrimonio.getBloco());
                 i++;
             }
         
-            if(patrimonio.getSala().getId() != null){
-                st.setInt(i, patrimonio.getSala().getId());
+            if(patrimonio.getSala() != null){
+                st.setInt(i, patrimonio.getSala());
                 i++;
             }
 
@@ -180,10 +180,9 @@ public class PatrimonioDAO implements IBaseDAO {
             patrimonio.setId(rs.getInt("ID_PATRIMONIO"));
             patrimonio.setNome(rs.getString("NOME"));
             patrimonio.setNumero(rs.getString("NUMERO"));
-            patrimonio.getBloco().setId(rs.getInt("ID_BLOCO"));
-            patrimonio.getBloco().setNome(rs.getString("NOME_BLOCO"));
-            patrimonio.getSala().setId(rs.getInt("ID_SALA"));
-            patrimonio.getSala().setNome(rs.getString("NOME_SALA"));
+            patrimonio.setBloco(rs.getInt("ID_BLOCO"));            
+            patrimonio.setSala(rs.getInt("ID_SALA"));
+            
             listaPatrimonio.add(patrimonio);
     }
         

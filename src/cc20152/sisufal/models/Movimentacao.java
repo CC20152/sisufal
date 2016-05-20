@@ -4,8 +4,8 @@ import java.util.Date;
 public class Movimentacao {
 
 	private Integer id;
-    private Integer id_patrimonio;
-    private Integer id_sala_destino;
+        private Integer id_patrimonio;
+        private Integer id_sala_destino;
 	private Date data;
 
         public Integer getId() {
@@ -25,11 +25,11 @@ public class Movimentacao {
         }
 
         public Integer getPatrimonio() {
-            return patrimonio;
+            return id_patrimonio;
         }
 
         public void setPatrimonio(Integer patrimonio) {
-            this.patrimonio = patrimonio;
+            this.id_patrimonio = id_patrimonio;
         }
 
         public Date getData() {
