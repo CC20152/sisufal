@@ -14,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Menu;
 import javafx.stage.Stage;
 
 /**
@@ -35,6 +36,7 @@ public class TelaPrincipalController implements Initializable {
     final String fxmlListainstituicaoFinanciadora = "fxml/lista/ListaInstituicaoFinanciadoraFXML.fxml"; 
     final String listaMonitoriaFXML = "fxml/lista/ListaMonitoriaFXML.fxml"; 
     final String listaDisciplinaFXML = "fxml/lista/ListaDisciplinaFXML.fxml"; 
+    final String listaConcursoFXML = "fxml/lista/ListaConcursoFXML.fxml"; 
     
     @FXML
     private void menuUsuario (ActionEvent event) throws IOException{
@@ -94,7 +96,6 @@ public class TelaPrincipalController implements Initializable {
     
     @FXML
     private void menuDisciplina(ActionEvent event) throws IOException{
-        System.out.println("Pora");
         String path = getClass().getResource("").toString();
         path = path.replace(pacote,"");
         URL url =  new URL(path + this.listaDisciplinaFXML);
@@ -102,6 +103,19 @@ public class TelaPrincipalController implements Initializable {
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setTitle("Disciplina");
+        stage.setScene(scene);
+        stage.show();
+    }
+    
+    @FXML
+    private void menuConcurso(ActionEvent event) throws IOException{
+        String path = getClass().getResource("").toString();
+        path = path.replace(pacote,"");
+        URL url =  new URL(path + this.listaConcursoFXML);
+        Parent root = FXMLLoader.load(url);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setTitle("Concurso");
         stage.setScene(scene);
         stage.show();
     }
@@ -188,7 +202,7 @@ public class TelaPrincipalController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        
     }    
     
 }

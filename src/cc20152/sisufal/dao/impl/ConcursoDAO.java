@@ -151,6 +151,7 @@ public class ConcursoDAO implements IBaseDAO{
             concurso.setNumeroEdital(rs.getString("NUMERO_EDITAL"));
             concurso.setAreaEstudo(rs.getString("AREA_ESTUDO"));
             concurso.getSupervisor().setId(rs.getInt("ID_SUPERVISOR"));
+            concurso.getSupervisor().setNome(rs.getString("NOME"));
             concurso.setDataInicio(rs.getDate("DATA_INICIO"));
             concurso.setDataFim(rs.getDate("DATA_FIM"));
             concurso.setModalidade(rs.getString("MODALIDADE"));

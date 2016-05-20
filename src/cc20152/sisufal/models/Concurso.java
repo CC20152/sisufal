@@ -10,10 +10,8 @@ public class Concurso {
 	private Date dataInicio;
 	private Date dataFim;
 	private String modalidade;
-	private BancaConcurso banca;
 
         public Concurso(){
-            this.banca = new BancaConcurso();
             this.supervisor = new Servidor();
         }
         
@@ -73,11 +71,4 @@ public class Concurso {
             this.modalidade = modalidade;
         }
 
-        public BancaConcurso getBanca() {
-            return banca;
-        }
-
-        public void setBanca(BancaConcurso banca) {
-            this.banca = banca;
-        }
 }

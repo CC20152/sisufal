@@ -60,7 +60,7 @@ import javafx.util.StringConverter;
  *
  * @author Dayvson
  */
-public class MonitoriaController implements Initializable{
+public class MonitoriaController implements Initializable {
 
    private ObservableList<Monitoria> data;
     

@@ -9,7 +9,6 @@ public class BancaConcurso {
 
         public BancaConcurso(){
             this.listaServidores = new ArrayList<>();
-            this.concurso = new Concurso();
         }
         
         public Concurso getConcurso() {
