@@ -11,22 +11,23 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="622.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cc20152.sisufal.controllers.ensino.monitoria.ConcursoController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="622.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cc20152.sisufal.controllers.ensino.concurso.ConcursoController">
    <children>
-      <Button fx:id="btnVoltarLista" layoutX="50.0" layoutY="573.0" mnemonicParsing="false" onAction="#fecharLista" text="Voltar" />
-      <Button fx:id="btnNovo" layoutX="50.0" layoutY="26.0" mnemonicParsing="false" onAction="#novoServidor" prefHeight="39.0" prefWidth="125.0" styleClass="classe" stylesheets="@../style.css" text="Novo Concurso" textAlignment="CENTER" />
+      <Button fx:id="btnVoltarLista" layoutX="50.0" layoutY="573.0" mnemonicParsing="false" onAction="#btnCancelar" text="Voltar" />
+      <Button fx:id="btnNovo" layoutX="50.0" layoutY="26.0" mnemonicParsing="false" onAction="#novoConcurso" prefHeight="39.0" prefWidth="125.0" styleClass="classe" stylesheets="@../style.css" text="Novo Concurso" textAlignment="CENTER" />
       <TextField fx:id="txtEdital" layoutX="98.0" layoutY="75.0" prefHeight="25.0" prefWidth="125.0" promptText="Edital" />
-      <Button fx:id="btnBuscar" layoutX="646.0" layoutY="75.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="105.0" text="Buscar" />
-      <TableView fx:id="tbMonitoria" layoutX="52.0" layoutY="128.0" prefHeight="386.0" prefWidth="697.0">
+      <Button layoutX="646.0" layoutY="75.0" mnemonicParsing="false" onAction="#btnBuscar" prefHeight="25.0" prefWidth="105.0" text="Buscar" />
+      <TableView fx:id="tbConcurso" layoutX="48.0" layoutY="128.0" prefHeight="386.0" prefWidth="744.0">
         <columns>
           <TableColumn prefWidth="92.0" text="Edital" />
-            <TableColumn prefWidth="75.0" text="Modalidade" />
-          <TableColumn prefWidth="154.0" text="Area Estudo" />
-            <TableColumn prefWidth="87.0" text="Data Início" />
-            <TableColumn prefWidth="71.0" text="Data Fim" />
-            <TableColumn prefWidth="192.0" text="Supervisor" />
-            <TableColumn prefWidth="51.0" text="Banca" />
-            <TableColumn prefWidth="63.0" />
+            <TableColumn prefWidth="107.0" text="Modalidade" />
+          <TableColumn prefWidth="91.0" text="Area Estudo" />
+            <TableColumn prefWidth="73.0" text="Data Início" />
+            <TableColumn prefWidth="60.0" text="Data Fim" />
+            <TableColumn prefWidth="145.0" text="Supervisor" />
+            <TableColumn minWidth="0.0" prefWidth="63.0" text="Banca" />
+            <TableColumn minWidth="0.0" prefWidth="57.0" text="Editar" />
+            <TableColumn minWidth="0.0" prefWidth="54.0" text="Deletar" />
         </columns>
       </TableView>
       <Label layoutX="50.0" layoutY="79.0" style="-fx-background-image: ../imgs/;" text="Edital:" />
