@@ -56,10 +56,10 @@ public class BancaConcursoDAO implements IBaseDAO {
     @Override
     public String delete(Object object){
         this.conn = Conexao.getConexao();
-        String sql = "DELETE FROM bancaconcurso WHERE id_banca_concurso = ?";   
+        String sql = "DELETE FROM bancaconcurso WHERE id_concurso = ?";   
         try{
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, ((BancaConcurso) object).getId());
+            st.setInt(1, ((Concurso) object).getId());
             st.execute();
         }catch(Exception ex){
             ex.printStackTrace();
@@ -100,6 +100,7 @@ public class BancaConcursoDAO implements IBaseDAO {
             servidor.setId(rs.getInt("ID_SERVIDOR"));
             servidor.setSiape(rs.getString("SIAPE"));
             servidor.setNome(rs.getString("NOME"));
+            servidor.setCPF(rs.getString("CPF"));
             servidor.setCargo(rs.getString("CARGO"));
             
             bancaConcurso.getListaServidores().add(servidor);
