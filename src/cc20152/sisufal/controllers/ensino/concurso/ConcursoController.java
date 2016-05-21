@@ -178,22 +178,23 @@ public class ConcursoController implements Initializable {
         String result = null;
         if(this.tipo == null){
             result = concursoDAO.save(this.concurso);
+            String codigo[] = result.trim().split(" - ");
+            this.concurso.setId(Integer.parseInt(codigo[0]));
         }else{
+            new BancaConcursoDAO().delete(this.concurso);
             result = concursoDAO.update(this.concurso);
         }
-        String codigo[] = result.trim().split(" - ");
+       
         BancaConcurso banca = new BancaConcurso();
-        System.out.println(result);
-        System.out.println(codigo[0]);
-        banca.getConcurso().setId(Integer.parseInt(codigo[0]));
+        banca.getConcurso().setId(this.concurso.getId());
         
         ArrayList<Servidor> listaServidores = new ArrayList<>(lista.getTargetItems());
         
         banca.setListaServidores(listaServidores);
         
         String bancaResult = new BancaConcursoDAO().save(banca);
-        System.out.println(bancaResult);
-        if(result.contains("OK")){
+        
+        if(bancaResult.contains("OK") && result.contains("OK")){
            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
            alerta.setTitle("Sucesso");
            alerta.setHeaderText("Concurso salvo com sucesso!");
@@ -390,7 +391,13 @@ public class ConcursoController implements Initializable {
         this.txtModalidade.setText(this.concurso.getModalidade());
         this.dataInicial.setValue(new Date(this.concurso.getDataInicio().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         this.dataFinal.setValue(new Date(this.concurso.getDataFim().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+
+        ArrayList<Servidor> listaServidores = new BancaConcursoDAO().listWithParams(this.concurso).get(0).getListaServidores();
         
+        this.lista.getSourceItems().removeIf(item -> (listaServidores.stream().filter(e -> e.getId() == item.getId()).count())>0);
+        
+        this.lista.getTargetItems().addAll(listaServidores);
+       
         ObservableList<Servidor> or = this.cmbSupervisor.getItems();
         
         int i = 0;

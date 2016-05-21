@@ -53,8 +53,10 @@ public class ConcursoDAO implements IBaseDAO{
     public String update(Object object) {
         this.conn = Conexao.getConexao();
         String sql = "UPDATE concurso SET numero_edital = ?, area_estudo = ?, id_supervisor = ?, data_inicio = ?, data_fim = ?, modalidade = ? WHERE id_concurso = ?";   
+        ResultSet rs;
+        int codigo = -1;
         try{
-            PreparedStatement st = conn.prepareStatement(sql);
+            PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             st.setString(1, ((Concurso) object).getNumeroEdital());
             st.setString(2, ((Concurso) object).getAreaEstudo());
             st.setInt(3, ((Concurso) object).getSupervisor().getId());
@@ -62,11 +64,14 @@ public class ConcursoDAO implements IBaseDAO{
             st.setDate(5, new java.sql.Date(((Concurso) object).getDataFim().getTime()));
             st.setString(6, ((Concurso) object).getModalidade());
             st.setInt(7, ((Concurso) object).getId());
-            st.execute();
+            st.executeUpdate();
+            rs = st.getGeneratedKeys();
+            if(rs.next())
+                codigo = rs.getInt(1);
         }catch(Exception ex){
             return "ERROR";
         }
-        return "OK";
+        return codigo + " - OK";
     }
 
     @Override
@@ -128,7 +133,7 @@ public class ConcursoDAO implements IBaseDAO{
             ResultSet rs;
             
             if(concurso.getNumeroEdital() != null){
-                st.setString(i, concurso.getNumeroEdital());
+                st.setString(i, "%" + concurso.getNumeroEdital() + "%");
                 i++;
             }
         
