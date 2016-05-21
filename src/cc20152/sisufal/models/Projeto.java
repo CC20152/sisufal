@@ -3,94 +3,77 @@ import java.util.Date;
 
 public class Projeto {
 
-	private int id;
+    private int id;
 
-	private String titulo;
+    private String titulo;
 
-	private Date dataInicio;
+    private Date dataInicio;
 
-	private Date dataFim;
+    private Date dataFim;
 
-	private Servidor servidorCoordenador;
+    private String tipo;
+    
+    private Servidor servidorCoordenador;
 
-	private String tipo;
+    private InstituicaoFinanciadora financiadora;
 
-	private InstituicaoFinanciadora financiadora;
+    public int getId() {
+        return id;
+    }
 
-	private BolsaProjeto bolsaProjeto;
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	private GrupoProjeto grupo;
+    public String getTitulo() {
+        return titulo;
+    }
 
-        public int getId() {
-            return id;
-        }
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
 
-        public void setId(int id) {
-            this.id = id;
-        }
+    public Date getDataInicio() {
+        return dataInicio;
+    }
 
-        public String getTitulo() {
-            return titulo;
-        }
+    public void setDataInicio(Date dataInicio) {
+        this.dataInicio = dataInicio;
+    }
 
-        public void setTitulo(String titulo) {
-            this.titulo = titulo;
-        }
+    public Date getDataFim() {
+        return dataFim;
+    }
 
-        public Date getDataInicio() {
-            return dataInicio;
-        }
+    public void setDataFim(Date dataFim) {
+        this.dataFim = dataFim;
+    }
 
-        public void setDataInicio(Date dataInicio) {
-            this.dataInicio = dataInicio;
-        }
+    public Servidor getServidorCoordenador() {
+        return servidorCoordenador;
+    }
 
-        public Date getDataFim() {
-            return dataFim;
-        }
+    public void setServidorCoordenador(Servidor servidorCoordenador) {
+        this.servidorCoordenador = servidorCoordenador;
+    }
 
-        public void setDataFim(Date dataFim) {
-            this.dataFim = dataFim;
-        }
+    public String getTipo() {
+        return tipo;
+    }
 
-        public Servidor getServidorCoordenador() {
-            return servidorCoordenador;
-        }
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 
-        public void setServidorCoordenador(Servidor servidorCoordenador) {
-            this.servidorCoordenador = servidorCoordenador;
-        }
+    public InstituicaoFinanciadora getFinanciadora() {
+        return financiadora;
+    }
 
-        public String getTipo() {
-            return tipo;
-        }
+    public void setFinanciadora(InstituicaoFinanciadora financiadora) {
+        this.financiadora = financiadora;
+    }
 
-        public void setTipo(String tipo) {
-            this.tipo = tipo;
-        }
-
-        public InstituicaoFinanciadora getFinanciadora() {
-            return financiadora;
-        }
-
-        public void setFinanciadora(InstituicaoFinanciadora financiadora) {
-            this.financiadora = financiadora;
-        }
-
-        public BolsaProjeto getBolsaProjeto() {
-            return bolsaProjeto;
-        }
-
-        public void setBolsaProjeto(BolsaProjeto bolsaProjeto) {
-            this.bolsaProjeto = bolsaProjeto;
-        }
-
-        public GrupoProjeto getGrupo() {
-            return grupo;
-        }
-
-        public void setGrupo(GrupoProjeto grupo) {
-            this.grupo = grupo;
-        }
-
+    public String toString() {
+        return this.titulo;
+    }
 }

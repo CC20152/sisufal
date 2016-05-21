@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,22 +26,29 @@ public class InstituicaoFinanciadoraDAO implements IBaseDAO{
     
     @Override
     public String save(Object object) {
+        int idSalvo = -1;
+        
         conexao = Conexao.getConexao();
         String sql = "INSERT INTO instituicaofinanciadora(nome, codigo) "
                     + "VALUES (?,?)";   
         try{
-            PreparedStatement st = conexao.prepareStatement(sql);
+            PreparedStatement st = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             st.setString(1, ((InstituicaoFinanciadora) object).getNome());
             st.setString(2, ((InstituicaoFinanciadora) object).getCodigo());
             
             st.execute();
+            
+            ResultSet rs = st.getGeneratedKeys();
+            
+            if(rs.next()) {
+                idSalvo = rs.getInt(1);
+            }
         }catch(Exception ex){
             ex.printStackTrace();
-            return "ERROR";
         }finally{
             Conexao.desconectar();
         }
-        return "OK";
+        return String.valueOf(idSalvo);
     }
 
     @Override
