@@ -5,18 +5,19 @@
  */
 package cc20152.sisufal.controllers.ensino.concurso;
 
+import cc20152.sisufal.dao.impl.BancaConcursoDAO;
 import cc20152.sisufal.dao.impl.ConcursoDAO;
 import cc20152.sisufal.dao.impl.ServidorDAO;
+import cc20152.sisufal.models.BancaConcurso;
 import cc20152.sisufal.models.Concurso;
-import cc20152.sisufal.models.Orientador;
 import cc20152.sisufal.models.Servidor;
 import cc20152.sisufal.util.AutoCompleteComboBoxListener;
 import cc20152.sisufal.util.BotoesLista;
 import cc20152.sisufal.util.DataUtil;
-import cc20152.sisufal.util.OrientadorConverter;
 import cc20152.sisufal.util.ServidorConverter;
 import com.sun.prism.impl.Disposer;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -48,7 +49,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.controlsfx.control.ListSelectionView;
@@ -63,6 +63,7 @@ public class ConcursoController implements Initializable {
     
     final String pacote = "controllers/ensino/concurso/"; //Pacote do controller
     final String fxml = "fxml/cadastro/CadastroConcursoFXML.fxml"; //Caminho do FXML
+    final String bancaConcursofxml = "fxml/lista/ListaBancaConcursoFXML.fxml";
     
     private String tipo;
     
@@ -104,7 +105,6 @@ public class ConcursoController implements Initializable {
         }
         
         if(this.dataInicial.getValue() != null){
-            System.out.println(this.dataInicial.getValue());
             LocalDate local = this.dataInicial.getValue();
             Date date = Date.from(local.atStartOfDay(ZoneId.systemDefault()).toInstant());
             concurso.setDataInicio(date);
@@ -181,8 +181,19 @@ public class ConcursoController implements Initializable {
         }else{
             result = concursoDAO.update(this.concurso);
         }
+        String codigo[] = result.trim().split(" - ");
+        BancaConcurso banca = new BancaConcurso();
+        System.out.println(result);
+        System.out.println(codigo[0]);
+        banca.getConcurso().setId(Integer.parseInt(codigo[0]));
         
-        if(result.equals("OK")){
+        ArrayList<Servidor> listaServidores = new ArrayList<>(lista.getTargetItems());
+        
+        banca.setListaServidores(listaServidores);
+        
+        String bancaResult = new BancaConcursoDAO().save(banca);
+        System.out.println(bancaResult);
+        if(result.contains("OK")){
            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
            alerta.setTitle("Sucesso");
            alerta.setHeaderText("Concurso salvo com sucesso!");
@@ -277,6 +288,14 @@ public class ConcursoController implements Initializable {
        
        this.tbConcurso.getColumns().get(6).setCellValueFactory(new PropertyValueFactory<>(""));
        
+       TableColumn colBanca = this.tbConcurso.getColumns().get(6);
+       colBanca.setCellFactory(new Callback<TableColumn<Disposer.Record, Boolean>, TableCell<Disposer.Record, Boolean>>() {
+           @Override
+           public TableCell<Disposer.Record, Boolean> call(TableColumn<Disposer.Record, Boolean> p) {
+               return new BotoesLista(data, Concurso.class, fxml, "mostrarBancaConcurso", "Ver Banca", "banca").new BotaoCell();
+           }
+       });
+       
        TableColumn colEditar = this.tbConcurso.getColumns().get(7);
        colEditar.setCellFactory(new Callback<TableColumn<Disposer.Record, Boolean>, TableCell<Disposer.Record, Boolean>>() {
            @Override
@@ -329,6 +348,21 @@ public class ConcursoController implements Initializable {
         preencherCampos();
     }
     
+    public void mostrarBancaConcurso(String tipo, ObservableList<?> _data, Concurso concurso) throws MalformedURLException, IOException{
+       String path = getClass().getResource("").toString();
+        path = path.replace(this.pacote, "");
+        URL url =  new URL(path + this.bancaConcursofxml);
+        FXMLLoader loader = new FXMLLoader(url);
+        Parent root = (Parent)loader.load();
+        BancaConcursoController controller = loader.getController();
+        controller.setInit(tipo, _data, concurso);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setTitle("Banca");
+        stage.setScene(scene);
+        stage.showAndWait();
+    }
+    
     public void deletar(Concurso concurso, ObservableList<?> _data){
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
         alerta.setTitle("Atençao!");
@@ -337,8 +371,16 @@ public class ConcursoController implements Initializable {
         Optional<ButtonType> res = alerta.showAndWait();
         if(res.get() == ButtonType.OK){
             ConcursoDAO concursoDAO = new ConcursoDAO();
-            concursoDAO.delete(concurso);
-            _data.remove(concurso);
+            String result = concursoDAO.delete(concurso);
+            if(result.contains("OK")){ 
+                _data.remove(concurso);
+            }else{
+                alerta = new Alert(Alert.AlertType.ERROR);
+                alerta.setTitle("Erro ao deletar");
+                alerta.setHeaderText("Não foi possivel excluir registro");
+                alerta.setContentText("Houve um erro ao excluir registro");
+                alerta.show();
+            } 
         }
     }
     

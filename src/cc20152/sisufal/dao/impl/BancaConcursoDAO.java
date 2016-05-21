@@ -8,6 +8,7 @@ package cc20152.sisufal.dao.impl;
 import cc20152.sisufal.dao.IBaseDAO;
 import cc20152.sisufal.db.Conexao;
 import cc20152.sisufal.models.BancaConcurso;
+import cc20152.sisufal.models.Concurso;
 import cc20152.sisufal.models.Servidor;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -39,6 +40,7 @@ public class BancaConcursoDAO implements IBaseDAO {
             }
            
             st.executeBatch();
+            conn.commit();
         }catch(Exception ex){
             ex.printStackTrace();
             return "ERROR";
@@ -116,7 +118,7 @@ public class BancaConcursoDAO implements IBaseDAO {
         try{
             PreparedStatement st = this.conn.prepareStatement(sql);
             ResultSet rs;
-            st.setInt(1, ((BancaConcurso) object).getConcurso().getId());
+            st.setInt(1, ((Concurso) object).getId());
             rs = st.executeQuery();
             listaBancaConcurso = mapearResultSet(rs);
             //conexao.close();
