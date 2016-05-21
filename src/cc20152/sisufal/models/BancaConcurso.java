@@ -8,6 +8,7 @@ public class BancaConcurso {
 	private ArrayList<Servidor> listaServidores;
 
         public BancaConcurso(){
+            this.concurso = new Concurso();
             this.listaServidores = new ArrayList<>();
         }
         

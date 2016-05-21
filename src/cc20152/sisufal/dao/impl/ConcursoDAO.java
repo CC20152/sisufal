@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,19 +28,25 @@ public class ConcursoDAO implements IBaseDAO{
     public String save(Object object) {
         this.conn = Conexao.getConexao();
         String sql = "INSERT INTO concurso(numero_edital, area_estudo, id_supervisor, data_inicio, data_fim, modalidade) VALUES(?, ?, ?, ?, ?, ?)";   
+        ResultSet rs;
+        int codigo = -1;
         try{
-            PreparedStatement st = conn.prepareStatement(sql);
+            PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             st.setString(1, ((Concurso) object).getNumeroEdital());
             st.setString(2, ((Concurso) object).getAreaEstudo());
             st.setInt(3, ((Concurso) object).getSupervisor().getId());
             st.setDate(4, new java.sql.Date(((Concurso) object).getDataInicio().getTime()));
             st.setDate(5, new java.sql.Date(((Concurso) object).getDataFim().getTime()));
             st.setString(6, ((Concurso) object).getModalidade());
-            st.execute();
+            st.executeUpdate();
+            rs = st.getGeneratedKeys();
+            if(rs.next())
+                codigo = rs.getInt(1);
         }catch(Exception ex){
+            ex.printStackTrace();
             return "ERROR";
         }
-        return "OK";
+        return codigo + " - OK";
     }
 
     @Override
