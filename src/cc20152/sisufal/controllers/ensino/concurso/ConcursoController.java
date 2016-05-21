@@ -34,19 +34,24 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.controlsfx.control.ListSelectionView;
 
 /**
  *
@@ -85,6 +90,11 @@ public class ConcursoController implements Initializable {
     private TableView<Concurso> tbConcurso;
     
     @FXML
+    private GridPane painelBanca;
+    
+    private ListSelectionView<Servidor> lista;
+    
+    @FXML
     private void btnBuscar(ActionEvent event){
         ConcursoDAO concursoDAO = new ConcursoDAO();
         Concurso concurso = new Concurso();
@@ -114,6 +124,9 @@ public class ConcursoController implements Initializable {
     
     @FXML
     private void btnSalvar(ActionEvent event) {
+        boolean temBanca = false;
+        
+        
         Alert aviso = new Alert(Alert.AlertType.ERROR);
         aviso.setTitle("Erro");
         if(this.txtEdital.getText().equals("") || this.txtEdital.getText() == null){
@@ -140,6 +153,12 @@ public class ConcursoController implements Initializable {
             aviso.setHeaderText("Campo data fim não pode estar vazio");
             aviso.show();
             return ;
+        }else if(!this.lista.getTargetItems().isEmpty()){
+            temBanca = true;
+        }else{
+           aviso.setHeaderText("É necessário ao menos um servidor na banca!");
+           aviso.show();
+           return ;
         }
         
         Concurso old = this.concurso;
@@ -154,6 +173,7 @@ public class ConcursoController implements Initializable {
         this.concurso.setDataInicio(Date.from(this.dataInicial.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
         this.concurso.setDataFim(Date.from(this.dataFinal.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
        
+        
         ConcursoDAO concursoDAO = new ConcursoDAO();
         String result = null;
         if(this.tipo == null){
@@ -257,7 +277,6 @@ public class ConcursoController implements Initializable {
        
        this.tbConcurso.getColumns().get(6).setCellValueFactory(new PropertyValueFactory<>(""));
        
-       
        TableColumn colEditar = this.tbConcurso.getColumns().get(7);
        colEditar.setCellFactory(new Callback<TableColumn<Disposer.Record, Boolean>, TableCell<Disposer.Record, Boolean>>() {
            @Override
@@ -285,7 +304,14 @@ public class ConcursoController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         if(!url.getPath().contains(this.fxml)){
             listarConcursos();
+            
         }else{
+            lista = new ListSelectionView<>();
+            lista.setSourceHeader(new Label("Disponíveis"));
+            lista.setTargetHeader(new Label("Selecionados"));
+            lista.getSourceItems().addAll(new ServidorDAO().listAll());
+            this.painelBanca.add(lista, 0, 0);
+            this.painelBanca.setAlignment(Pos.CENTER);
             this.cmbSupervisor.getItems().addAll(new ServidorDAO().listAll());
             this.cmbSupervisor.setConverter(new ServidorConverter());
             new AutoCompleteComboBoxListener<>(this.cmbSupervisor, "Escolha um Supervisor");
