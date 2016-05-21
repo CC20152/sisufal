@@ -33,7 +33,10 @@ public class BotoesLista {
     private Class<?> controller;
     private String fxml;
     private String pacote = "util/";
-  
+    private String metodo;
+    private String texto;
+    private String tipo;
+    
     public BotoesLista(ObservableList<?> data, Class<?> object, String fxml){
         this.data = data;
         this.classe = object;
@@ -44,6 +47,47 @@ public class BotoesLista {
         this.data = data;
         this.classe = object;
         this.controller = controller;
+    }
+    
+    public BotoesLista(ObservableList<?> data, Class<?> object, String fxml, String metodo, String texto, String tipo){
+        this.data = data;
+        this.classe = object;
+        this.fxml = fxml;
+        this.metodo = metodo;
+        this.texto = texto;
+        this.tipo = tipo;
+    }
+    
+    public class BotaoCell extends TableCell<Disposer.Record, Boolean> {
+        final Button cellButton = new Button(texto);
+        public BotaoCell(){
+            cellButton.setOnAction((ActionEvent t) -> {
+                Object obj = classe.cast(BotaoCell.this.getTableView().getItems().get(BotaoCell.this.getIndex()));
+                String path = getClass().getResource("").toString();
+                path = path.replace(pacote, "");
+                try {
+                    URL url = new URL(path + fxml);
+                    FXMLLoader loader = new FXMLLoader(url);
+                    Parent root = (Parent)loader.load();
+                    controller = loader.getController().getClass();
+                    Method mth = controller.getMethod(metodo, String.class, ObservableList.class, classe);
+                    mth.invoke(loader.getController(), tipo, data, obj);
+                }catch(IOException e){}catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                   
+                    Logger.getLogger(BotoesLista.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+        }
+
+        @Override
+        protected void updateItem(Boolean t, boolean empty) {
+            super.updateItem(t, empty);
+            if(!empty){
+                setGraphic(cellButton);
+            }else{
+                setGraphic(null);
+            }
+        }
     }
     
     public class EditarCell extends TableCell<Disposer.Record, Boolean> {

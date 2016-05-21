@@ -5,17 +5,20 @@
  */
 package cc20152.sisufal.controllers.institucional;
 
-import cc20152.sisufal.dao.IBaseDAO;
 import cc20152.sisufal.dao.impl.ClasseDocenteDAO;
-import cc20152.sisufal.dao.impl.CursoDAO;
 import cc20152.sisufal.dao.impl.ServidorDAO;
 import cc20152.sisufal.models.ClasseDocente;
 import cc20152.sisufal.models.Servidor;
+import cc20152.sisufal.util.BotoesLista;
+import cc20152.sisufal.util.MaskTextField;
+import com.sun.prism.impl.Disposer;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,6 +30,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableCell;
@@ -49,6 +53,9 @@ public class ServidorController implements Initializable {
     ClasseDocenteDAO classeDocenteDAO = new ClasseDocenteDAO();
     ObservableList<Servidor> data = FXCollections.observableArrayList();
     
+    private Servidor servidor;
+    private String tipo;
+    
     @FXML
         private Button btnCancelarCadastro;
     @FXML
@@ -62,7 +69,7 @@ public class ServidorController implements Initializable {
     @FXML
         private TextField txtCargo;
     @FXML
-        private TextField txtCpf;
+        private MaskTextField txtCpf;
     @FXML
         private TextField txtPesquisa;
     @FXML
@@ -138,6 +145,11 @@ public class ServidorController implements Initializable {
             aviso.show();
             return ;
         }
+        
+        Servidor old = this.servidor;
+        if(this.servidor == null){
+            this.servidor = new Servidor();
+        }
         Servidor servidor = new Servidor();
         servidor.setNome(this.txtNome.getText());
         servidor.setSiape(this.txtSiape.getText());
@@ -148,18 +160,33 @@ public class ServidorController implements Initializable {
         
         //System.out.println(servidor.getClasse().getId()+"-"+servidor.getClasse().getNome());
         
-        String result = servidorDAO.save(servidor);
-        System.out.println(result);
+        String result = null;
+
+        if(this.tipo == null){
+            result = servidorDAO.save(servidor);
+        }else{
+            servidor.setId(old.getId());
+            result = servidorDAO.update(servidor);
+        }
+                
         if(result.equals("OK")){
            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
            alerta.setTitle("Sucesso");
            alerta.setHeaderText("Servidor cadastrado com sucesso!");
            alerta.show();
+           
+            if(this.tipo == null){
+                this.data.add(servidor);
+           }else{
+                this.data.remove(old);
+                this.data.add(servidor);
+           }
+           
            Stage stage = (Stage) btnCancelarCadastro.getScene().getWindow();
            stage.close();
         }else{
            Alert alerta = new Alert(Alert.AlertType.ERROR);
-           alerta.setTitle("Sucesso");
+           alerta.setTitle("Erro");
            alerta.setHeaderText("Erro ao cadastrar servidor!");
            alerta.show();
         }
@@ -172,6 +199,7 @@ public class ServidorController implements Initializable {
             listarGridServidores();
             listarComboPesquisa();
         }else{
+            txtCpf.setMask("NNN.NNN.NNN-NN");
             listarComboClasse();
         }
     }    
@@ -184,42 +212,22 @@ public class ServidorController implements Initializable {
        tableServidores.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("cargo"));
        tableServidores.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("classe"));
       
-        Callback<TableColumn<Servidor, String>, TableCell<Servidor, String>> cellFactory = //
-            new Callback<TableColumn<Servidor, String>, TableCell<Servidor, String>>()
-            {
-                @Override
-                public TableCell call( final TableColumn<Servidor, String> param )
-                {
-                    final TableCell<Servidor, String> cell = new TableCell<Servidor, String>()
-                    {
-
-                        final Button btn = new Button( "It" );
-
-                        @Override
-                        public void updateItem( String item, boolean empty )
-                        {
-                            super.updateItem( item, empty );
-                            if ( empty )
-                            {
-                                setGraphic( null );
-                                setText( null );
-                            }
-                            else
-                            {
-                                btn.setOnAction( ( ActionEvent event ) ->
-                                        {
-                                            Servidor servidor = getTableView().getItems().get( getIndex() );
-                                            System.out.println( servidor.toString() );
-                                } );
-                                setGraphic( btn );
-                                setText( null );
-                            }
-                        }
-                    };
-                    return cell;
-                }
-            };
-       tableServidores.getColumns().get(4).setCellValueFactory(new PropertyValueFactory<>("editar"));
+       TableColumn colEditar = this.tableServidores.getColumns().get(4);
+       colEditar.setCellFactory(new Callback<TableColumn<Disposer.Record, Boolean>, TableCell<Disposer.Record, Boolean>>() {
+           @Override
+           public TableCell<Disposer.Record, Boolean> call(TableColumn<Disposer.Record, Boolean> p) {
+               return new BotoesLista(data, Servidor.class, fxml).new EditarCell();
+           }
+       });
+       
+       TableColumn colDeletar = this.tableServidores.getColumns().get(5);
+       colDeletar.setCellFactory(new Callback<TableColumn<Disposer.Record, Boolean>, TableCell<Disposer.Record, Boolean>>() {
+           @Override
+           public TableCell<Disposer.Record, Boolean> call(TableColumn<Disposer.Record, Boolean> p) {
+               return new BotoesLista(data, Servidor.class, ServidorController.class).new DeletarCell();
+           }
+       });
+       //tableServidores.getColumns().get(4).setCellValueFactory(new PropertyValueFactory<>("editar"));
        //tableServidores.getColumns().get(4).setCellFactory(cellFactory);
         
        data.setAll(listaServidores);
@@ -250,4 +258,47 @@ public class ServidorController implements Initializable {
         List<Servidor> lista = servidorDAO.listWithParams(hashPesquisa);
         data.setAll(lista);
     }
+    
+    public void setEditar(String tipo, ObservableList<?> data, Servidor servidor){
+        this.tipo = tipo;
+        this.data = (ObservableList<Servidor>)data;
+        this.servidor = (Servidor) servidor;
+        preencherCampos();
+    }
+    
+    private void preencherCampos(){
+        this.txtNome.setText(this.servidor.getNome());
+        this.txtSiape.setText(this.servidor.getSiape());
+        this.txtCpf.setText(this.servidor.getCPF());
+        this.txtCargo.setText(this.servidor.getCargo());
+        //System.out.println("id:"+this.servidor.getClasse().getId());
+        if(this.servidor.getClasse().getId()!=null){
+            this.chkProfessor.setSelected(true);
+            this.cmbClasse.setDisable(false);
+        }
+        ObservableList<ClasseDocente> cl = this.cmbClasse.getItems();
+        
+        int i=0;
+        for(ClasseDocente c : cl){
+            if(Objects.equals(c.getId(), this.servidor.getClasse().getId())){
+                this.cmbClasse.getSelectionModel().select(i);
+            }
+            i++;
+        }
+        if(i == 0) this.cmbClasse.getSelectionModel().select(i);
+    }
+    
+    
+        public void deletar(Servidor servidor, ObservableList<?> _data){
+        Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+        alerta.setTitle("Atençao!");
+        alerta.setHeaderText("Deseja realmente excluir este registro?");
+        alerta.setContentText("Você não poderá voltar atrás!");
+        Optional<ButtonType> res = alerta.showAndWait();
+        if(res.get() == ButtonType.OK){
+            servidorDAO.delete(servidor);
+            _data.remove(servidor);
+        }
+    }
+    
 }

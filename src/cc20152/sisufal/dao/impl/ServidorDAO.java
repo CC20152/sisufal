@@ -50,12 +50,46 @@ public class ServidorDAO implements IBaseDAO {
     
     @Override
     public String update(Object object){
-        return "ok";
+        this.conexao = Conexao.getConexao();
+        String sql = "UPDATE servidor SET siape = ?, nome = ?, cargo = ?, cpf = ?, docente = ?, id_classe = ? WHERE id_servidor = ?";   
+        try{
+            PreparedStatement st = conexao.prepareStatement(sql);
+            st.setString(1, ((Servidor) object).getSiape());
+            st.setString(2, ((Servidor) object).getNome());
+            st.setString(3, ((Servidor) object).getCargo());
+            st.setString(4, ((Servidor) object).getCPF());
+            if(((Servidor) object).getClasse().getId()!=null){
+                st.setInt(5, 1);
+                st.setInt(6, ((Servidor) object).getClasse().getId());
+            }
+            else{
+                 st.setInt(5,0);
+                 st.setNull(6,java.sql.Types.INTEGER);
+            }
+            
+            st.setInt(7, ((Servidor) object).getId());
+            
+            st.execute();
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return "ERROR";
+        }
+        return "OK";
     }
     
     @Override
     public String delete(Object object){
-        return "ok";
+        this.conexao = Conexao.getConexao();
+        String sql = "DELETE FROM servidor WHERE id_servidor = ?";   
+        try{
+            PreparedStatement st = conexao.prepareStatement(sql);
+            st.setInt(1, ((Servidor) object).getId());
+            st.execute();
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return "ERROR";
+        }
+        return "OK";
     }
     
     @Override

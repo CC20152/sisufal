@@ -8,6 +8,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import cc20152.sisufal.util.MaskTextField ?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cc20152.sisufal.controllers.institucional.ServidorController">
    <children>
@@ -19,7 +20,7 @@
       <TextField fx:id="txtSiape" layoutX="16.0" layoutY="149.0" prefWidth="270.0" />
       <Label layoutX="21.0" layoutY="174.0" text="Cargo:" />
       <Label layoutX="21.0" layoutY="217.0" text="CPF:" />
-      <TextField fx:id="txtCpf" layoutX="16.0" layoutY="234.0" prefWidth="270.0" />
+      <MaskTextField fx:id="txtCpf" layoutX="16.0" layoutY="234.0" prefWidth="270.0" />
       <ImageView fitHeight="76.0" fitWidth="307.0" layoutX="-5.0" layoutY="-1.0" pickOnBounds="true">
          <image>
             <Image url="@../imgs/IC.png" />

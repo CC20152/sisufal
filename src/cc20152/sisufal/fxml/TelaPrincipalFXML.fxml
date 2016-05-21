@@ -47,14 +47,14 @@
             </Menu>
             <Menu mnemonicParsing="false" text="Patrimônio">
               <items>
-                <MenuItem mnemonicParsing="false" text="Patrimônios Permanentes" />
+                <MenuItem mnemonicParsing="false" onAction="#menuPatrimonioPermanente" text="Patrimônios Permanentes" />
                   <MenuItem mnemonicParsing="false" text="Movimentar Patrimônio Permanente" />
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Patrimônios de Consumo" />
+                  <MenuItem mnemonicParsing="false" onAction="#menuPatrimonioConsumo" text="Patrimônios de Consumo" />
                   <MenuItem mnemonicParsing="false" text="Movimentar Patrimônio de Consumo" />
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Blocos" />
-                  <MenuItem mnemonicParsing="false" text="Salas" />
+                  <MenuItem mnemonicParsing="false" onAction="#menuBloco" text="Blocos" />
+                  <MenuItem mnemonicParsing="false" onAction="#menuSala" text="Salas" />
               </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Projeto">
@@ -65,7 +65,7 @@
             </Menu>
             <Menu mnemonicParsing="false" text="Concurso">
               <items>
-                <MenuItem mnemonicParsing="false" text="Concursos" />
+                <MenuItem fx:id="menuConcurso" mnemonicParsing="false" onAction="#menuConcurso" text="Concursos" />
               </items>
             </Menu>
         <Menu mnemonicParsing="false" text="Help">

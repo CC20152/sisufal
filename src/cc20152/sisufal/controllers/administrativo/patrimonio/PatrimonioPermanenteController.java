@@ -5,7 +5,7 @@
  */
 package cc20152.sisufal.controllers.administrativo.patrimonio;
 
-import cc20152.sisufal.dao.impl.PatrimonioDAO;
+import cc20152.sisufal.dao.impl.PatrimonioPermanenteDAO;
 import cc20152.sisufal.dao.impl.BlocoDAO;
 import cc20152.sisufal.dao.impl.SalaDAO;
 import cc20152.sisufal.controllers.administrativo.patrimonio.*;
@@ -45,19 +45,18 @@ import java.util.Objects;
 import java.util.Optional;
 import javafx.scene.control.ButtonType;
 
-
 /**
  *
  * @author Gabriel Fabrício
  */
-public class BlocoController implements Initializable {
-    private BlocoDAO blocoDAO = new BlocoDAO();
+public class PatrimonioPermanenteController implements Initializable {
+    private PatrimonioPermanenteDAO patrimonioDAO = new PatrimonioPermanenteDAO();
     String pacote = "controllers/administrativo/patrimonio/"; //Pacote do controller
-    String fxml = "fxml/cadastro/CadastroBlocoFXML.fxml";
-    ObservableList<Bloco> data = FXCollections.observableArrayList();
+    String fxml = "fxml/cadastro/CadastroPatrimonioPermanenteFXML.fxml";
+    ObservableList<Patrimonio> data = FXCollections.observableArrayList();
     
     private String tipo;
-    private Bloco bloco;
+    private Patrimonio patrimonio;
 
     @FXML
         private Button btnCancelarCadastro;
@@ -68,26 +67,32 @@ public class BlocoController implements Initializable {
     @FXML
         private TextField txtNumero;
     @FXML
-        private TableView<Bloco> tableBloco;   
+        private ComboBox<Bloco> cmbBloco;
+    @FXML
+        private ComboBox<Sala> cmbSala;
+    @FXML
+        private TableView<Sala> tableSala;
+    @FXML
+        private TableView<Patrimonio> tablePatrimonio;    
     
     @FXML
     private void btnBuscar(ActionEvent event){
-        BlocoDAO blocoDAO = new BlocoDAO();
-        Bloco bloco = new Bloco();
+        PatrimonioPermanenteDAO patrimonioDAO = new PatrimonioPermanenteDAO();
+        Patrimonio patrimonio = new Patrimonio();
         
         if(!this.txtNome.getText().equals("")){
-            bloco.setNome(this.txtNome.getText());
+            patrimonio.setNome(this.txtNome.getText());
         }
-        /*
+        
         if(this.cmbBloco.getSelectionModel() != null && !this.cmbBloco.getSelectionModel().isSelected(0)){
-            sala.getBloco().setId(this.cmbBloco.getValue().getId());
+            patrimonio.setBloco(this.cmbBloco.getValue().getId());
         }
         
         if(this.cmbSala.getSelectionModel() != null && !this.cmbSala.getSelectionModel().isSelected(0)){
-            bloco.getSala().setId(this.cmbSala.getValue().getId());
+            patrimonio.setSala(this.cmbSala.getValue().getId());
         }
-        */
-        List<Bloco> list = blocoDAO.listWithParams(bloco);
+        
+        List<Patrimonio> list = patrimonioDAO.listWithParams(patrimonio);
         
         this.data.clear();
         this.data.addAll(list);
@@ -103,7 +108,7 @@ public class BlocoController implements Initializable {
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);
         Stage stage = new Stage();
-        stage.setTitle("Cadastro Sala");
+        stage.setTitle("Cadastro Patrimônio");
         stage.setScene(scene);
         stage.show();
     }
@@ -128,11 +133,13 @@ public class BlocoController implements Initializable {
             aviso.show();
             return ;
         }
-        Bloco bloco = new Bloco();
-        bloco.setNome(this.txtNome.getText());
-        bloco.setCodigo(this.txtNumero.getText());
-                
-        String result = blocoDAO.save(bloco);
+        Patrimonio patrimonio = new Patrimonio();
+        patrimonio.setNome(this.txtNome.getText());
+        patrimonio.setNumero(this.txtNumero.getText());
+        patrimonio.setBloco(this.cmbBloco.getValue().getId());
+        patrimonio.setSala(this.tableSala.getSelectionModel().getSelectedItem().getId());
+        
+        String result = patrimonioDAO.save(patrimonio);
         System.out.println(result);
         if(result.equals("OK")){
            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
@@ -164,7 +171,7 @@ public class BlocoController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         if(!url.getPath().contains(this.fxml)){
-            listarGridBloco();
+            listarGridPatrimonio();
         }       
     }
     /*
@@ -178,74 +185,112 @@ public class BlocoController implements Initializable {
         this.cmbBloco.getItems().add(c);
         this.cmbBloco.getItems().addAll(new BlocoDAO().listAll());
         this.cmbSala.getItems().add(g);
-        this.cmbSala.getItems().addAll(new blocoDAO().listAll());
+        this.cmbSala.getItems().addAll(new SalaDAO().listAll());
         this.cmbBloco.getSelectionModel().selectFirst();
         this.cmbSala.getSelectionModel().selectFirst();
         
         if(!url.getPath().contains(this.fxml)){
             listarGridPatrimonio();
         }
-    }    
+    }
     */
+    private void listarComboBloco() {
+        List<Bloco> listaBloco = new ArrayList<>();
+        listaBloco = new BlocoDAO().listAll();
+        this.cmbBloco.getItems().setAll(listaBloco);
+        this.cmbBloco.getSelectionModel().selectFirst();
+    }
+    /*
+    private void listarCombotxtNumero() {
+        List<Bloco> listaBloco = new ArrayList<>();
+        listaBloco = new BlocoDAO().listAll();
+        this.cmbBloco.getItems().setAll(listaBloco);
+        this.cmbBloco.getSelectionModel().selectFirst();
+    }
+    */
+    private void listarTableSala() {
+        List<Sala> listaSala = this.cmbBloco.getValue().getSalas();
+        listaSala = new SalaDAO().listAll();
+        this.tableSala.getItems().setAll(listaSala);
+        this.tableSala.getSelectionModel().selectFirst();
+    }
 
-    private void listarGridBloco(){
-       List<Bloco> listaBloco = new ArrayList<>();
-       listaBloco = new BlocoDAO().listAll();
-       this.tableBloco.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("nome"));
-       this.tableBloco.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("codigo"));
-
-       TableColumn colEditar = this.tableBloco.getColumns().get(2);
+    private void listarGridPatrimonio(){
+       List<Patrimonio> listaPatrimonio = new ArrayList<>();
+       listaPatrimonio = new PatrimonioPermanenteDAO().listAll();
+       this.tablePatrimonio.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("nome"));
+       this.tablePatrimonio.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("numero"));
+       this.tablePatrimonio.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("bloco"));
+       this.tablePatrimonio.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("sala"));
+      
+       TableColumn colEditar = this.tablePatrimonio.getColumns().get(4);
        colEditar.setCellFactory(new Callback<TableColumn<Record, Boolean>, TableCell<Record, Boolean>>() {
            @Override
            public TableCell<Record, Boolean> call(TableColumn<Record, Boolean> p) {
-               return new BotoesLista(data, Bloco.class, fxml).new EditarCell();
+               return new BotoesLista(data, Patrimonio.class, fxml).new EditarCell();
            }
        });
        
-       TableColumn colDeletar = this.tableBloco.getColumns().get(3);
+       TableColumn colDeletar = this.tablePatrimonio.getColumns().get(5);
        colDeletar.setCellFactory(new Callback<TableColumn<Record, Boolean>, TableCell<Record, Boolean>>() {
            @Override
            public TableCell<Record, Boolean> call(TableColumn<Record, Boolean> p) {
-               return new BotoesLista(data, Bloco.class, BlocoController.class).new DeletarCell();
+               return new BotoesLista(data, Patrimonio.class, PatrimonioController.class).new DeletarCell();
            }
        });
       
-       for (Bloco e : listaBloco) {
+       for (Patrimonio e : listaPatrimonio) {
            data.add(e);
        }
        
-       tableBloco.setItems(data);
+       tablePatrimonio.setItems(data);
     }
 
-    public void setData(ObservableList<Bloco> data){
+    public void setData(ObservableList<Patrimonio> data){
         this.data = data;
     }
     
-    public void setEditar(String tipo, ObservableList<?> data, Bloco bloco){
+    public void setEditar(String tipo, ObservableList<?> data, Patrimonio patrimonio){
         this.tipo = tipo;
-        this.data = (ObservableList<Bloco>)data;
-        this.bloco = (Bloco) bloco;
+        this.data = (ObservableList<Patrimonio>)data;
+        this.patrimonio = (Patrimonio) patrimonio;
         preencherCampos();
     }
 
-    public void deletar(Bloco bloco, ObservableList<?> _data){
+    public void deletar(Patrimonio patrimonio, ObservableList<?> _data){
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
         alerta.setTitle("Atençao!");
         alerta.setHeaderText("Deseja realmente excluir este registro?");
         alerta.setContentText("Você não poderá voltar atrás!");
         Optional<ButtonType> res = alerta.showAndWait();
         if(res.get() == ButtonType.OK){
-            BlocoDAO blocoDAO = new BlocoDAO();
-            blocoDAO.delete(bloco);
-            _data.remove(bloco);
+            PatrimonioPermanenteDAO patrimonioDAO = new PatrimonioPermanenteDAO();
+            patrimonioDAO.delete(patrimonio);
+            _data.remove(patrimonio);
         }
     }
     
     private void preencherCampos(){
-        this.txtNome.setText(this.bloco.getNome());
-        this.txtNumero.setText(this.bloco.getCodigo());
-
-            
+        this.txtNome.setText(this.patrimonio.getNome());
+        this.txtNumero.setText(this.patrimonio.getNumero());
+        ObservableList<Bloco> cc = this.cmbBloco.getItems();
+        ObservableList<Sala> gg = this.tableSala.getItems();
+        int i = 0;
+        for(Bloco c : cc){
+            if(Objects.equals(c.getId(), this.patrimonio.getBloco())){
+                this.cmbBloco.getSelectionModel().select(i);
+            }
+            i++;
+        }
+        if(i == 0) this.cmbBloco.getSelectionModel().select(i);
+        for(Sala g : gg){
+            if(Objects.equals(g.getId(), this.patrimonio.getSala())){
+                this.tableSala.getSelectionModel().select(i);
+            }
+            i++;
+        }
+        if(i == 0) this.tableSala.getSelectionModel().select(i);
+    
     }
 
     

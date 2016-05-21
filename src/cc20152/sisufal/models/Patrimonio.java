@@ -1,23 +1,21 @@
 package cc20152.sisufal.models;
-public abstract class Patrimonio {
 
-	private int id;
+public class Patrimonio {
 
+	private Integer id;
 	private String numero;
-
 	private String nome;
+    private Movimentacao ultimaMovimentacao;
+    private Integer id_sala;
+    private Integer id_bloco;
+	private Integer idServidorResponsavel;
+	private Integer idDiscenteResponsavel;
 
-	private Movimentacao UltimaMovimentacao;
-
-	private int idServidorResponsavel;
-
-	private int idDiscenteResponsavel;
-
-        public int getId() {
+        public Integer getId() {
             return id;
         }
 
-        public void setId(int id) {
+        public void setId(Integer id) {
             this.id = id;
         }
 
@@ -37,28 +35,49 @@ public abstract class Patrimonio {
             this.nome = nome;
         }
 
+        public Integer getSala() {
+            return id_sala;
+        }
+
+        public void setSala(Integer id_sala) {
+            this.id_sala = id_sala;
+        }
+
+        public Integer getBloco() {
+            return id_bloco;
+        }
+
+        public void setBloco(Integer id_bloco) {
+            this.id_bloco = id_bloco;
+        }
+
         public Movimentacao getUltimaMovimentacao() {
-            return UltimaMovimentacao;
+            return ultimaMovimentacao;
         }
 
-        public void setUltimaMovimentacao(Movimentacao UltimaMovimentacao) {
-            this.UltimaMovimentacao = UltimaMovimentacao;
+        public void setUltimaMovimentacao(Movimentacao ultimaMovimentacao) {
+            this.ultimaMovimentacao = ultimaMovimentacao;
         }
 
-        public int getIdServidorResponsavel() {
+        public Integer getIdServidorResponsavel() {
             return idServidorResponsavel;
         }
 
-        public void setIdServidorResponsavel(int idServidorResponsavel) {
+        public void setIdServidorResponsavel(Integer idServidorResponsavel) {
             this.idServidorResponsavel = idServidorResponsavel;
         }
 
-        public int getIdDiscenteResponsavel() {
+        public Integer getIdDiscenteResponsavel() {
             return idDiscenteResponsavel;
         }
 
-        public void setIdDiscenteResponsavel(int idDiscenteResponsavel) {
+        public void setIdDiscenteResponsavel(Integer idDiscenteResponsavel) {
             this.idDiscenteResponsavel = idDiscenteResponsavel;
+        }
+
+        @Override
+        public String toString() {
+            return this.nome;
         }
 
 	
