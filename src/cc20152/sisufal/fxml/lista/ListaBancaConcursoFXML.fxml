@@ -14,7 +14,7 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="478.0" prefWidth="631.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cc20152.sisufal.controllers.ensino.concurso.BancaConcursoController">
    <children>
       <Button fx:id="btnVoltarLista" layoutX="38.0" layoutY="441.0" mnemonicParsing="false" onAction="#btnCancelar" text="Voltar" />
-      <TableView fx:id="tbBancaConcurso" layoutX="25.0" layoutY="30.0" prefHeight="386.0" prefWidth="583.0">
+      <TableView fx:id="tbBancaConcurso" layoutX="25.0" layoutY="68.0" prefHeight="348.0" prefWidth="583.0">
         <columns>
           <TableColumn prefWidth="210.0" text="Nome" />
             <TableColumn prefWidth="96.0" text="SIAPE" />
@@ -22,5 +22,6 @@
             <TableColumn prefWidth="149.0" text="Cargo" />
         </columns>
       </TableView>
+      <Button layoutX="25.0" layoutY="14.0" mnemonicParsing="false" onAction="#declaracaoParticipante" prefHeight="32.0" prefWidth="94.0" text="Declaração" />
    </children>
 </AnchorPane>
