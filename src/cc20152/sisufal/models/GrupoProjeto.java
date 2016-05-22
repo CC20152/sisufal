@@ -3,24 +3,32 @@ import java.util.ArrayList;
 
 public class GrupoProjeto {
 
-	private int id;
+    private Integer id;
+    private Projeto projeto;
+    private ArrayList<Servidor> listaServidores;
 
-	private ArrayList<Servidor> listaServidores;
+    public int getId() {
+        return id;
+    }
 
-        public int getId() {
-            return id;
-        }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-        public void setId(int id) {
-            this.id = id;
-        }
+    public ArrayList<Servidor> getListaServidores() {
+        return listaServidores;
+    }
 
-        public ArrayList<Servidor> getListaServidores() {
-            return listaServidores;
-        }
+    public void setListaServidores(ArrayList<Servidor> listaServidores) {
+        this.listaServidores = listaServidores;
+    }
+    
+    public Projeto getProjeto() {
+        return projeto;
+    }
 
-        public void setListaServidores(ArrayList<Servidor> listaServidores) {
-            this.listaServidores = listaServidores;
-        }
+    public void setProjeto(Projeto projeto) {
+        this.projeto = projeto;
+    }
 
 }

@@ -5,21 +5,323 @@
  */
 package cc20152.sisufal.controllers.pesquisa.projeto;
 
+import cc20152.sisufal.util.InstituicaoFinanciadoraConverter;
+import cc20152.sisufal.dao.impl.InstituicaoFinanciadoraDAO;
+import cc20152.sisufal.dao.impl.ProjetoDAO;
+import cc20152.sisufal.dao.impl.ServidorDAO;
+import cc20152.sisufal.models.InstituicaoFinanciadora;
+import cc20152.sisufal.models.Projeto;
+import cc20152.sisufal.models.Servidor;
+import cc20152.sisufal.util.AutoCompleteComboBoxListener;
+import cc20152.sisufal.util.BotoesLista;
+import cc20152.sisufal.util.DataUtil;
+import cc20152.sisufal.util.ServidorConverter;
+import com.sun.prism.impl.Disposer;
+import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import javafx.util.Callback;
 
 /**
  *
- * @author AtaideAl
+ * @author anderson
  */
 public class ProjetoController implements Initializable {
+   private ObservableList<Projeto> data;
     
+    final String pacote = "controllers/pesquisa/projeto/";
+    private String fxmlCadastro = "fxml/cadastro/CadastroProjetoFXML.fxml";
+    
+    private String tipo;
+    private Projeto projeto;
+    
+    @FXML
+    private TextField txtTitulo;
+    
+    @FXML
+    private TextField txtTipo;
+    
+    @FXML
+    private DatePicker datInicio;
+    
+    @FXML
+    private DatePicker datFim;
+    
+    @FXML
+    private ComboBox cmbCoodenador;
+    
+    @FXML
+    private ComboBox cmbFinanciadora;
+    
+    @FXML
+    private Button btnVoltarLista;
+    
+    @FXML
+    private Button btnCancelarCadastro;
+    
+    @FXML
+    private TableView<Projeto> tableProjetos;
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-       
-    }    
+    public void initialize(URL url, ResourceBundle resources) {
+        if(!url.getPath().contains(this.fxmlCadastro)){
+            listarProjetos();
+        } else {
+            this.cmbCoodenador.getItems().addAll(new ServidorDAO().listAll());
+            this.cmbCoodenador.setConverter(new ServidorConverter());
+            new AutoCompleteComboBoxListener<>(this.cmbCoodenador, "Escolha um coordenador");
+            
+            this.cmbFinanciadora.getItems().addAll(new InstituicaoFinanciadoraDAO().listAll());
+            this.cmbFinanciadora.setConverter(new InstituicaoFinanciadoraConverter());
+            new AutoCompleteComboBoxListener<>(this.cmbFinanciadora, "Escolha uma instituiçao financiadora");
+        }
+    }
     
+    @FXML
+    private void btnBuscar(ActionEvent event){
+
+    }
+    
+    @FXML
+    private void novoProjeto (ActionEvent event) throws IOException{
+        String path = getClass().getResource("").toString();
+        path = path.replace(this.pacote, "");
+        URL url =  new URL(path + this.fxmlCadastro);
+        FXMLLoader loader = new FXMLLoader(url);
+        Parent root = (Parent)loader.load();
+        ProjetoController controller = loader.getController();
+        controller.setData(this.data);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setTitle("Cadastro de Projeto");
+        stage.setScene(scene);
+        stage.showAndWait();
+    }
+    
+    @FXML
+    private void salvarProjeto(ActionEvent event) throws IOException, SQLException{
+        Alert aviso = new Alert(Alert.AlertType.ERROR);
+        aviso.setTitle("Erro");
+        
+        if(this.txtTitulo.getText().equals("")) {
+            aviso.setHeaderText("Campo titulo não pode estar vazio");
+            aviso.show();
+            return ;
+        } else if(this.txtTipo.getText().equals("")){
+            aviso.setHeaderText("Campo tipo não pode estar vazio");
+            aviso.show();
+            return ;
+        } else if(this.datInicio.getValue() == null){
+            aviso.setHeaderText("Campo data de inicio não pode estar vazio");
+            aviso.show();
+            return ;
+        } else if(this.datFim.getValue() == null){
+            aviso.setHeaderText("Campo data de fim não pode estar vazio");
+            aviso.show();
+            return ;
+        } else if(this.cmbCoodenador.getValue() == null){
+            aviso.setHeaderText("Campo coordenador não pode estar vazio");
+            aviso.show();
+            return ;
+        } else if(this.cmbFinanciadora.getValue() == null){
+            aviso.setHeaderText("Campo instituiçao financiadora não pode estar vazio");
+            aviso.show();
+            return ;
+        } 
+        
+        Projeto old = this.projeto;
+        if(this.projeto == null) {
+            this.projeto = new Projeto();
+        }
+
+        this.projeto.setTitulo(this.txtTitulo.getText());
+        this.projeto.setTipo(this.txtTipo.getText());
+        this.projeto.setDataInicio(Date.from(this.datInicio.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        this.projeto.setDataFim(Date.from(this.datFim.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        this.projeto.setServidorCoordenador((Servidor) this.cmbCoodenador.getValue());
+        this.projeto.setFinanciadora((InstituicaoFinanciadora) this.cmbFinanciadora.getValue());
+        
+        ProjetoDAO projetoDAO = new ProjetoDAO();
+        String result = null;
+        
+         if(this.tipo == null){
+            result = projetoDAO.save(projeto);
+        }else{
+            result = projetoDAO.update(projeto);
+        }
+        
+        System.out.println(result);
+        if(!result.equals("-1")){ 
+           if(this.tipo == null) this.data.add(projeto); 
+           else this.data.set(this.data.indexOf(projeto), projeto);
+               
+           Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+           alerta.setTitle("Sucesso");
+           alerta.setHeaderText("Projeto cadastrado com sucesso!");
+           alerta.show();
+           Stage stage = (Stage) btnCancelarCadastro.getScene().getWindow();
+           stage.close();
+        }else{
+           Alert alerta = new Alert(Alert.AlertType.ERROR);
+           alerta.setTitle("Erro");
+           alerta.setHeaderText("Erro ao cadastrar projeto!");
+           alerta.show();
+        }
+    }
+    
+    @FXML
+    private void cancelarCadastro (ActionEvent event){
+        Stage stage = (Stage) btnCancelarCadastro.getScene().getWindow();
+        stage.close();
+    }
+    
+    @FXML
+    private void fecharLista (ActionEvent event){
+        Stage stage = (Stage) btnVoltarLista.getScene().getWindow();
+        stage.close();
+    }
+    
+    private void setData(ObservableList<Projeto> data){
+        this.data = data;
+    }
+    
+    private void listarProjetos(){
+       data = FXCollections.observableArrayList();
+       
+       List<Projeto> listaProjetos = new ArrayList<>();
+       listaProjetos = new ProjetoDAO().listAll();
+       
+       TableColumn colTitulo = this.tableProjetos.getColumns().get(0);
+       colTitulo.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Projeto, String>, ObservableValue<String>>() {
+           public ObservableValue<String> call(TableColumn.CellDataFeatures<Projeto, String> p) {
+               return new SimpleObjectProperty(p.getValue().getTitulo());
+           }
+       });
+       
+       TableColumn colCoordenador = this.tableProjetos.getColumns().get(1);
+       colCoordenador.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Projeto, String>, ObservableValue<String>>() {
+           public ObservableValue<String> call(TableColumn.CellDataFeatures<Projeto, String> p) {
+               return new SimpleObjectProperty(p.getValue().getServidorCoordenador().getNome());
+           }
+       });
+       
+       TableColumn colTipo = this.tableProjetos.getColumns().get(2);
+       colTipo.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Projeto, String>, ObservableValue<String>>() {
+           public ObservableValue<String> call(TableColumn.CellDataFeatures<Projeto, String> p) {
+               return new SimpleObjectProperty(p.getValue().getTipo());
+           }
+       });
+       
+       TableColumn colDataInicio = this.tableProjetos.getColumns().get(3);
+       colDataInicio.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Projeto, String>, ObservableValue<String>>() {
+           public ObservableValue<String> call(TableColumn.CellDataFeatures<Projeto, String> p) {
+               return new SimpleObjectProperty(DataUtil.getDataApresentacao(p.getValue().getDataInicio()));
+           }
+       });
+       
+       TableColumn colDataFim = this.tableProjetos.getColumns().get(4);
+       colDataFim.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Projeto, String>, ObservableValue<String>>() {
+           public ObservableValue<String> call(TableColumn.CellDataFeatures<Projeto, String> p) {
+               return new SimpleObjectProperty(DataUtil.getDataApresentacao(p.getValue().getDataFim()));
+           }
+       });
+       
+       TableColumn colEditar = this.tableProjetos.getColumns().get(5);
+       colEditar.setCellFactory(new Callback<TableColumn<Disposer.Record, Boolean>, TableCell<Disposer.Record, Boolean>>() {
+           @Override
+           public TableCell<Disposer.Record, Boolean> call(TableColumn<Disposer.Record, Boolean> p) {
+               return new BotoesLista(data, Projeto.class, fxmlCadastro).new EditarCell();
+           }
+       });
+       
+       TableColumn colDeletar = this.tableProjetos.getColumns().get(6);
+       colDeletar.setCellFactory(new Callback<TableColumn<Disposer.Record, Boolean>, TableCell<Disposer.Record, Boolean>>() {
+           @Override
+           public TableCell<Disposer.Record, Boolean> call(TableColumn<Disposer.Record, Boolean> p) {
+               return new BotoesLista(data, Projeto.class, ProjetoController.class).new DeletarCell();
+           }
+       });
+      
+       for (Projeto p : listaProjetos) {
+           data.add(p);
+       }
+       
+       tableProjetos.setItems(data);
+    }
+    
+    public void setEditar(String tipo, ObservableList<?> data, Projeto projeto){
+        this.tipo = tipo;
+        this.data = (ObservableList<Projeto>)data;
+        this.projeto = (Projeto) projeto;
+        preencherCampos();
+    }
+    
+    public void deletar(Projeto projeto, ObservableList<?> _data){
+        Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+        alerta.setTitle("Atençao!");
+        alerta.setHeaderText("Deseja realmente excluir este registro?");
+        alerta.setContentText("Você não poderá voltar atrás!");
+        Optional<ButtonType> res = alerta.showAndWait();
+        if(res.get() == ButtonType.OK){
+            ProjetoDAO projetoDAO = new ProjetoDAO();
+            projetoDAO.delete(projeto);
+            _data.remove(projeto);
+        }
+    }
+    
+    private void preencherCampos(){
+        this.txtTitulo.setText(this.projeto.getTitulo());
+        this.txtTipo.setText(this.projeto.getTipo());
+        this.datInicio.setValue(new Date(this.projeto.getDataInicio().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        this.datFim.setValue(new Date(this.projeto.getDataFim().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        
+//        TODO Preencher grupo e bolsa
+
+        ObservableList<Servidor> servidores = this.cmbCoodenador.getItems();
+        int i = 0;
+        for(Servidor s : servidores){
+            if(Objects.equals(s.getId(), this.projeto.getServidorCoordenador().getId())){
+                this.cmbCoodenador.getSelectionModel().select(i);
+            }
+            i++;
+        }
+        if(i == 0) this.cmbCoodenador.getSelectionModel().select(i);
+        
+        ObservableList<InstituicaoFinanciadora> financiadoras = this.cmbFinanciadora.getItems();
+        i = 0;
+        for(InstituicaoFinanciadora f : financiadoras){
+            if(Objects.equals(f.getId(), this.projeto.getFinanciadora().getId())){
+                this.cmbFinanciadora.getSelectionModel().select(i);
+            }
+            i++;
+        }
+        if(i == 0) this.cmbFinanciadora.getSelectionModel().select(i);
+    }
 }

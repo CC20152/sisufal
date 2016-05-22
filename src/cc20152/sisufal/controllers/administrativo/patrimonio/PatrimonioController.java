@@ -172,7 +172,10 @@ public class PatrimonioController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         if(!url.getPath().contains(this.fxml)){
             listarGridPatrimonio();
-        }       
+        }else{
+            listarComboBloco();
+            listarTableSala();
+        }     
     }
     /*
     @Override
@@ -197,7 +200,7 @@ public class PatrimonioController implements Initializable {
     private void listarComboBloco() {
         List<Bloco> listaBloco = new ArrayList<>();
         listaBloco = new BlocoDAO().listAll();
-        this.cmbBloco.getItems().setAll(listaBloco);
+        this.cmbBloco.getItems().addAll(listaBloco);
         this.cmbBloco.getSelectionModel().selectFirst();
     }
 

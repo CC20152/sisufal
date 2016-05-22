@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -7,24 +10,25 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="622.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cc20152.sisufal.controllers.ensino.tcc.TCCController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="622.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cc20152.sisufal.controllers.pesquisa.projeto.ProjetoController">
    <children>
       <Button fx:id="btnVoltarLista" layoutX="50.0" layoutY="573.0" mnemonicParsing="false" onAction="#fecharLista" text="Voltar" />
-      <Button fx:id="btnNovo" layoutX="706.0" layoutY="573.0" mnemonicParsing="false" onAction="#novoTCC" text="Novo" textAlignment="CENTER" />
-      <TextField layoutX="50.0" layoutY="75.0" prefHeight="25.0" prefWidth="567.0" />
-      <Button layoutX="646.0" layoutY="75.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="105.0" text="Localizar" />
-      <TableView editable="true" layoutX="52.0" layoutY="140.0" prefHeight="386.0" prefWidth="697.0">
+      <Button layoutX="51.0" layoutY="39.0" mnemonicParsing="false" onAction="#novoProjeto" prefHeight="36.0" prefWidth="145.0" text="Novo Projeto" textAlignment="CENTER" />
+      <TextField fx:id="txtTitulo" layoutX="50.0" layoutY="115.0" prefHeight="25.0" prefWidth="317.0" />
+      <Button layoutX="646.0" layoutY="115.0" mnemonicParsing="false" onAction="#btnBuscar" prefHeight="25.0" prefWidth="105.0" text="Localizar" />
+      <TableView fx:id="tableProjetos" editable="true" layoutX="52.0" layoutY="164.0" prefHeight="386.0" prefWidth="697.0">
         <columns>
-          <TableColumn prefWidth="41.0" text="id" />
-          <TableColumn prefWidth="158.0" text="Título" />
-            <TableColumn prefWidth="105.0" text="Coordenador" />
-            <TableColumn prefWidth="112.0" text="Tipo" />
-            <TableColumn prefWidth="94.0" text="Data Início" />
-            <TableColumn prefWidth="93.0" text="Data Fim" />
-            <TableColumn prefWidth="47.0" text="Mostrar" />
-            <TableColumn prefWidth="45.0" text="Deletar" />
+          <TableColumn fx:id="titulo" prefWidth="158.0" text="Título" />
+            <TableColumn fx:id="coordenador" prefWidth="105.0" text="Coordenador" />
+            <TableColumn fx:id="tipo" prefWidth="103.0" text="Tipo" />
+            <TableColumn fx:id="dataInicio" prefWidth="92.0" text="Data Início" />
+            <TableColumn fx:id="dataFim" prefWidth="91.0" text="Data Fim" />
+            <TableColumn prefWidth="71.0" text="Editar" />
+            <TableColumn prefWidth="76.0" text="Deletar" />
         </columns>
       </TableView>
-      <Label layoutX="52.0" layoutY="58.0" text="Projeto" />
+      <Label layoutX="52.0" layoutY="98.0" text="Titulo" />
+      <ComboBox fx:id="cmbCoodenador" layoutX="392.0" layoutY="114.0" prefHeight="25.0" prefWidth="225.0" promptText="Coordenador" />
+      <Label layoutX="392.0" layoutY="99.0" text="Coordenador:" />
    </children>
 </AnchorPane>

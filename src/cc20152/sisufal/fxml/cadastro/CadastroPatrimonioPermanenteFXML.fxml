@@ -15,7 +15,7 @@
       <ComboBox fx:id="cmbBloco" layoutX="16.0" layoutY="260.0" prefWidth="270.0" />
       <Label layoutX="313.0" layoutY="139.0" text="Sala:" />
       <Label layoutX="21.0" layoutY="243.0" text="Bloco:" />
-      <ImageView fitHeight="100.0" fitWidth="600.0" pickOnBounds="true">
+      <ImageView fitHeight="120.0" fitWidth="600.0" pickOnBounds="true">
          <image>
             <Image url="@../imgs/IC.png" />
          </image>

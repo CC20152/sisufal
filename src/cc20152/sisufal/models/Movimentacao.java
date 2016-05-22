@@ -3,10 +3,10 @@ import java.util.Date;
 
 public class Movimentacao {
 
-	private Integer id;
+	    private Integer id;
         private Integer id_patrimonio;
         private Integer id_sala_destino;
-	private Date data;
+	    private Date data;
 
         public Integer getId() {
             return id;

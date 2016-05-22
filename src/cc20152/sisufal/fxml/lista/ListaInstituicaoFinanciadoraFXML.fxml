@@ -13,10 +13,10 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="622.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cc20152.sisufal.controllers.pesquisa.projeto.InstituicaoFinanciadoraController">
    <children>
       <Button fx:id="btnVoltarLista" layoutX="50.0" layoutY="566.0" mnemonicParsing="false" onAction="#fecharLista" text="Voltar" />
-      <Button layoutX="50.0" layoutY="30.0" mnemonicParsing="false" onAction="#novaInstituicao" prefHeight="36.0" prefWidth="145.0" text="Nova Instituiçao" textAlignment="CENTER" />
+      <Button layoutX="50.0" layoutY="39.0" mnemonicParsing="false" onAction="#novaInstituicao" prefHeight="36.0" prefWidth="145.0" text="Nova Instituiçao" textAlignment="CENTER" />
       <TextField fx:id="txtCodigo" layoutX="50.0" layoutY="110.0" prefHeight="25.0" prefWidth="183.0" />
       <Button layoutX="642.0" layoutY="109.0" mnemonicParsing="false" onAction="#btnBuscar" prefHeight="25.0" prefWidth="105.0" text="Buscar" />
-      <TableView fx:id="tableInstituicoesFinanciadoras" editable="true" layoutX="50.0" layoutY="156.0" prefHeight="386.0" prefWidth="697.0">
+      <TableView fx:id="tableInstituicoesFinanciadoras" editable="true" layoutX="50.0" layoutY="157.0" prefHeight="386.0" prefWidth="697.0">
         <columns>
           <TableColumn fx:id="codigo" prefWidth="105.0" text="Codigo" />
             <TableColumn fx:id="nome" prefWidth="412.0" text="Nome" />

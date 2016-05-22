@@ -8,24 +8,24 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cc20152.sisufal.controllers.administrativo.patrimonio.PatrimonioController">
    <children>
-      <Label layoutX="21.0" layoutY="165.0" text="Nome do Patrimônio:" />
-      <Label layoutX="21.0" layoutY="217.0" text="Código do Patrimônio:" />
-      <TextField fx:id="txtNome" layoutX="16.0" layoutY="182.0" prefWidth="270.0" promptText="Nome" />
-      <TextField fx:id="txtNumero" layoutX="16.0" layoutY="234.0" prefWidth="270.0" promptText="Código" />
-      <ComboBox fx:id="cmbBloco" layoutX="308.0" layoutY="120.0" prefWidth="270.0" />
-      <Label layoutX="313.0" layoutY="155.0" text="Sala:" />
-      <Label layoutX="313.0" layoutY="103.0" text="Bloco:" />
+      <Label layoutX="21.0" layoutY="126.0" text="Nome do Patrimônio:" />
+      <Label layoutX="21.0" layoutY="178.0" text="Código do Patrimônio:" />
+      <TextField fx:id="txtNome" layoutX="16.0" layoutY="143.0" prefWidth="270.0" promptText="Nome" />
+      <TextField fx:id="txtNumero" layoutX="16.0" layoutY="195.0" prefWidth="270.0" promptText="Código" />
+      <ComboBox fx:id="cmbBloco" layoutX="16.0" layoutY="247.0" prefWidth="270.0" />
+      <Label layoutX="313.0" layoutY="126.0" text="Sala:" />
+      <Label layoutX="21.0" layoutY="230.0" text="Bloco:" />
       <ImageView fitHeight="100.0" fitWidth="600.0" pickOnBounds="true">
          <image>
             <Image url="@../imgs/IC.png" />
          </image>
       </ImageView>
-      <Button fx:id="btnCancelarCadastro" layoutX="224.0" layoutY="356.0" mnemonicParsing="false" onAction="#cancelarCadastro" text="Cancelar" />
-      <Button layoutX="159.0" layoutY="356.0" mnemonicParsing="false" onAction="#btnSalvar" text="Salvar" />
-      <TableView fx:id="tableSala" layoutX="308.0" layoutY="172.0" prefHeight="134.0" prefWidth="270.0">
+      <TableView fx:id="tableSala" layoutX="308.0" layoutY="143.0" prefHeight="134.0" prefWidth="270.0">
         <columns>
           <TableColumn prefWidth="269.0" text="Salas" />
         </columns>
       </TableView>
+      <Button layoutX="456.0" layoutY="356.0" mnemonicParsing="false" onAction="#btnSalvar" text="Salvar" />
+      <Button fx:id="btnCancelarCadastro" layoutX="521.0" layoutY="356.0" mnemonicParsing="false" onAction="#cancelarCadastro" text="Cancelar" />
    </children>
 </AnchorPane>

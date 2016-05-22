@@ -139,7 +139,8 @@ public class InstituicaoFinanciadoraController implements Initializable   {
             result = instituicaoFinanciadoraDAO.update(instituicaoFinanciadora);
         }
         
-        if(result.equals("OK")){ 
+        System.out.println(result);
+        if(!result.equals("-1")){ 
            if(this.tipo == null) this.data.add(instituicaoFinanciadora); 
            else this.data.set(this.data.indexOf(instituicaoFinanciadora), instituicaoFinanciadora);
                
