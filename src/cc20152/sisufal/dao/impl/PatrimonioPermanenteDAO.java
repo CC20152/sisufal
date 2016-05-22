@@ -26,7 +26,7 @@ public class PatrimonioPermanenteDAO implements IBaseDAO {
     @Override
     public String save(Object object){
         this.conn = Conexao.getConexao();
-        String sql = "INSERT INTO patrimoniopermanente(nome, numero, id_bloco, id_sala) VALUES(?, ?, ?, ?)";   
+        String sql = "INSERT INTO patrimoniopermanente(nome_patrimonio, numero_patrimonio, id_bloco, id_sala) VALUES(?, ?, ?, ?)";   
         try{
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, ((Patrimonio) object).getNome());
@@ -44,7 +44,7 @@ public class PatrimonioPermanenteDAO implements IBaseDAO {
     @Override
     public String update(Object object){
         this.conn = Conexao.getConexao();
-        String sql = "UPDATE patrimoniopermanente SET nome = ?, numero = ?, id_bloco = ?, id_sala = ? WHERE id_patrimonio = ?";   
+        String sql = "UPDATE patrimoniopermanente SET nome_patrimonio = ?, numero_patrimonio = ?, id_bloco = ?, id_sala = ? WHERE id_patrimonio = ?";   
         try{
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, ((Patrimonio) object).getNome());
@@ -121,7 +121,7 @@ public class PatrimonioPermanenteDAO implements IBaseDAO {
         ArrayList<Patrimonio> listaPatrimonio = new ArrayList();
         this.conn = Conexao.getConexao();
         Patrimonio patrimonio = (Patrimonio) object;
-        String sql = "SELECT d.id_patrimonios, d.nome, c.nome as NOME_BLOCO, d.numero, d.id_sala FROM salas c, d.id_bloco FROM blocos c, patrimoniopermanente d WHERE d.id_bloco = c.id_bloco";
+        String sql = "SELECT d.id_patrimonios, d.nome_patrimonio, c.nome_patrimonio as NOME_BLOCO, d.numero_patrimonio, d.id_sala FROM salas c, d.id_bloco FROM blocos c, patrimoniopermanente d WHERE d.id_bloco = c.id_bloco";
         
         try{
             
@@ -137,11 +137,11 @@ public class PatrimonioPermanenteDAO implements IBaseDAO {
             }
 
             if(patrimonio.getNome() != null){
-                sql += " AND upper(d.nome) LIKE upper(?)";
+                sql += " AND upper(d.nome_patrimonio) LIKE upper(?)";
             }
 
             if(patrimonio.getNumero() != null){
-                sql += " AND upper(d.numero) LIKE upper(?)";
+                sql += " AND upper(d.numero_patrimonio) LIKE upper(?)";
             }
             
             PreparedStatement st = this.conn.prepareStatement(sql);

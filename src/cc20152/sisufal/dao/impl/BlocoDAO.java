@@ -26,7 +26,7 @@ public class BlocoDAO implements IBaseDAO {
     @Override
     public String save(Object object){
         this.conn = Conexao.getConexao();
-        String sql = "INSERT INTO blocos(nome, codigo) VALUES(?, ?)";   
+        String sql = "INSERT INTO bloco(nome, codigo) VALUES(?, ?)";   
         try{
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, ((Bloco) object).getNome());

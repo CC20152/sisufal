@@ -31,7 +31,7 @@ public class SalaDAO implements IBaseDAO {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, ((Sala) object).getNome());
             st.setString(2, ((Sala) object).getCodigo());
-            //st.setInt(3, ((Sala) object).getBloco().getId());
+            st.setInt(3, ((Sala) object).getBloco());
             st.execute();
         }catch(Exception ex){
             ex.printStackTrace();
@@ -48,7 +48,7 @@ public class SalaDAO implements IBaseDAO {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, ((Sala) object).getNome());
             st.setString(2, ((Sala) object).getCodigo());
-            //st.setInt(3, ((Sala) object).getBloco().getId());
+            st.setInt(3, ((Sala) object).getBloco());
             st.setInt(3, ((Sala) object).getId());
             st.execute();
         }catch(Exception ex){

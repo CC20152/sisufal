@@ -95,7 +95,7 @@ public class SalaController implements Initializable {
     }
     
     @FXML
-    private void novoPatrimonio (ActionEvent event) throws IOException{
+    private void novaSala (ActionEvent event) throws IOException{
         //System.out.println("---------");
         String path = getClass().getResource("").toString();
         path = path.replace(pacote,"");
@@ -139,14 +139,14 @@ public class SalaController implements Initializable {
         if(result.equals("OK")){
            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
            alerta.setTitle("Sucesso");
-           alerta.setHeaderText("Patrimônio cadastrado com sucesso!");
+           alerta.setHeaderText("Sala cadastrada com sucesso!");
            alerta.show();
            Stage stage = (Stage) btnCancelarCadastro.getScene().getWindow();
            stage.close();
         }else{
            Alert alerta = new Alert(Alert.AlertType.ERROR);
            alerta.setTitle("Erro");
-           alerta.setHeaderText("Erro ao cadastrar patrimônio!");
+           alerta.setHeaderText("Erro ao cadastrar sala!");
            alerta.show();
         }
     }
@@ -167,7 +167,10 @@ public class SalaController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         if(!url.getPath().contains(this.fxml)){
             listarGridSala();
-        }       
+        }
+        else{
+            listarComboBloco();
+        }   
     }
     /*
     @Override
@@ -192,7 +195,7 @@ public class SalaController implements Initializable {
     private void listarComboBloco() {
         List<Bloco> listaBloco = new ArrayList<>();
         listaBloco = new BlocoDAO().listAll();
-        this.cmbBloco.getItems().setAll(listaBloco);
+        this.cmbBloco.getItems().addAll(listaBloco);
         this.cmbBloco.getSelectionModel().selectFirst();
     }
     

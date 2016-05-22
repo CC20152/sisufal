@@ -12,7 +12,7 @@
       <Label layoutX="21.0" layoutY="161.0" text="Código da Sala:" />
       <TextField fx:id="txtNome" layoutX="16.0" layoutY="126.0" prefWidth="270.0" promptText="Nome" />
       <TextField fx:id="txtNumero" layoutX="16.0" layoutY="178.0" prefWidth="270.0" promptText="Código" />
-      <ComboBox fx:id="cmbBloco" layoutX="16.0" layoutY="230.0" onAction="#listarComboBloco" prefWidth="270.0" visibleRowCount="2" />
+      <ComboBox fx:id="cmbBloco" layoutX="16.0" layoutY="230.0" prefWidth="270.0" visibleRowCount="2" />
       <Label layoutX="21.0" layoutY="213.0" text="Bloco da Sala:" />
       <ImageView fitHeight="76.0" fitWidth="300.0" pickOnBounds="true">
          <image>

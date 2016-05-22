@@ -70,6 +70,7 @@ public class BlocoController implements Initializable {
     @FXML
         private TableView<Bloco> tableBloco;   
     
+        
     @FXML
     private void btnBuscar(ActionEvent event){
         BlocoDAO blocoDAO = new BlocoDAO();
@@ -94,7 +95,7 @@ public class BlocoController implements Initializable {
     }
     
     @FXML
-    private void novoPatrimonio (ActionEvent event) throws IOException{
+    private void novoBloco (ActionEvent event) throws IOException{
         //System.out.println("---------");
         String path = getClass().getResource("").toString();
         path = path.replace(pacote,"");
@@ -128,6 +129,12 @@ public class BlocoController implements Initializable {
             aviso.show();
             return ;
         }
+
+        Bloco old = this.bloco;
+        if(this.bloco == null){
+            this.bloco = new Bloco();
+        }
+
         Bloco bloco = new Bloco();
         bloco.setNome(this.txtNome.getText());
         bloco.setCodigo(this.txtNumero.getText());
@@ -137,14 +144,25 @@ public class BlocoController implements Initializable {
         if(result.equals("OK")){
            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
            alerta.setTitle("Sucesso");
-           alerta.setHeaderText("Patrimônio cadastrado com sucesso!");
+           alerta.setHeaderText("Bloco cadastrado com sucesso!");
            alerta.show();
+           
+           if(this.tipo == null){
+                this.data.add(bloco);
+           }
+           else{
+                this.data.remove(old);
+                this.data.add(bloco);
+           }
+
            Stage stage = (Stage) btnCancelarCadastro.getScene().getWindow();
-           stage.close();
-        }else{
+           stage.close();           
+        }
+
+        else{
            Alert alerta = new Alert(Alert.AlertType.ERROR);
            alerta.setTitle("Erro");
-           alerta.setHeaderText("Erro ao cadastrar patrimônio!");
+           alerta.setHeaderText("Erro ao cadastrar bloco!");
            alerta.show();
         }
     }
@@ -193,8 +211,8 @@ public class BlocoController implements Initializable {
        listaBloco = new BlocoDAO().listAll();
        this.tableBloco.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("nome"));
        this.tableBloco.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("codigo"));
-
-       TableColumn colEditar = this.tableBloco.getColumns().get(2);
+       
+       TableColumn colEditar = this.tableBloco.getColumns().get(3);
        colEditar.setCellFactory(new Callback<TableColumn<Record, Boolean>, TableCell<Record, Boolean>>() {
            @Override
            public TableCell<Record, Boolean> call(TableColumn<Record, Boolean> p) {
@@ -202,7 +220,7 @@ public class BlocoController implements Initializable {
            }
        });
        
-       TableColumn colDeletar = this.tableBloco.getColumns().get(3);
+       TableColumn colDeletar = this.tableBloco.getColumns().get(4);
        colDeletar.setCellFactory(new Callback<TableColumn<Record, Boolean>, TableCell<Record, Boolean>>() {
            @Override
            public TableCell<Record, Boolean> call(TableColumn<Record, Boolean> p) {

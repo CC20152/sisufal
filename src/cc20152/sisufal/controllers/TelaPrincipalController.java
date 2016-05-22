@@ -33,12 +33,15 @@ public class TelaPrincipalController implements Initializable {
     final String fxmlListaBloco = "fxml/lista/ListaBlocoFXML.fxml";
     final String fxmlListaSala = "fxml/lista/ListaSalaFXML.fxml";
     final String fxmlListaPatrimonio = "fxml/lista/ListaPatrimonioFXML.fxml";
+    final String fxmlMovimentaçãoPatrimonioConsumo = "fxml/cadastro/MovimentacaoPatrimonio(C)FXML.fxml";
     final String fxmlListaPatrimonioPermanente = "fxml/lista/ListaPatrimonioPermanenteFXML.fxml";
+    final String fxmlMovimentaçãoPatrimonioPermanente = "fxml/cadastro/MovimentacaoPatrimonio(P)FXML.fxml";
     final String fxmlListaProjeto = "fxml/lista/ListaProjetoFXML.fxml"; 
     final String fxmlListainstituicaoFinanciadora = "fxml/lista/ListaInstituicaoFinanciadoraFXML.fxml"; 
     final String listaMonitoriaFXML = "fxml/lista/ListaMonitoriaFXML.fxml"; 
     final String listaDisciplinaFXML = "fxml/lista/ListaDisciplinaFXML.fxml"; 
-    final String listaConcursoFXML = "fxml/lista/ListaConcursoFXML.fxml"; 
+    final String listaConcursoFXML = "fxml/lista/ListaConcursoFXML.fxml";
+
     
     @FXML
     private void menuUsuario (ActionEvent event) throws IOException{
@@ -172,6 +175,34 @@ public class TelaPrincipalController implements Initializable {
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setTitle("Patrimônios de Consumo");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
+    private void movimentacaoPatrimonioPermanente (ActionEvent event) throws IOException{
+        String path = getClass().getResource("").toString();
+        path = path.replace(pacote,"");
+        URL url = new URL(path + this.fxmlMovimentaçãoPatrimonioPermanente);
+        //System.out.println(url);
+        Parent root = FXMLLoader.load(url);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setTitle("Movimentar Patrimônio Permanente");
+        stage.setScene(scene);
+        stage.show();
+    }
+    
+    @FXML
+    private void movimentacaoPatrimonioConsumo (ActionEvent event) throws IOException{
+        String path = getClass().getResource("").toString();
+        path = path.replace(pacote,"");
+        URL url = new URL(path + this.fxmlMovimentaçãoPatrimonioConsumo);
+        //System.out.println(url);
+        Parent root = FXMLLoader.load(url);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setTitle("Movimentar Patrimônio de Consumo");
         stage.setScene(scene);
         stage.show();
     }

@@ -172,7 +172,10 @@ public class PatrimonioPermanenteController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         if(!url.getPath().contains(this.fxml)){
             listarGridPatrimonio();
-        }       
+        }else{
+            listarComboBloco();
+            listarTableSala();
+        }     
     }
     /*
     @Override
@@ -197,8 +200,10 @@ public class PatrimonioPermanenteController implements Initializable {
     private void listarComboBloco() {
         List<Bloco> listaBloco = new ArrayList<>();
         listaBloco = new BlocoDAO().listAll();
-        this.cmbBloco.getItems().setAll(listaBloco);
+        this.cmbBloco.getItems().addAll(listaBloco);
+        //this.cmbBloco.getItems().setAll(listaBloco);
         this.cmbBloco.getSelectionModel().selectFirst();
+
     }
     /*
     private void listarCombotxtNumero() {
@@ -222,7 +227,6 @@ public class PatrimonioPermanenteController implements Initializable {
        this.tablePatrimonio.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("numero"));
        this.tablePatrimonio.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("bloco"));
        this.tablePatrimonio.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("sala"));
-      
        TableColumn colEditar = this.tablePatrimonio.getColumns().get(4);
        colEditar.setCellFactory(new Callback<TableColumn<Record, Boolean>, TableCell<Record, Boolean>>() {
            @Override
