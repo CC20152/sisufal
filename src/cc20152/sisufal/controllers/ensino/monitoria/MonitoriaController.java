@@ -156,6 +156,10 @@ public class MonitoriaController implements Initializable {
             aviso.setHeaderText("Campo data fim não pode estar vazio");
             aviso.show();
             return ;
+        }else if(this.dataFinal.getValue().isBefore(this.dataInicial.getValue())){
+            aviso.setHeaderText("Data de término não pode ser menor que data de início");
+            aviso.show();
+            return ;
         }
         
         Monitoria old = this.monitoria;

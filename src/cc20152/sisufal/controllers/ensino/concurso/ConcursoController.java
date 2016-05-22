@@ -82,7 +82,7 @@ public class ConcursoController implements Initializable {
     private TextField txtAreaEstudo;
     
     @FXML
-    private TextField txtModalidade;
+    private ComboBox cmbModalidade;
     
     @FXML
     private ComboBox cmbSupervisor;
@@ -141,7 +141,7 @@ public class ConcursoController implements Initializable {
             aviso.setHeaderText("Campo supervisor não pode estar vazio");
             aviso.show();
             return ;
-        }else if(this.txtModalidade.getText().equals("") || this.txtModalidade.getText() == null){
+        }else if(this.cmbModalidade.getValue() == null || this.cmbModalidade.getSelectionModel().isSelected(0)){
             aviso.setHeaderText("Campo situação não pode estar vazio");
             aviso.show();
             return ;
@@ -151,6 +151,10 @@ public class ConcursoController implements Initializable {
             return ;
         }else if(this.dataFinal.getValue() == null){
             aviso.setHeaderText("Campo data fim não pode estar vazio");
+            aviso.show();
+            return ;
+        }else if(this.dataFinal.getValue().isBefore(this.dataInicial.getValue())){
+            aviso.setHeaderText("Data de término não pode ser menor que data de início");
             aviso.show();
             return ;
         }else if(!this.lista.getTargetItems().isEmpty()){
@@ -168,7 +172,7 @@ public class ConcursoController implements Initializable {
         
         this.concurso.setSupervisor((Servidor) this.cmbSupervisor.getValue());
         this.concurso.setAreaEstudo(this.txtAreaEstudo.getText());
-        this.concurso.setModalidade(this.txtModalidade.getText());
+        this.concurso.setModalidade(this.cmbModalidade.getValue().toString());
         this.concurso.setNumeroEdital(this.txtEdital.getText());
         this.concurso.setDataInicio(Date.from(this.dataInicial.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
         this.concurso.setDataFim(Date.from(this.dataFinal.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
@@ -326,6 +330,13 @@ public class ConcursoController implements Initializable {
             listarConcursos();
             
         }else{
+            ArrayList<String> listaModalidade = new ArrayList<>();
+            listaModalidade.add("Escolha uma modalidade");
+            listaModalidade.add("PROFESSOR EFETIVO");
+            listaModalidade.add("PROFESSOR SUBSTITUTO");
+            listaModalidade.add("OUTRA");
+            this.cmbModalidade.getItems().addAll(listaModalidade);
+            this.cmbModalidade.getSelectionModel().select(0);
             lista = new ListSelectionView<>();
             lista.setSourceHeader(new Label("Disponíveis"));
             lista.setTargetHeader(new Label("Selecionados"));
@@ -388,7 +399,7 @@ public class ConcursoController implements Initializable {
     private void preencherCampos(){
         this.txtAreaEstudo.setText(this.concurso.getAreaEstudo());
         this.txtEdital.setText(this.concurso.getNumeroEdital());
-        this.txtModalidade.setText(this.concurso.getModalidade());
+        this.cmbModalidade.getSelectionModel().select(this.concurso.getModalidade());
         this.dataInicial.setValue(new Date(this.concurso.getDataInicio().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         this.dataFinal.setValue(new Date(this.concurso.getDataFim().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 
