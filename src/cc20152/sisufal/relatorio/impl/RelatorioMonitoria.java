@@ -10,6 +10,7 @@ import cc20152.sisufal.models.Monitoria;
 import cc20152.sisufal.relatorio.Relatorio;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import net.sf.jasperreports.engine.JRException;
@@ -22,7 +23,22 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 public class RelatorioMonitoria extends Relatorio {
     
     public RelatorioMonitoria(){
-        relatorio = "reportMonitoria.jasper";
+        super.relatorio = "reportMonitoria.jasper";
+    }
+    
+    public void gerarDeclaracao(Monitoria monitoria) throws JRException, IOException{
+        
+        monitoria.getDiscente().setNome(monitoria.getDiscente().getNome().toUpperCase());
+        monitoria.getOrientador().setNome(monitoria.getOrientador().getNome().toUpperCase());
+        monitoria.getDisciplina().setNome((monitoria.getDisciplina().getNome() + ".").toUpperCase());
+        
+        List<Monitoria> listaMonitoria = new ArrayList<>();
+        listaMonitoria.add(monitoria);
+        ds = new JRBeanCollectionDataSource(listaMonitoria, false);
+        parametros = new HashMap();
+        super.relatorio = "reportDeclaracaoMonitoria.jasper";
+        
+        imprimirRelatorio();
     }
     
     public void gerarRelatorio(Monitoria monitoria, Map parametros) throws JRException, IOException{

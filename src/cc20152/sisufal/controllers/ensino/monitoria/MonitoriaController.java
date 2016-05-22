@@ -102,6 +102,25 @@ public class MonitoriaController implements Initializable {
     @FXML
     private TableView<Monitoria> tbMonitoria;
     
+    @FXML 
+    private void declaracaoOrientacao(ActionEvent event){
+        RelatorioMonitoria relatorio = new RelatorioMonitoria();
+        if(this.tbMonitoria.getSelectionModel().getSelectedIndex() < 0){
+            Alert aviso = new Alert(Alert.AlertType.ERROR);
+            aviso.setTitle("Erro");
+            aviso.setHeaderText("É necessário selecionar um monitor");
+            aviso.show();
+            return ;
+        }
+        try {
+           relatorio.gerarDeclaracao(this.tbMonitoria.getSelectionModel().getSelectedItem());
+        } catch (JRException ex) {
+           Logger.getLogger(MonitoriaController.class.getName()).log(Level.SEVERE, null, ex);
+       } catch (IOException ex) {
+           Logger.getLogger(MonitoriaController.class.getName()).log(Level.SEVERE, null, ex);
+       }
+    }
+    
     @FXML
     private void relatorioGeral(ActionEvent event) {
        Map parametros = new HashMap();
