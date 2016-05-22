@@ -17,6 +17,7 @@ public class AutoCompleteComboBoxListener<T> implements EventHandler<KeyEvent> {
     private ComboBox comboBox;
     private StringBuilder sb;
     private ObservableList<T> data;
+    private ArrayList<T> data2;
     private boolean moveCaretToPos = false;
     private int caretPos;
     private Class<?> classe;
@@ -25,7 +26,7 @@ public class AutoCompleteComboBoxListener<T> implements EventHandler<KeyEvent> {
         this.comboBox = comboBox;
         sb = new StringBuilder();
         data = comboBox.getItems();
-
+        data2 = (ArrayList<T>) comboBox.getItems();
         this.comboBox.setEditable(true);
         this.comboBox.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
@@ -82,7 +83,7 @@ public class AutoCompleteComboBoxListener<T> implements EventHandler<KeyEvent> {
             return;
         }
 
-        ArrayList<Object> list = new ArrayList<>();
+        ObservableList list = FXCollections.observableArrayList();
         for (int i=0; i<data.size(); i++) {
             if(data.get(i).toString().toLowerCase().contains(
                 AutoCompleteComboBoxListener.this.comboBox
@@ -93,8 +94,8 @@ public class AutoCompleteComboBoxListener<T> implements EventHandler<KeyEvent> {
         
         String t = comboBox.getEditor().getText();
         
-        comboBox.getItems().clear();
-        comboBox.getItems().addAll(list);
+        
+        comboBox.setItems(list);
         comboBox.getEditor().setText(t);
         
         if(!moveCaretToPos) {
