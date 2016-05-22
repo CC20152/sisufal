@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 /**
  *
@@ -149,61 +150,58 @@ public class PatrimonioPermanenteDAO implements IBaseDAO {
         }
         return listaPatrimonio;
     }
-    /*
-    * Eu escrevi isso sem ter a certeza se é um bom método
-    */
+    
     @Override
     public List<Patrimonio> listWithParams(Object object){
-        ArrayList<Patrimonio> listaPatrimonio = new ArrayList();
+        ArrayList<Patrimonio> lista = new ArrayList<Patrimonio>();
         this.conn = Conexao.getConexao();
-        Patrimonio patrimonio = (Patrimonio) object;
-        String sql = "SELECT d.id_patrimonios, d.nome_patrimonio, c.nome as NOME_SALA, d.numero_patrimonio, d.id_sala FROM salas c, patrimoniopermanente d WHERE d.id_sala = c.id_sala";
         
+        String tipo = ((HashMap) object).get("tipo").toString().toLowerCase();
+        String pesquisa = ((HashMap) object).get("texto").toString();
+        String sql;
+        //System.out.println(tipo);
+        if(tipo.equals("nome") ||tipo.equals("numero") ){
+            sql = "SELECT * FROM patrimoniopermanente "
+                + "INNER JOIN movimentacaopermanente c ON c.id_patrimonio = patrimoniopermanente.id_patrimonio "
+                + "INNER JOIN sala ON sala.id_sala = c.id_sala "
+                + "INNER JOIN bloco ON bloco.id_bloco = sala.id_bloco "
+                + "WHERE patrimoniopermanente."+tipo+"_patrimonio LIKE '%"+pesquisa+"%'";
+        }else if(tipo.equals("bloco")){
+             sql = "SELECT * FROM patrimoniopermanente "
+                + "INNER JOIN movimentacaopermanente c ON c.id_patrimonio = patrimoniopermanente.id_patrimonio "
+                + "INNER JOIN sala ON sala.id_sala = c.id_sala "
+                + "INNER JOIN bloco ON bloco.id_bloco = sala.id_bloco "
+                + "WHERE bloco.nome LIKE '%"+pesquisa+"%'";
+        }else{
+             sql = "SELECT * FROM patrimoniopermanente "
+                + "INNER JOIN movimentacaopermanente c ON c.id_patrimonio = patrimoniopermanente.id_patrimonio "
+                + "INNER JOIN sala ON sala.id_sala = c.id_sala "
+                + "INNER JOIN bloco ON bloco.id_bloco = sala.id_bloco "
+                + "WHERE sala.nome LIKE '%"+pesquisa+"%'";
+        }
+       
         try{
-            
-            
-            int i = 1;
-            /*
-            if(patrimonio.getBloco() != null){
-                sql += " AND c.id_bloco = ?";
-            }
-            
-            if(patrimonio.getSala() != null){
-                sql += " AND c.id_sala = ?";
-            }
-            */
-            if(patrimonio.getNome() != null){
-                sql += " AND upper(d.nome_patrimonio) LIKE upper(?)";
-            }
-
-            if(patrimonio.getNumero() != null){
-                sql += " AND upper(d.numero_patrimonio) LIKE upper(?)";
-            }
-            
             PreparedStatement st = this.conn.prepareStatement(sql);
             ResultSet rs;
-            
-            if(patrimonio.getBloco() != null){
-                st.setInt(i, patrimonio.getBloco());
-                i++;
-            }
-            /*
-            if(patrimonio.getSala() != null){
-                st.setInt(i, patrimonio.getSala());
-                i++;
-            }
-            */
-            if(patrimonio.getNome() != null){
-                st.setString(i, "%" + patrimonio.getNome() + "%");
-                i++;
-            }
-            
+
             rs = st.executeQuery();
-            listaPatrimonio = mapearResultSet(rs);
+            while(rs.next()){
+                Patrimonio patrimonio = new Patrimonio();
+                patrimonio.setId(rs.getInt("patrimoniopermanente.ID_PATRIMONIO"));
+                patrimonio.setNome(rs.getString("patrimoniopermanente.NOME_PATRIMONIO"));
+                patrimonio.setNumero(rs.getString("patrimoniopermanente.NUMERO_PATRIMONIO"));
+                patrimonio.setSala(rs.getInt("c.ID_SALA"));
+                patrimonio.setNomeSala(rs.getString("sala.NOME"));
+                patrimonio.setBloco(rs.getInt("bloco.ID_BLOCO"));
+                patrimonio.setNomeBloco(rs.getString("bloco.NOME"));
+                lista.add(patrimonio);
+            }
+            Conexao.desconectar();
         }catch(Exception ex){
             ex.printStackTrace();
+            return null;
         }
-        return listaPatrimonio;
+        return lista;
     }
     
     

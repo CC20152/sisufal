@@ -77,11 +77,7 @@ public class BlocoController implements Initializable {
         
     @FXML
     private void pesquisar(ActionEvent event){
-        if(txtPesquisa.getText().equals(""))
-            listarGridBloco();
-        else{
             listarGridBlocoPesquisa(cmbPesquisa.getValue());
-        }
     }
     
     @FXML
@@ -181,6 +177,7 @@ public class BlocoController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         if(!url.getPath().contains(this.fxml)){
             listarGridBloco();
+            listarComboPesquisa();
         }       
     }
     /*
@@ -206,7 +203,7 @@ public class BlocoController implements Initializable {
     private void listarComboPesquisa() {
         ArrayList<String> listaPesquisa = new ArrayList<>();
         listaPesquisa.add("Nome");
-        listaPesquisa.add("Numero");
+        listaPesquisa.add("Codigo");
         this.cmbPesquisa.getItems().addAll(listaPesquisa);
         this.cmbPesquisa.getSelectionModel().selectFirst();
     }

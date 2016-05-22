@@ -67,32 +67,17 @@ public class SalaController implements Initializable {
     @FXML
         private TextField txtNumero;
     @FXML
+        private TextField txtPesquisa;
+    @FXML
+        private ComboBox<String> cmbPesquisa;
+    @FXML
     	private ComboBox<Bloco> cmbBloco;
     @FXML
         private TableView<Sala> tableSala;   
     
     @FXML
-    private void btnBuscar(ActionEvent event){
-        SalaDAO salaDAO = new SalaDAO();
-        Sala sala = new Sala();
-        
-        if(!this.txtNome.getText().equals("")){
-            sala.setNome(this.txtNome.getText());
-        }
-        
-        if(this.cmbBloco.getSelectionModel() != null && !this.cmbBloco.getSelectionModel().isSelected(0)){
-            sala.setBloco(this.cmbBloco.getValue());
-            //sala.setNomeBloco(this.cmbBloco.getValue().getNome());
-        }
-        /*
-        if(this.cmbSala.getSelectionModel() != null && !this.cmbSala.getSelectionModel().isSelected(0)){
-            sala.getSala().setId(this.cmbSala.getValue().getId());
-        }
-        */
-        List<Sala> list = salaDAO.listWithParams(sala);
-        
-        this.data.clear();
-        this.data.addAll(list);
+    private void pesquisar(ActionEvent event){
+        listarGridSalaPesquisa(cmbPesquisa.getValue());
     }
     
     @FXML
@@ -198,6 +183,7 @@ public class SalaController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         if(!url.getPath().contains(this.fxml)){
             listarGridSala();
+            listarComboPesquisa();
         }
         else{
             listarComboBloco();           
@@ -258,6 +244,23 @@ public class SalaController implements Initializable {
        }
        
        tableSala.setItems(data);
+    }
+
+    private void listarComboPesquisa() {
+        ArrayList<String> listaPesquisa = new ArrayList<>();
+        listaPesquisa.add("Nome");
+        listaPesquisa.add("Codigo");
+        listaPesquisa.add("Bloco");
+        this.cmbPesquisa.getItems().addAll(listaPesquisa);
+        this.cmbPesquisa.getSelectionModel().selectFirst();
+    }
+
+    private void listarGridSalaPesquisa(String tipo){
+        HashMap hashPesquisa = new HashMap();
+        hashPesquisa.put("tipo", tipo);
+        hashPesquisa.put("texto", txtPesquisa.getText());
+        List<Sala> lista = salaDAO.listWithParams(hashPesquisa);
+        data.setAll(lista);
     }
 
     public void setData(ObservableList<Sala> data){

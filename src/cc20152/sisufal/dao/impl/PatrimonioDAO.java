@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 /**
  *
@@ -149,82 +150,58 @@ public class PatrimonioDAO implements IBaseDAO {
         }
         return listaPatrimonio;
     }
-    /*
+
     @Override
-    public List<InstituicaoFinanciadora> listAll() {
-        ArrayList<InstituicaoFinanciadora> listaInstituicaoFinanciadora = new ArrayList();
-        this.conexao = Conexao.getConexao();
-        String sql = "SELECT * FROM instituicaofinanciadora";
+    public List<Patrimonio> listWithParams(Object object){
+        ArrayList<Patrimonio> lista = new ArrayList<Patrimonio>();
+        this.conn = Conexao.getConexao();
         
+        String tipo = ((HashMap) object).get("tipo").toString().toLowerCase();
+        String pesquisa = ((HashMap) object).get("texto").toString();
+        String sql;
+        //System.out.println(tipo);
+        if(tipo.equals("nome") ||tipo.equals("numero") ){
+            sql = "SELECT * FROM patrimonioconsumo "
+                + "INNER JOIN movimentacaoconsumo c ON c.id_patrimonio = patrimonioconsumo.id_patrimonio "
+                + "INNER JOIN sala ON sala.id_sala = c.id_sala "
+                + "INNER JOIN bloco ON bloco.id_bloco = sala.id_bloco "
+                + "WHERE patrimonioconsumo."+tipo+"_patrimonio LIKE '%"+pesquisa+"%'";
+        }else if(tipo.equals("bloco")){
+             sql = "SELECT * FROM patrimonioconsumo "
+                + "INNER JOIN movimentacaoconsumo c ON c.id_patrimonio = patrimonioconsumo.id_patrimonio "
+                + "INNER JOIN sala ON sala.id_sala = c.id_sala "
+                + "INNER JOIN bloco ON bloco.id_bloco = sala.id_bloco "
+                + "WHERE bloco.nome LIKE '%"+pesquisa+"%'";
+        }else{
+             sql = "SELECT * FROM patrimonioconsumo "
+                + "INNER JOIN movimentacaoconsumo c ON c.id_patrimonio = patrimonioconsumo.id_patrimonio "
+                + "INNER JOIN sala ON sala.id_sala = c.id_sala "
+                + "INNER JOIN bloco ON bloco.id_bloco = sala.id_bloco "
+                + "WHERE sala.nome LIKE '%"+pesquisa+"%'";
+        }
+       
         try{
-            PreparedStatement st = this.conexao.prepareStatement(sql);
+            PreparedStatement st = this.conn.prepareStatement(sql);
             ResultSet rs;
 
             rs = st.executeQuery();
-            listaInstituicaoFinanciadora = mapearResultSet(rs);
-            
+            while(rs.next()){
+                Patrimonio patrimonio = new Patrimonio();
+                patrimonio.setId(rs.getInt("patrimonioconsumo.ID_PATRIMONIO"));
+                patrimonio.setNome(rs.getString("patrimonioconsumo.NOME_PATRIMONIO"));
+                patrimonio.setNumero(rs.getString("patrimonioconsumo.NUMERO_PATRIMONIO"));
+                patrimonio.setSala(rs.getInt("c.ID_SALA"));
+                patrimonio.setNomeSala(rs.getString("sala.NOME"));
+                patrimonio.setBloco(rs.getInt("bloco.ID_BLOCO"));
+                patrimonio.setNomeBloco(rs.getString("bloco.NOME"));
+                lista.add(patrimonio);
+            }
             Conexao.desconectar();
         }catch(Exception ex){
             ex.printStackTrace();
+            return null;
         }
-        return listaInstituicaoFinanciadora;
-    }
-    */
-    /*
-    * Eu escrevi isso sem ter a certeza se é um bom método
-    */
-    @Override
-    public List<Patrimonio> listWithParams(Object object){
-        ArrayList<Patrimonio> listaPatrimonio = new ArrayList();
-        this.conn = Conexao.getConexao();
-        Patrimonio patrimonio = (Patrimonio) object;
-        String sql = "SELECT d.id_patrimonios, d.nome_patrimonio, c.nome as NOME_SALA, d.numero_patrimonio, d.id_sala FROM salas c, patrimonioconsumo d WHERE d.id_sala = c.id_sala";
-        
-        try{
-            
-            
-            int i = 1;
-            /*
-            if(patrimonio.getBloco() != null){
-                sql += " AND c.id_bloco = ?";
-            }
-            
-            if(patrimonio.getSala() != null){
-                sql += " AND c.id_sala = ?";
-            }
-            */
-            if(patrimonio.getNome() != null){
-                sql += " AND upper(d.nome_patrimonio) LIKE upper(?)";
-            }
-
-            if(patrimonio.getNumero() != null){
-                sql += " AND upper(d.numero_patrimonio) LIKE upper(?)";
-            }
-            
-            PreparedStatement st = this.conn.prepareStatement(sql);
-            ResultSet rs;
-            
-            if(patrimonio.getBloco() != null){
-                st.setInt(i, patrimonio.getBloco());
-                i++;
-            }
-            /*
-            if(patrimonio.getSala() != null){
-                st.setInt(i, patrimonio.getSala());
-                i++;
-            }
-            */
-            if(patrimonio.getNome() != null){
-                st.setString(i, "%" + patrimonio.getNome() + "%");
-                i++;
-            }
-            
-            rs = st.executeQuery();
-            listaPatrimonio = mapearResultSet(rs);
-        }catch(Exception ex){
-            ex.printStackTrace();
-        }
-        return listaPatrimonio;
+        return lista;
     }
     
     

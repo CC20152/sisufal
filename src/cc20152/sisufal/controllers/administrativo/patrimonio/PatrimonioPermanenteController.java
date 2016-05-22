@@ -124,11 +124,7 @@ public class PatrimonioPermanenteController implements Initializable {
 
     @FXML
     private void pesquisar(ActionEvent event){
-        if(txtPesquisa.getText().equals(""))
-            listarGridPatrimonio();
-        else{
-            listarGridPatrimonioPesquisa(cmbPesquisa.getValue());
-        }
+        listarGridPatrimonioPesquisa(cmbPesquisa.getValue());
     }
 
     @FXML
@@ -270,6 +266,7 @@ public class PatrimonioPermanenteController implements Initializable {
         listaPesquisa.add("Nome");
         listaPesquisa.add("Numero");
         listaPesquisa.add("Sala");
+        listaPesquisa.add("Bloco");
         this.cmbPesquisa.getItems().addAll(listaPesquisa);
         this.cmbPesquisa.getSelectionModel().selectFirst();
     }

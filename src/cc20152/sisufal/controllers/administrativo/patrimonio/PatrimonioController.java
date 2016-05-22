@@ -77,30 +77,7 @@ public class PatrimonioController implements Initializable {
     @FXML
         private TableView<Sala> tableSala;
     @FXML
-        private TableView<Patrimonio> tablePatrimonio;    
-    
-    @FXML
-    private void btnBuscar(ActionEvent event){
-        PatrimonioDAO patrimonioDAO = new PatrimonioDAO();
-        Patrimonio patrimonio = new Patrimonio();
-        
-        if(!this.txtNome.getText().equals("")){
-            patrimonio.setNome(this.txtNome.getText());
-        }
-        
-        if(this.cmbBloco.getSelectionModel() != null && !this.cmbBloco.getSelectionModel().isSelected(0)){
-            patrimonio.setBloco(this.cmbBloco.getValue().getId());
-        }
-        
-        if(this.cmbSala.getSelectionModel() != null && !this.cmbSala.getSelectionModel().isSelected(0)){
-            patrimonio.setSala(this.cmbSala.getValue().getId());
-        }
-        
-        List<Patrimonio> list = patrimonioDAO.listWithParams(patrimonio);
-        
-        this.data.clear();
-        this.data.addAll(list);
-    }
+        private TableView<Patrimonio> tablePatrimonio;
     
     @FXML
     private void novoPatrimonio (ActionEvent event) throws IOException{
@@ -124,11 +101,7 @@ public class PatrimonioController implements Initializable {
 
     @FXML
     private void pesquisar(ActionEvent event){
-        if(txtPesquisa.getText().equals(""))
-            listarGridPatrimonio();
-        else{
-            listarGridPatrimonioPesquisa(cmbPesquisa.getValue());
-        }
+        listarGridPatrimonioPesquisa(cmbPesquisa.getValue());
     }
 
     @FXML
@@ -270,6 +243,7 @@ public class PatrimonioController implements Initializable {
         listaPesquisa.add("Nome");
         listaPesquisa.add("Numero");
         listaPesquisa.add("Sala");
+        listaPesquisa.add("Bloco");
         this.cmbPesquisa.getItems().addAll(listaPesquisa);
         this.cmbPesquisa.getSelectionModel().selectFirst();
     }

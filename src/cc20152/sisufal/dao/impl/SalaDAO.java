@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -79,8 +80,9 @@ public class SalaDAO implements IBaseDAO {
     public List<Sala> listAll(){
         ArrayList<Sala> listaSala = new ArrayList();
         this.conn = Conexao.getConexao();
-        String sql = "SELECT * FROM sala d, bloco c WHERE d.id_bloco = c.id_bloco";
-        
+        String sql = "SELECT * FROM sala "
+                    + "INNER JOIN bloco ON bloco.id_bloco = sala.id_bloco ";
+
         try{
             PreparedStatement st = this.conn.prepareStatement(sql);
             ResultSet rs;
@@ -94,46 +96,45 @@ public class SalaDAO implements IBaseDAO {
         return listaSala;
     }
     
-    /*
-    * Eu escrevi isso sem ter a certeza se é um bom método
-    */
     @Override
     public List<Sala> listWithParams(Object object){
-        ArrayList<Sala> listaSala = new ArrayList();
+        ArrayList<Sala> lista = new ArrayList<Sala>();
         this.conn = Conexao.getConexao();
-        Sala sala = (Sala) object;
-        String sql = "SELECT * FROM bloco c, sala d WHERE d.id_bloco = c.id_bloco";
         
+        String tipo = ((HashMap) object).get("tipo").toString().toLowerCase();
+        String pesquisa = ((HashMap) object).get("texto").toString();
+        String sql;
+        //System.out.println(tipo);
+        if(tipo.equals("codigo") ||tipo.equals("nome") ){
+            sql = "SELECT * FROM sala "
+                    + "INNER JOIN bloco ON bloco.id_bloco = sala.id_bloco "
+                    + "WHERE sala."+tipo+" LIKE '%"+pesquisa+"%'";
+        }else{
+             sql = "SELECT * FROM sala "
+                     + "INNER JOIN bloco ON bloco.id_bloco = sala.id_bloco "
+                     + "WHERE bloco.nome LIKE '%"+pesquisa+"%'";
+        }
+       
         try{
-            
-            
-            int i = 1;
-            
-            if(sala.getBloco() != null){
-                sql += " AND c.id_bloco = ?";
-            }
-            if(sala.getNome() != null){
-                sql += " AND upper(d.nome) LIKE upper(?)";
-            }
-
-            if(sala.getCodigo() != null){
-                sql += " AND upper(d.codigo) LIKE upper(?)";
-            }
-            
             PreparedStatement st = this.conn.prepareStatement(sql);
             ResultSet rs;
-            
-            if(sala.getNome() != null){
-                st.setString(i, "%" + sala.getNome() + "%");
-                i++;
-            }
-            
+
             rs = st.executeQuery();
-            listaSala = mapearResultSet(rs);
+            while(rs.next()){
+            Sala sala = new Sala();
+            sala.setId(rs.getInt("ID_SALA"));
+            sala.setNome(rs.getString("NOME"));
+            sala.setCodigo(rs.getString("CODIGO"));
+            sala.getBloco().setId(rs.getInt("ID_BLOCO"));
+            sala.getBloco().setNome(rs.getString("BLOCO.NOME"));
+            lista.add(sala);
+            }
+            Conexao.desconectar();
         }catch(Exception ex){
             ex.printStackTrace();
+            return null;
         }
-        return listaSala;
+        return lista;
     }
     
     public ArrayList<Sala> listSalas(Bloco bloco){
@@ -167,7 +168,7 @@ public class SalaDAO implements IBaseDAO {
             sala.setNome(rs.getString("NOME"));
             sala.setCodigo(rs.getString("CODIGO"));
             sala.getBloco().setId(rs.getInt("ID_BLOCO"));
-            sala.getBloco().setNome(rs.getString("C.NOME"));
+            sala.getBloco().setNome(rs.getString("BLOCO.NOME"));
             listaSala.add(sala);
     }
 

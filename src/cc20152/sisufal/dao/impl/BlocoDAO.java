@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -92,7 +93,7 @@ public class BlocoDAO implements IBaseDAO {
     
     /*
     * Eu escrevi isso sem ter a certeza se é um bom método
-    */
+    
     @Override
     public List<Bloco> listWithParams(Object object){
         ArrayList<Bloco> listaBloco = new ArrayList();
@@ -127,6 +128,38 @@ public class BlocoDAO implements IBaseDAO {
             ex.printStackTrace();
         }
         return listaBloco;
+    }
+    */
+    @Override
+    public List<Bloco> listWithParams(Object object){
+        ArrayList<Bloco> lista = new ArrayList<>();
+        this.conn = Conexao.getConexao();
+        
+        String tipo = ((HashMap) object).get("tipo").toString().toLowerCase();
+        String pesquisa = ((HashMap) object).get("texto").toString();
+        String sql;
+        //System.out.println(tipo);
+        sql = "SELECT * FROM bloco "
+            + "WHERE bloco."+tipo+" LIKE '%"+pesquisa+"%'";
+       
+        try{
+            PreparedStatement st = this.conn.prepareStatement(sql);
+            ResultSet rs;
+
+            rs = st.executeQuery();
+            while(rs.next()){
+            Bloco bloco = new Bloco();
+            bloco.setId(rs.getInt("ID_BLOCO"));
+            bloco.setNome(rs.getString("NOME"));
+            bloco.setCodigo(rs.getString("CODIGO"));
+            lista.add(bloco);
+            }
+            Conexao.desconectar();
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return null;
+        }
+        return lista;
     }
     
     
