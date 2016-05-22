@@ -10,6 +10,7 @@ import cc20152.sisufal.models.Monitoria;
 import cc20152.sisufal.models.Disciplina;
 import cc20152.sisufal.models.Orientador;
 import cc20152.sisufal.models.Periodo;
+import cc20152.sisufal.relatorio.impl.RelatorioMonitoria;
 import cc20152.sisufal.util.AutoCompleteComboBoxListener;
 import cc20152.sisufal.util.BotoesLista;
 import cc20152.sisufal.util.DataUtil;
@@ -46,10 +47,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.util.StringConverter;
+import net.sf.jasperreports.engine.JRException;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -99,34 +103,23 @@ public class MonitoriaController implements Initializable {
     private TableView<Monitoria> tbMonitoria;
     
     @FXML
+    private void relatorioGeral(ActionEvent event) {
+       Map parametros = new HashMap();
+       RelatorioMonitoria relatorio = new RelatorioMonitoria();
+       try {
+           relatorio.gerarRelatorio(dadosPreenchidos(), parametros);
+       } catch (JRException ex) {
+           Logger.getLogger(MonitoriaController.class.getName()).log(Level.SEVERE, null, ex);
+       } catch (IOException ex) {
+           Logger.getLogger(MonitoriaController.class.getName()).log(Level.SEVERE, null, ex);
+       }
+    }
+    
+    @FXML
     private void btnBuscar(ActionEvent event){
         MonitoriaDAO monitoriaDAO = new MonitoriaDAO();
-        Monitoria monitoria = new Monitoria();
-        
-        if(!this.txtNome.getText().equals("")){
-            monitoria.getDiscente().setNome(this.txtNome.getText());
-        }
-        
-        if(this.cmbDisciplina.getValue() != null && !this.cmbDisciplina.getSelectionModel().isSelected(0)){
-            monitoria.setDisciplina((Disciplina) this.cmbDisciplina.getValue());
-        }
-        
-        if(this.dataInicial.getValue() != null){
-            System.out.println(this.dataInicial.getValue());
-            LocalDate local = this.dataInicial.getValue();
-            Date date = Date.from(local.atStartOfDay(ZoneId.systemDefault()).toInstant());
-            monitoria.setDataInicio(date);
-        }
-        
-        if(this.dataFinal.getValue() != null){
-            LocalDate local = this.dataFinal.getValue();
-            Date date = Date.from(local.atStartOfDay(ZoneId.systemDefault()).toInstant());
-            monitoria.setDataFim(date);
-        }
-        
-        
-        List<Monitoria> list = monitoriaDAO.listWithParams(monitoria);
-        
+       
+        List<Monitoria> list = monitoriaDAO.listWithParams(dadosPreenchidos());
         this.data.clear();
         this.data.addAll(list);
     }
@@ -354,6 +347,8 @@ public class MonitoriaController implements Initializable {
         }
     }
     
+    
+    
     private void preencherCampos(){
         
         this.dataInicial.setValue(new Date(this.monitoria.getDataInicio().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
@@ -402,5 +397,27 @@ public class MonitoriaController implements Initializable {
         if(i == 0) this.cmbOrientador.getSelectionModel().select(i);
         
         this.cmbSituacao.setValue(this.monitoria.getSitCertificado());
+    }
+    
+    private Monitoria dadosPreenchidos(){
+         Monitoria monitoria = new Monitoria();
+        if(!this.txtNome.getText().equals("")){
+            monitoria.getDiscente().setNome(this.txtNome.getText());
+        }
+        if(this.cmbDisciplina.getValue() != null && !this.cmbDisciplina.getSelectionModel().isSelected(0)){
+            monitoria.setDisciplina((Disciplina) this.cmbDisciplina.getValue());
+        }
+        if(this.dataInicial.getValue() != null){
+            System.out.println(this.dataInicial.getValue());
+            LocalDate local = this.dataInicial.getValue();
+            Date date = Date.from(local.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            monitoria.setDataInicio(date);
+        }
+        if(this.dataFinal.getValue() != null){
+            LocalDate local = this.dataFinal.getValue();
+            Date date = Date.from(local.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            monitoria.setDataFim(date);
+        }
+        return monitoria;
     }
 }
