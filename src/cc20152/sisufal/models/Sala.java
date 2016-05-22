@@ -6,9 +6,11 @@ public class Sala {
 	private Integer id;
 	private String nome;
 	private String codigo;
-    private Integer id_bloco;
-    private ArrayList<Patrimonio> patrimonios;
-       
+    private Bloco bloco;
+        
+        public Sala(){
+            bloco = new Bloco();
+        }
 	
         public Integer getId() {
             return id;
@@ -34,12 +36,12 @@ public class Sala {
             this.codigo = codigo;
         }
 
-        public Integer getBloco() {
-            return id_bloco;
+        public Bloco getBloco() {
+            return bloco;
         }
 
-        public void setBloco(Integer id_bloco) {
-            this.id_bloco = id_bloco;
+        public void setBloco(Bloco bloco) {
+            this.bloco = bloco;
         }
 
         @Override

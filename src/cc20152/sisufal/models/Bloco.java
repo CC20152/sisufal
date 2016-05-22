@@ -6,8 +6,12 @@ public class Bloco {
     private Integer id;
     private String nome;
     private String codigo;
-    private ArrayList<Sala> salas;
+    public ArrayList<Sala> salas;
     
+        public Bloco(){
+            salas = new ArrayList<>();
+        }
+        
         public Integer getId() {
             return id;
         }
@@ -38,6 +42,10 @@ public class Bloco {
 
         public void setSalas(ArrayList<Sala> salas) {
             this.salas = salas;
+        }
+
+        public void addSalas(Sala sala) {
+            this.salas.add(sala);
         }
         
         @Override

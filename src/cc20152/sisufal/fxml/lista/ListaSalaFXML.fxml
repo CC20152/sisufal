@@ -19,10 +19,11 @@
       <Button layoutX="646.0" layoutY="75.0" mnemonicParsing="false" onAction="#btnBuscar" prefHeight="25.0" prefWidth="105.0" text="Localizar" />
       <TableView fx:id="tableSala" editable="true" layoutX="52.0" layoutY="140.0" prefHeight="386.0" prefWidth="697.0">
         <columns>
-          <TableColumn prefWidth="182.0" text="Nome" />
-            <TableColumn prefWidth="158.0" text="Código" />
-            <TableColumn prefWidth="54.0" text="Editar" />
-            <TableColumn minWidth="0.0" prefWidth="69.0" text="Deletar" />
+          <TableColumn prefWidth="188.0" text="Nome" />
+            <TableColumn prefWidth="183.0" text="Código" />
+            <TableColumn prefWidth="155.0" text="Bloco" />
+            <TableColumn minWidth="0.0" prefWidth="84.0" text="Editar" />
+            <TableColumn prefWidth="86.0" text="Deletar" />
         </columns>
       </TableView>
       <Label layoutX="52.0" layoutY="58.0" text="Sala:" />

@@ -68,30 +68,20 @@ public class BlocoController implements Initializable {
     @FXML
         private TextField txtNumero;
     @FXML
-        private TableView<Bloco> tableBloco;   
+        private TableView<Bloco> tableBloco;  
+    @FXML
+        private TextField txtPesquisa;
+    @FXML
+        private ComboBox<String> cmbPesquisa; 
     
         
     @FXML
-    private void btnBuscar(ActionEvent event){
-        BlocoDAO blocoDAO = new BlocoDAO();
-        Bloco bloco = new Bloco();
-        
-        if(!this.txtNome.getText().equals("")){
-            bloco.setNome(this.txtNome.getText());
+    private void pesquisar(ActionEvent event){
+        if(txtPesquisa.getText().equals(""))
+            listarGridBloco();
+        else{
+            listarGridBlocoPesquisa(cmbPesquisa.getValue());
         }
-        /*
-        if(this.cmbBloco.getSelectionModel() != null && !this.cmbBloco.getSelectionModel().isSelected(0)){
-            sala.getBloco().setId(this.cmbBloco.getValue().getId());
-        }
-        
-        if(this.cmbSala.getSelectionModel() != null && !this.cmbSala.getSelectionModel().isSelected(0)){
-            bloco.getSala().setId(this.cmbSala.getValue().getId());
-        }
-        */
-        List<Bloco> list = blocoDAO.listWithParams(bloco);
-        
-        this.data.clear();
-        this.data.addAll(list);
     }
     
     @FXML
@@ -138,8 +128,16 @@ public class BlocoController implements Initializable {
         Bloco bloco = new Bloco();
         bloco.setNome(this.txtNome.getText());
         bloco.setCodigo(this.txtNumero.getText());
-                
-        String result = blocoDAO.save(bloco);
+        
+        String result = null;
+
+        if(this.tipo == null){
+            result = blocoDAO.save(bloco);
+        }else{
+            bloco.setId(old.getId());
+            result = blocoDAO.update(bloco);
+        }
+
         System.out.println(result);
         if(result.equals("OK")){
            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
@@ -205,6 +203,21 @@ public class BlocoController implements Initializable {
         }
     }    
     */
+    private void listarComboPesquisa() {
+        ArrayList<String> listaPesquisa = new ArrayList<>();
+        listaPesquisa.add("Nome");
+        listaPesquisa.add("Numero");
+        this.cmbPesquisa.getItems().addAll(listaPesquisa);
+        this.cmbPesquisa.getSelectionModel().selectFirst();
+    }
+
+    private void listarGridBlocoPesquisa(String tipo){
+        HashMap hashPesquisa = new HashMap();
+        hashPesquisa.put("tipo", tipo);
+        hashPesquisa.put("texto", txtPesquisa.getText());
+        List<Bloco> lista = blocoDAO.listWithParams(hashPesquisa);
+        data.setAll(lista);
+    }
 
     private void listarGridBloco(){
        List<Bloco> listaBloco = new ArrayList<>();
@@ -212,7 +225,7 @@ public class BlocoController implements Initializable {
        this.tableBloco.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("nome"));
        this.tableBloco.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("codigo"));
        
-       TableColumn colEditar = this.tableBloco.getColumns().get(3);
+       TableColumn colEditar = this.tableBloco.getColumns().get(2);
        colEditar.setCellFactory(new Callback<TableColumn<Record, Boolean>, TableCell<Record, Boolean>>() {
            @Override
            public TableCell<Record, Boolean> call(TableColumn<Record, Boolean> p) {
@@ -220,7 +233,7 @@ public class BlocoController implements Initializable {
            }
        });
        
-       TableColumn colDeletar = this.tableBloco.getColumns().get(4);
+       TableColumn colDeletar = this.tableBloco.getColumns().get(3);
        colDeletar.setCellFactory(new Callback<TableColumn<Record, Boolean>, TableCell<Record, Boolean>>() {
            @Override
            public TableCell<Record, Boolean> call(TableColumn<Record, Boolean> p) {

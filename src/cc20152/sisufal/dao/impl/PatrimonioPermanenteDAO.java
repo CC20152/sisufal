@@ -13,7 +13,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  *
@@ -26,13 +28,12 @@ public class PatrimonioPermanenteDAO implements IBaseDAO {
     @Override
     public String save(Object object){
         this.conn = Conexao.getConexao();
-        String sql = "INSERT INTO patrimoniopermanente(nome_patrimonio, numero_patrimonio, id_bloco, id_sala) VALUES(?, ?, ?, ?)";   
+        String sql = "INSERT INTO patrimoniopermanente(nome_patrimonio, numero_patrimonio, id_movimentacao) VALUES(?, ?, ?)";  
         try{
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, ((Patrimonio) object).getNome());
             st.setString(2, ((Patrimonio) object).getNumero());
-            st.setInt(3, ((Patrimonio) object).getBloco());
-            st.setInt(4, ((Patrimonio) object).getSala());
+            st.setInt(3, ((Patrimonio) object).getUltimaMovimentacao().getId());
             st.execute();
         }catch(Exception ex){
             ex.printStackTrace();
@@ -41,17 +42,59 @@ public class PatrimonioPermanenteDAO implements IBaseDAO {
         return "OK";
     }
     
+    public Integer savePatrimonio(Patrimonio object){
+        this.conn = Conexao.getConexao();
+        String sql = "INSERT INTO patrimoniopermanente(nome_patrimonio, numero_patrimonio) VALUES(?, ?)";  
+        Integer id = -1;
+        try{
+            PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            st.setString(1, ((Patrimonio) object).getNome());
+            st.setString(2, ((Patrimonio) object).getNumero());
+            ResultSet rs;
+            st.executeUpdate();
+            rs = st.getGeneratedKeys();            
+            if(rs.next())
+                id = rs.getInt(1);
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return -1;
+        }
+        return id;
+    }
+    
+    public Integer saveMovimentacao(Movimentacao movimentacao){
+        this.conn = Conexao.getConexao();
+        String sql = "INSERT INTO movimentacaopermanente(id_sala, id_patrimonio, data) VALUES(?, ?, ?)";   
+        Integer id = -1;
+        try{
+            PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            st.setInt(1, ((Movimentacao) movimentacao).getSala());
+            st.setInt(2, ((Movimentacao) movimentacao).getPatrimonio());
+            Calendar cal = Calendar.getInstance();
+            java.sql.Timestamp timestamp = new java.sql.Timestamp(cal.getTimeInMillis());
+            st.setTimestamp(3, timestamp);
+            ResultSet rs;
+            st.executeUpdate();
+            rs = st.getGeneratedKeys();            
+            if(rs.next())
+                id = rs.getInt(1);
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return -1;
+        }
+        return id;
+    }
+    
     @Override
     public String update(Object object){
         this.conn = Conexao.getConexao();
-        String sql = "UPDATE patrimoniopermanente SET nome_patrimonio = ?, numero_patrimonio = ?, id_bloco = ?, id_sala = ? WHERE id_patrimonio = ?";   
+        String sql = "UPDATE patrimoniopermanente SET nome_patrimonio = ?, numero_patrimonio = ?, id_movimentacao = ? WHERE id_patrimonio = ?";   
         try{
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, ((Patrimonio) object).getNome());
             st.setString(2, ((Patrimonio) object).getNumero());
-            st.setInt(3, ((Patrimonio) object).getBloco());
-            st.setInt(4, ((Patrimonio) object).getSala());
-            st.setInt(5, ((Patrimonio) object).getId());
+            st.setInt(3, ((Patrimonio) object).getUltimaMovimentacao().getId());
+            st.setInt(4, ((Patrimonio) object).getId());
             st.execute();
         }catch(Exception ex){
             ex.printStackTrace();
@@ -79,40 +122,33 @@ public class PatrimonioPermanenteDAO implements IBaseDAO {
     public List<Patrimonio> listAll(){
         ArrayList<Patrimonio> listaPatrimonio = new ArrayList();
         this.conn = Conexao.getConexao();
-        String sql = "SELECT * FROM patrimoniopermanente";
+        String sql = "SELECT * FROM patrimoniopermanente "
+                + "INNER JOIN movimentacaopermanente c ON c.id_patrimonio = patrimoniopermanente.id_patrimonio "
+                + "INNER JOIN sala ON sala.id_sala = c.id_sala "
+                + "INNER JOIN bloco ON bloco.id_bloco = sala.id_bloco "
+                + "ORDER BY c.id_movimentacao DESC ";
         try{
             PreparedStatement st = this.conn.prepareStatement(sql);
             ResultSet rs;
 
             rs = st.executeQuery();
-            listaPatrimonio = mapearResultSet(rs);
+            while(rs.next()){
+                Patrimonio patrimonio = new Patrimonio();
+                patrimonio.setId(rs.getInt("patrimoniopermanente.ID_PATRIMONIO"));
+                patrimonio.setNome(rs.getString("patrimoniopermanente.NOME_PATRIMONIO"));
+                patrimonio.setNumero(rs.getString("patrimoniopermanente.NUMERO_PATRIMONIO"));
+                patrimonio.setSala(rs.getInt("c.ID_SALA"));
+                patrimonio.setNomeSala(rs.getString("sala.NOME"));
+                patrimonio.setBloco(rs.getInt("bloco.ID_BLOCO"));
+                patrimonio.setNomeBloco(rs.getString("bloco.NOME"));
+                listaPatrimonio.add(patrimonio);
+            }
             Conexao.desconectar();
         }catch(Exception ex){
             ex.printStackTrace();
         }
         return listaPatrimonio;
     }
-    /*
-    @Override
-    public List<InstituicaoFinanciadora> listAll() {
-        ArrayList<InstituicaoFinanciadora> listaInstituicaoFinanciadora = new ArrayList();
-        this.conexao = Conexao.getConexao();
-        String sql = "SELECT * FROM instituicaofinanciadora";
-        
-        try{
-            PreparedStatement st = this.conexao.prepareStatement(sql);
-            ResultSet rs;
-
-            rs = st.executeQuery();
-            listaInstituicaoFinanciadora = mapearResultSet(rs);
-            
-            Conexao.desconectar();
-        }catch(Exception ex){
-            ex.printStackTrace();
-        }
-        return listaInstituicaoFinanciadora;
-    }
-    */
     /*
     * Eu escrevi isso sem ter a certeza se é um bom método
     */
@@ -121,21 +157,21 @@ public class PatrimonioPermanenteDAO implements IBaseDAO {
         ArrayList<Patrimonio> listaPatrimonio = new ArrayList();
         this.conn = Conexao.getConexao();
         Patrimonio patrimonio = (Patrimonio) object;
-        String sql = "SELECT d.id_patrimonios, d.nome_patrimonio, c.nome_patrimonio as NOME_BLOCO, d.numero_patrimonio, d.id_sala FROM salas c, d.id_bloco FROM blocos c, patrimoniopermanente d WHERE d.id_bloco = c.id_bloco";
+        String sql = "SELECT d.id_patrimonios, d.nome_patrimonio, c.nome as NOME_SALA, d.numero_patrimonio, d.id_sala FROM salas c, patrimoniopermanente d WHERE d.id_sala = c.id_sala";
         
         try{
             
             
             int i = 1;
-            
+            /*
             if(patrimonio.getBloco() != null){
                 sql += " AND c.id_bloco = ?";
             }
-        
+            
             if(patrimonio.getSala() != null){
                 sql += " AND c.id_sala = ?";
             }
-
+            */
             if(patrimonio.getNome() != null){
                 sql += " AND upper(d.nome_patrimonio) LIKE upper(?)";
             }
@@ -151,12 +187,12 @@ public class PatrimonioPermanenteDAO implements IBaseDAO {
                 st.setInt(i, patrimonio.getBloco());
                 i++;
             }
-        
+            /*
             if(patrimonio.getSala() != null){
                 st.setInt(i, patrimonio.getSala());
                 i++;
             }
-
+            */
             if(patrimonio.getNome() != null){
                 st.setString(i, "%" + patrimonio.getNome() + "%");
                 i++;
@@ -178,10 +214,9 @@ public class PatrimonioPermanenteDAO implements IBaseDAO {
     while(rs.next()){
             Patrimonio patrimonio = new Patrimonio();
             patrimonio.setId(rs.getInt("ID_PATRIMONIO"));
-            patrimonio.setNome(rs.getString("NOME"));
-            patrimonio.setNumero(rs.getString("NUMERO"));
-            patrimonio.setBloco(rs.getInt("ID_BLOCO"));
-            patrimonio.setSala(rs.getInt("ID_SALA"));
+            patrimonio.setNome(rs.getString("NOME_PATRIMONIO"));
+            patrimonio.setNumero(rs.getString("NUMERO_PATRIMONIO"));
+            patrimonio.setSala(rs.getInt("ID_MOVIMENTACAO"));
             listaPatrimonio.add(patrimonio);
     }
         

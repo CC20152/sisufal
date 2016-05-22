@@ -26,12 +26,13 @@ public class SalaDAO implements IBaseDAO {
     @Override
     public String save(Object object){
         this.conn = Conexao.getConexao();
-        String sql = "INSERT INTO sala(nome, codigo, id_bloco) VALUES(?, ?, ?)";   
+        String sql = "INSERT INTO sala(nome, codigo, id_bloco, nome_bloco) VALUES(?, ?, ?, ?)";   
         try{
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, ((Sala) object).getNome());
             st.setString(2, ((Sala) object).getCodigo());
-            st.setInt(3, ((Sala) object).getBloco());
+            st.setInt(3, ((Sala) object).getBloco().getId());
+            st.setString(4, ((Sala) object).getBloco().getNome());
             st.execute();
         }catch(Exception ex){
             ex.printStackTrace();
@@ -43,13 +44,14 @@ public class SalaDAO implements IBaseDAO {
     @Override
     public String update(Object object){
         this.conn = Conexao.getConexao();
-        String sql = "UPDATE sala SET nome = ?, codigo = ?, id_bloco = ? WHERE id_sala = ?";   
+        String sql = "UPDATE sala SET nome = ?, codigo = ?, id_bloco = ?, nome_bloco = ? WHERE id_sala = ?";   
         try{
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, ((Sala) object).getNome());
             st.setString(2, ((Sala) object).getCodigo());
-            st.setInt(3, ((Sala) object).getBloco());
-            st.setInt(3, ((Sala) object).getId());
+            st.setInt(3, ((Sala) object).getBloco().getId());
+            st.setString(4, ((Sala) object).getBloco().getNome());
+            st.setInt(5, ((Sala) object).getId());
             st.execute();
         }catch(Exception ex){
             ex.printStackTrace();
@@ -77,7 +79,7 @@ public class SalaDAO implements IBaseDAO {
     public List<Sala> listAll(){
         ArrayList<Sala> listaSala = new ArrayList();
         this.conn = Conexao.getConexao();
-        String sql = "SELECT d.id_sala, d.nome, c.nome as NOME_BLOCO, d.codigo, d.id_bloco FROM sala d, bloco c WHERE d.id_bloco = c.id_bloco";
+        String sql = "SELECT * FROM sala d, bloco c WHERE d.id_bloco = c.id_bloco";
         
         try{
             PreparedStatement st = this.conn.prepareStatement(sql);
@@ -85,7 +87,7 @@ public class SalaDAO implements IBaseDAO {
 
             rs = st.executeQuery();
             listaSala = mapearResultSet(rs);
-            //conexao.close();
+            
         }catch(Exception ex){
             ex.printStackTrace();
         }
@@ -100,7 +102,7 @@ public class SalaDAO implements IBaseDAO {
         ArrayList<Sala> listaSala = new ArrayList();
         this.conn = Conexao.getConexao();
         Sala sala = (Sala) object;
-        String sql = "SELECT d.id_sala, d.nome, c.nome as NOME_BLOCO, d.codigo, d.id_bloco FROM bloco c, sala d WHERE d.id_bloco = c.id_bloco";
+        String sql = "SELECT * FROM bloco c, sala d WHERE d.id_bloco = c.id_bloco";
         
         try{
             
@@ -110,7 +112,6 @@ public class SalaDAO implements IBaseDAO {
             if(sala.getBloco() != null){
                 sql += " AND c.id_bloco = ?";
             }
-            
             if(sala.getNome() != null){
                 sql += " AND upper(d.nome) LIKE upper(?)";
             }
@@ -121,12 +122,7 @@ public class SalaDAO implements IBaseDAO {
             
             PreparedStatement st = this.conn.prepareStatement(sql);
             ResultSet rs;
-            /*
-            if(sala.getBloco().getId() != null){
-                st.setInt(i, sala.getBloco().getId());
-                i++;
-            }
-            */
+            
             if(sala.getNome() != null){
                 st.setString(i, "%" + sala.getNome() + "%");
                 i++;
@@ -134,6 +130,26 @@ public class SalaDAO implements IBaseDAO {
             
             rs = st.executeQuery();
             listaSala = mapearResultSet(rs);
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+        return listaSala;
+    }
+    
+    public ArrayList<Sala> listSalas(Bloco bloco){
+        ArrayList<Sala> listaSala = new ArrayList();
+        this.conn = Conexao.getConexao();
+        String sql = "SELECT * FROM sala "
+                + "INNER JOIN bloco c ON c.id_bloco = sala.id_bloco"
+                + " WHERE sala.id_bloco = ?";
+        
+        try{
+            PreparedStatement st = this.conn.prepareStatement(sql);
+            ResultSet rs;
+            st.setInt(1, bloco.getId());
+            rs = st.executeQuery();
+            listaSala = mapearResultSet(rs);
+            
         }catch(Exception ex){
             ex.printStackTrace();
         }
@@ -150,7 +166,8 @@ public class SalaDAO implements IBaseDAO {
             sala.setId(rs.getInt("ID_SALA"));
             sala.setNome(rs.getString("NOME"));
             sala.setCodigo(rs.getString("CODIGO"));
-            sala.setBloco(rs.getInt("ID_BLOCO"));
+            sala.getBloco().setId(rs.getInt("ID_BLOCO"));
+            sala.getBloco().setNome(rs.getString("C.NOME"));
             listaSala.add(sala);
     }
 

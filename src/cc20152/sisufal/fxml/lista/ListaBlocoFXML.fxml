@@ -15,18 +15,17 @@
    <children>
       <Button fx:id="btnVoltarLista" layoutX="50.0" layoutY="573.0" mnemonicParsing="false" onAction="#fecharLista" text="Voltar" />
       <Button layoutX="706.0" layoutY="573.0" mnemonicParsing="false" onAction="#novoBloco" text="Novo" textAlignment="CENTER" />
-      <TextField layoutX="50.0" layoutY="75.0" prefHeight="25.0" prefWidth="406.0" />
-      <Button layoutX="646.0" layoutY="75.0" mnemonicParsing="false" onAction="#btnBuscar" prefHeight="25.0" prefWidth="105.0" text="Localizar" />
+      <TextField fx:id="txtPesquisa" layoutX="50.0" layoutY="75.0" prefHeight="25.0" prefWidth="406.0" />
+      <Button layoutX="646.0" layoutY="75.0" mnemonicParsing="false" onAction="#pesquisar" prefHeight="25.0" prefWidth="105.0" text="Localizar" />
       <TableView fx:id="tableBloco" editable="true" layoutX="52.0" layoutY="140.0" prefHeight="386.0" prefWidth="697.0">
         <columns>
-          <TableColumn prefWidth="182.0" text="Nome" />
-            <TableColumn prefWidth="158.0" text="Código" />
-            <TableColumn prefWidth="166.0" text="Salas" />
-            <TableColumn minWidth="0.0" prefWidth="96.0" text="Editar" />
-            <TableColumn minWidth="0.0" prefWidth="94.0" text="Deletar" />
+          <TableColumn prefWidth="261.0" text="Nome" />
+            <TableColumn prefWidth="313.0" text="Código" />
+            <TableColumn minWidth="0.0" prefWidth="57.0" text="Editar" />
+            <TableColumn minWidth="0.0" prefWidth="65.0" text="Deletar" />
         </columns>
       </TableView>
       <Label layoutX="52.0" layoutY="58.0" text="Bloco:" />
-      <ComboBox layoutX="474.0" layoutY="75.0" prefWidth="150.0" />
+      <ComboBox fx:id="cmbPesquisa" layoutX="474.0" layoutY="75.0" prefWidth="150.0" />
    </children>
 </AnchorPane>
