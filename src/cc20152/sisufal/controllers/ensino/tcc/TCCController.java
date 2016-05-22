@@ -331,6 +331,12 @@ public class TCCController implements Initializable {
        tableTcc.setItems(data);  
     }
     
+    public void listarGridTCCsPesquisa(){
+        String tccNome = txtPesquisa.getText();
+        //List<TCC> lista = tcc.listWithParams(tccNome);
+        //data.setAll(lista);
+    }
+    
     public void setEditar(String tipo, ObservableList<?> data, TCC tcc){
         this.tipo = tipo;
         this.data = (ObservableList<TCC>)data;
@@ -406,9 +412,9 @@ public class TCCController implements Initializable {
     @FXML
     private void pesquisar(ActionEvent event){
         if(txtPesquisa.getText().equals(""))
-            listarGridServidores();
+            listarTCCs();
         else{
-            listarGridServidoresPesquisa(cmbPesquisa.getValue());
+            listarGridTCCsPesquisa();
         }
     }
 }
