@@ -7,9 +7,11 @@ package cc20152.sisufal.dao.impl;
 
 import cc20152.sisufal.dao.IBaseDAO;
 import cc20152.sisufal.db.Conexao;
+import cc20152.sisufal.models.BancaTCC;
 import cc20152.sisufal.models.Concurso;
 import cc20152.sisufal.models.Convidado;
 import cc20152.sisufal.models.Discente;
+import cc20152.sisufal.models.Orientador;
 import cc20152.sisufal.models.Servidor;
 import cc20152.sisufal.models.TCC;
 import java.sql.Connection;
@@ -33,13 +35,13 @@ public class TCCDAO implements IBaseDAO{
         TCC tcc = ((TCC)object);
         int idTCC = saveTCC(tcc);
         if(idTCC!=-1){
-            System.out.println("Cadastrou TCC:"+idTCC);
+            //System.out.println("Cadastrou TCC:"+idTCC);
             int idBanca = saveBancaTCC(idTCC);
             if (idBanca!=-1){
-                System.out.println("Cadastrou banca:"+idBanca);
+                //System.out.println("Cadastrou banca:"+idBanca);
                 String result = saveIdBancaTCC(idTCC,idBanca);
                 if(result.equals("OK")){
-                    System.out.println("Salvou banca TCC");
+                    //System.out.println("Salvou banca TCC");
                     //salvar discentes
                     for (Discente d : tcc.getBanca().getListaDiscentes()) {
                         saveParticipanteDiscente(idBanca,d.getId());
@@ -54,7 +56,7 @@ public class TCCDAO implements IBaseDAO{
                             c.setId(saveConvidado(c)); 
                         saveParticipanteConvidado(idBanca,c.getId());
                     }
-                    System.out.println("Salvou participantes");
+                    //System.out.println("Salvou participantes");
                     return "OK";
                 }
             }
@@ -66,27 +68,35 @@ public class TCCDAO implements IBaseDAO{
 
     @Override
     public String update(Object object) {
-        this.conn = Conexao.getConexao();
-        String sql = "UPDATE concurso SET numero_edital = ?, area_estudo = ?, id_supervisor = ?, data_inicio = ?, data_fim = ?, modalidade = ? WHERE id_concurso = ?";   
-        ResultSet rs;
-        int codigo = -1;
-        try{
-            PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            st.setString(1, ((Concurso) object).getNumeroEdital());
-            st.setString(2, ((Concurso) object).getAreaEstudo());
-            st.setInt(3, ((Concurso) object).getSupervisor().getId());
-            st.setDate(4, new java.sql.Date(((Concurso) object).getDataInicio().getTime()));
-            st.setDate(5, new java.sql.Date(((Concurso) object).getDataFim().getTime()));
-            st.setString(6, ((Concurso) object).getModalidade());
-            st.setInt(7, ((Concurso) object).getId());
-            st.executeUpdate();
-            rs = st.getGeneratedKeys();
-            if(rs.next())
-                codigo = rs.getInt(1);
-        }catch(Exception ex){
-            return "ERROR";
-        }
-        return codigo + " - OK";
+        TCC tcc = ((TCC)object);
+        deletarBanca(tcc.getBanca());
+        int idBanca = saveBancaTCC(tcc.getId());
+            if (idBanca!=-1){
+                //System.out.println("Cadastrou banca:"+idBanca);
+                String result = saveIdBancaTCC(tcc.getId(),idBanca);
+                tcc.getBanca().setId(idBanca);
+                if(result.equals("OK")){
+                    //System.out.println("Salvou banca TCC");
+                    //salvar discentes
+                    for (Discente d : tcc.getBanca().getListaDiscentes()) {
+                        saveParticipanteDiscente(idBanca,d.getId());
+                    }
+                    //salvar professores
+                    for (Servidor s : tcc.getBanca().getListaServidores()) {
+                        saveParticipanteProf(idBanca,s.getId());
+                    }
+                    //salvar convidados
+                    for (Convidado c : tcc.getBanca().getListaConvidados()) {
+                        if(c.getId()==null)
+                            c.setId(saveConvidado(c)); 
+                        saveParticipanteConvidado(idBanca,c.getId());
+                    }
+                    //System.out.println("Salvou participantes");
+                    return "OK";
+                }
+            }
+        
+        return "ERROR";
     }
 
     @Override
@@ -101,7 +111,8 @@ public class TCCDAO implements IBaseDAO{
             ex.printStackTrace();
             return "ERROR";
         }
-        return "OK";}
+        return "OK";
+    }
 
     @Override
     public List<TCC> listAll() {
@@ -276,4 +287,110 @@ public class TCCDAO implements IBaseDAO{
 	return codigo;
     }
     
+    public ArrayList<Orientador> listaProfessorBanca(TCC tcc){
+    ArrayList<Orientador> listaProfessorBanca = new ArrayList<>();
+        this.conn = Conexao.getConexao();
+        String sql = "SELECT * FROM participantebancatcc p " +
+                     "INNER JOIN servidor ON servidor.id_servidor =  p.id_servidor " +
+                     "WHERE id_banca_TCC = ?";
+        
+        try{
+            PreparedStatement st = this.conn.prepareStatement(sql);
+            System.out.println(tcc.getBanca().getId().toString());
+            st.setInt(1, tcc.getBanca().getId());
+            
+            ResultSet rs;
+
+            rs = st.executeQuery();
+            while ( rs.next() ) {
+            Orientador orientador = new Orientador();
+            orientador.setId(rs.getInt("servidor.id_servidor"));
+            orientador.setNome(rs.getString("servidor.nome"));
+            orientador.setSiape(rs.getString("servidor.siape"));
+            orientador.setCargo(rs.getString("servidor.cargo"));
+            orientador.setCPF(rs.getString("servidor.cpf"));
+            listaProfessorBanca.add(orientador);
+            }
+            
+            //conexao.close();
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+        
+        return listaProfessorBanca;
+    }
+    
+    public ArrayList<Discente> listaDiscenteBanca(TCC tcc){
+    ArrayList<Discente> listaDiscenteBanca = new ArrayList<>();
+        this.conn = Conexao.getConexao();
+        String sql = "SELECT * FROM participantebancatcc p " +
+                     "INNER JOIN discentes ON discentes.id_discente = p.id_discente " +
+                     "WHERE id_banca_TCC = ?";
+        
+        try{
+            PreparedStatement st = this.conn.prepareStatement(sql);
+            System.out.println(tcc.getBanca().getId().toString());
+            st.setInt(1, tcc.getBanca().getId());
+            
+            ResultSet rs;
+
+            rs = st.executeQuery();
+            while ( rs.next() ) {
+                Discente discente = new Discente();
+                discente.setId(rs.getInt("discentes.id_discente"));
+                discente.setNome(rs.getString("discentes.nome"));
+                discente.setCpf(rs.getString("discentes.cpf"));
+                discente.setMatricula(rs.getString("discentes.matricula"));
+                listaDiscenteBanca.add(discente);
+            }
+            
+            //conexao.close();
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+        
+        return listaDiscenteBanca;
+    }
+    
+    public ArrayList<Convidado> listaConvidadoBanca(TCC tcc){
+    ArrayList<Convidado> listaConvidadoBanca = new ArrayList<>();
+        this.conn = Conexao.getConexao();
+        String sql = "SELECT * FROM participantebancatcc p " +
+                     "INNER JOIN convidado ON convidado.id_convidado =  p.id_discente " +
+                     "WHERE id_banca_TCC = ?";
+        
+        try{
+            PreparedStatement st = this.conn.prepareStatement(sql);
+            System.out.println(tcc.getBanca().getId().toString());
+            st.setInt(1, tcc.getBanca().getId());
+            
+            ResultSet rs;
+
+            rs = st.executeQuery();
+            while ( rs.next() ) {
+                Convidado convidado = new Convidado();
+                convidado.setId(rs.getInt("convidado.id_convidado"));
+                convidado.setNome(rs.getString("convidado.nome"));
+                listaConvidadoBanca.add(convidado);
+            }
+            
+            //conexao.close();
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+        
+        return listaConvidadoBanca;
+    }
+    
+    public void deletarBanca(BancaTCC banca) {
+    this.conn = Conexao.getConexao();
+        String sql = "DELETE FROM bancatcc WHERE id_banca_TCC = ?";   
+        try{
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, banca.getId());
+            st.execute();
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+    }
 }

@@ -11,8 +11,8 @@
    <children>
       <Button fx:id="btnVoltarLista" layoutX="50.0" layoutY="573.0" mnemonicParsing="false" onAction="#fecharLista" text="Voltar" />
       <Button fx:id="btnNovo" layoutX="706.0" layoutY="573.0" mnemonicParsing="false" onAction="#novoTCC" text="Novo" textAlignment="CENTER" />
-      <TextField layoutX="50.0" layoutY="75.0" prefHeight="25.0" prefWidth="567.0" />
-      <Button layoutX="646.0" layoutY="75.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="105.0" text="Localizar" />
+      <TextField fx:id="txtPesquisa" layoutX="50.0" layoutY="75.0" prefHeight="25.0" prefWidth="567.0" />
+      <Button layoutX="646.0" layoutY="75.0" mnemonicParsing="false" onAction="#pesquisar" prefHeight="25.0" prefWidth="105.0" text="Localizar" />
       <TableView fx:id="tableTcc" editable="true" layoutX="52.0" layoutY="140.0" prefHeight="386.0" prefWidth="697.0">
         <columns>
           <TableColumn prefWidth="195.0" text="Título" />

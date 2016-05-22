@@ -27,6 +27,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -59,6 +60,8 @@ public class TCCController implements Initializable {
     String pacote = "controllers/ensino/tcc/"; //Pacote do controller
     String fxml = "fxml/cadastro/CadastroTCCFXML.fxml"; 
     
+    @FXML
+        private TextField txtPesquisa;
     @FXML
         private Button btnCancelarCadastro;
     @FXML
@@ -171,6 +174,7 @@ public class TCCController implements Initializable {
             result = tccDAO.save(this.tcc);
         }else{
             result = tccDAO.update(this.tcc);
+            //System.out.println("ID NOVO:"+tcc.getBanca().getId());
         }
         
         if(result.equals("OK")){
@@ -350,38 +354,28 @@ public class TCCController implements Initializable {
     
     private void preencherCampos(){
         
+        this.txtTitulo.setText(tcc.getTitulo());
+        this.dataInicio.setValue(new Date(this.tcc.getDataInicio().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        this.dataFim.setValue(new Date(this.tcc.getDataFim().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());      
         
-        /*
-        this.dataInicial.setValue(new Date(this.monitoria.getDataInicio().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-        this.dataFinal.setValue(new Date(this.monitoria.getDataFim().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-        
-        ObservableList<Disciplina> dd = this.cmbDisciplina.getItems();
-        ObservableList<Periodo> pp = this.cmbPeriodo.getItems();
-        ObservableList<Discente> disc = this.cmbDiscente.getItems();
+                
+        ObservableList<Curso> cc = this.cmbCurso.getItems();
+        ObservableList<Discente> disc = this.cmbDiscenteBanca.getItems();
         ObservableList<Orientador> or = this.cmbOrientador.getItems();
         
         int i = 0;
-
-        for(Disciplina d : dd){
-            if(Objects.equals(d.getId(), this.monitoria.getDisciplina().getId())){
-                this.cmbDisciplina.getSelectionModel().select(i);
-            }
-            i++;
-        }
-        if(i == 0) this.cmbDisciplina.getSelectionModel().select(i);
         
-        i = 0;
-        for(Periodo p : pp){
-            if(Objects.equals(p.getId(), this.monitoria.getPeriodo().getId())){
-                this.cmbPeriodo.getSelectionModel().select(i);
+        for(Curso c : cc){
+            if(Objects.equals(c.getId(), this.tcc.getDiscente().getId())){
+                this.cmbCurso.getSelectionModel().select(i);
             }
             i++;
         }
-        if(i == 0) this.cmbPeriodo.getSelectionModel().select(i);
+        if(i == 0) this.cmbCurso.getSelectionModel().select(i);
         
         i = 0;
         for(Discente p : disc){
-            if(Objects.equals(p.getId(), this.monitoria.getDiscente().getId())){
+            if(Objects.equals(p.getId(), this.tcc.getDiscente().getId())){
                 this.cmbDiscente.getSelectionModel().select(i);
             }
             i++;
@@ -390,15 +384,31 @@ public class TCCController implements Initializable {
         
         i = 0;
         for(Orientador p : or){
-            if(Objects.equals(p.getId(), this.monitoria.getOrientador().getId())){
+            if(Objects.equals(p.getId(), this.tcc.getOrientador().getId())){
                 this.cmbOrientador.getSelectionModel().select(i);
             }
             i++;
         }
         if(i == 0) this.cmbOrientador.getSelectionModel().select(i);
+        TCCDAO tccDAO = new TCCDAO();
         
-        this.cmbSituacao.setValue(this.monitoria.getSitCertificado());
+        ArrayList<Orientador> listaProfessor = tccDAO.listaProfessorBanca(tcc);
+        tableProfessor.getItems().setAll(listaProfessor);
+        
+        ArrayList<Discente> listaDiscente= tccDAO.listaDiscenteBanca(tcc);
+        tableDiscente.getItems().setAll(listaDiscente);
+        
+        ArrayList<Convidado> listaConvidado = tccDAO.listaConvidadoBanca(tcc);
+        tableConvidado.getItems().setAll(listaConvidado);
+        
     }
-    */
+    
+    @FXML
+    private void pesquisar(ActionEvent event){
+        if(txtPesquisa.getText().equals(""))
+            listarGridServidores();
+        else{
+            listarGridServidoresPesquisa(cmbPesquisa.getValue());
+        }
     }
 }

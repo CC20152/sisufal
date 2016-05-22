@@ -20,7 +20,7 @@
       <Label layoutX="25.0" layoutY="135.0" text="Data Início" />
       <Label layoutX="29.0" layoutY="177.0" text="Curso" />
       <Label layoutX="29.0" layoutY="220.0" text="Discente" />
-      <ImageView fitHeight="76.0" fitWidth="307.0" layoutX="17.0" pickOnBounds="true">
+      <ImageView fitHeight="76.0" fitWidth="307.0" layoutX="8.0" pickOnBounds="true">
          <image>
             <Image url="@../imgs/IC.png" />
          </image>
