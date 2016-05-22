@@ -36,5 +36,6 @@
       <DatePicker fx:id="dataInicial" layoutX="292.0" layoutY="75.0" prefHeight="25.0" prefWidth="140.0" />
       <Label layoutX="52.0" layoutY="112.0" style="-fx-background-image: ../imgs/;" text="Disciplina:" />
       <ComboBox fx:id="cmbDisciplina" layoutX="113.0" layoutY="108.0" prefHeight="25.0" prefWidth="312.0" />
+      <Button layoutX="187.0" layoutY="26.0" mnemonicParsing="false" onAction="#relatorioGeral" prefHeight="39.0" prefWidth="105.0" text="Relatório" />
    </children>
 </AnchorPane>
