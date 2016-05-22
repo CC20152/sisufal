@@ -7,6 +7,7 @@ package cc20152.sisufal.controllers.ensino.monitoria;
 
 import cc20152.sisufal.dao.impl.CursoDAO;
 import cc20152.sisufal.dao.impl.DisciplinaDAO;
+import cc20152.sisufal.models.Concurso;
 import cc20152.sisufal.models.Curso;
 import cc20152.sisufal.models.Disciplina;
 import cc20152.sisufal.util.BotoesLista;
@@ -36,6 +37,8 @@ import javafx.util.Callback;
 import com.sun.prism.impl.Disposer.Record;
 import java.util.Objects;
 import java.util.Optional;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.ButtonType;
 
 /**
@@ -102,6 +105,10 @@ public class DisciplinaController implements Initializable {
             return ;
         }else if(this.txtCargaHoraria.getText().equals("")){
             aviso.setHeaderText("Campo carga horária não pode estar vazio");
+            aviso.show();
+            return ;
+        }else if(!this.txtCargaHoraria.getText().matches("\\d+")){
+            aviso.setHeaderText("Campo carga horária precisa ser em número de horas");
             aviso.show();
             return ;
         }else if(this.cmbCurso.getValue() == null || this.cmbCurso.getSelectionModel().isSelected(0)){
@@ -185,7 +192,12 @@ public class DisciplinaController implements Initializable {
        listaDisciplina = new DisciplinaDAO().listAll();
        
        this.tbDisciplina.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("nome"));
-       this.tbDisciplina.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("cargaHoraria"));
+       TableColumn colCarga =  this.tbDisciplina.getColumns().get(1);
+       colCarga.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Disciplina, String>, ObservableValue<String>>() {
+           public ObservableValue<String> call(TableColumn.CellDataFeatures<Disciplina, String> p) {
+               return new SimpleObjectProperty(p.getValue().getCargaHoraria() + "H");
+           }
+       });
        this.tbDisciplina.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("curso"));
        this.tbDisciplina.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("turno"));
       
