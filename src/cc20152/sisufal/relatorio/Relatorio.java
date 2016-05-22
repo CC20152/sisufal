@@ -31,7 +31,7 @@ public abstract class Relatorio {
         path = path.replace("impl", "jrxml");
         parametros.put("CAMINHO", path);
         
-        InputStream jasperStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("cc20152/sisufal/relatorio/jrxml/reportMonitoria.jasper");
+        InputStream jasperStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("cc20152/sisufal/relatorio/jrxml/" + relatorio);
         
         JasperPrint impressao = JasperFillManager.fillReport(jasperStream, parametros, ds);
         JasperViewer viewer = new JasperViewer(impressao, false);
