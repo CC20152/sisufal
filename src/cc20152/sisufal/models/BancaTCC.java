@@ -5,12 +5,18 @@ public class BancaTCC {
 
 	private Integer id;
 
-	private ArrayList<Servidor> listaServidores;
+	private ArrayList<Orientador> listaServidores;
 
 	private ArrayList<Discente> listaDiscentes;
 
 	private ArrayList<Convidado> listaConvidados;
-
+        
+        
+        public BancaTCC(){
+            listaServidores = new ArrayList<>();
+            listaDiscentes = new ArrayList<>();
+            listaConvidados = new ArrayList<>();
+        }
 	public void setId(Integer id) {
             this.id = id;
 	}
@@ -19,11 +25,11 @@ public class BancaTCC {
             return id;
 	}
 
-	public void setListaServidores(ArrayList<Servidor> listaServidores) {
+	public void setListaServidores(ArrayList<Orientador> listaServidores) {
             this.listaServidores = listaServidores;
 	}
 
-	public ArrayList<Servidor> getListaServidores() {
+	public ArrayList<Orientador> getListaServidores() {
             return listaServidores;
 	}
 
@@ -39,7 +45,7 @@ public class BancaTCC {
             this.listaConvidados = listaConvidados;
 	}
 
-	public ArrayList getListaConvidados() {
+	public ArrayList<Convidado> getListaConvidados() {
             return listaConvidados;
 	}
 

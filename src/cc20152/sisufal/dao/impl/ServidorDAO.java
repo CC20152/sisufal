@@ -102,7 +102,7 @@ public class ServidorDAO implements IBaseDAO {
         try{
             PreparedStatement st = conexao.prepareStatement(sql);
             ResultSet rs;
-
+                
             rs = st.executeQuery();
             while ( rs.next() ) {
                 Servidor servidor = new Servidor();
@@ -170,5 +170,38 @@ public class ServidorDAO implements IBaseDAO {
             return null;
         }
         return lista;
+    }
+    
+    public Servidor getServidorById(Servidor servidor){
+        Servidor s = new Servidor();
+        conexao = Conexao.getConexao();
+        String sql = "SELECT * FROM servidor "
+                + "LEFT JOIN classedocente on servidor.id_classe = classedocente.id_classe_docente "
+                + "WHERE servidor.id_servidor = ?";
+        
+        try{
+            PreparedStatement st = conexao.prepareStatement(sql);
+            ResultSet rs;
+            
+            st.setInt(1, servidor.getId());
+            rs = st.executeQuery();
+            if ( rs.next() ) {
+                servidor.setId(rs.getInt("servidor.id_servidor"));
+                servidor.setNome(rs.getString("servidor.nome"));
+                servidor.setSiape(rs.getString("servidor.siape"));
+                servidor.setCargo(rs.getString("servidor.cargo"));
+                servidor.setCPF(rs.getString("servidor.cpf"));
+                int docente = rs.getInt("servidor.docente");
+                if(docente==1){
+                    servidor.getClasse().setId(rs.getInt("classedocente.id_classe_docente"));
+                    servidor.getClasse().setNome(rs.getString("classedocente.nome"));
+                }
+            }
+            //conexao.close();
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return null;
+        }
+        return s;
     }
 }

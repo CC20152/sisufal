@@ -87,7 +87,10 @@ public class ServidorController implements Initializable {
         path = path.replace(pacote,"");
         URL url =  new URL(path+fxml);
         //System.out.println(url);
-        Parent root = FXMLLoader.load(url);
+        FXMLLoader loader = new FXMLLoader(url);
+        Parent root = (Parent)loader.load();
+        ServidorController controller = loader.getController();
+        controller.setData(this.data);
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setTitle("Cadastro Servidor");
@@ -150,6 +153,8 @@ public class ServidorController implements Initializable {
         if(this.servidor == null){
             this.servidor = new Servidor();
         }
+        
+        
         Servidor servidor = new Servidor();
         servidor.setNome(this.txtNome.getText());
         servidor.setSiape(this.txtSiape.getText());
@@ -203,6 +208,10 @@ public class ServidorController implements Initializable {
             listarComboClasse();
         }
     }    
+    
+       public void setData(ObservableList<Servidor> data){
+        this.data = data;
+    }
     
     private void listarGridServidores(){
        List<Servidor> listaServidores = new ArrayList<Servidor>();

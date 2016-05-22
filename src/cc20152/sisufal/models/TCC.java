@@ -19,6 +19,13 @@ public class TCC {
 
 	private BancaTCC banca;
 
+        
+        public TCC(){
+            banca = new BancaTCC();
+            curso = new Curso();
+            discente = new Discente();
+            orientador = new Orientador();
+        }
         public int getId() {
             return id;
         }
