@@ -72,9 +72,9 @@ public class TCCDAO implements IBaseDAO{
         deletarBanca(tcc.getBanca());
         int idBanca = saveBancaTCC(tcc.getId());
             if (idBanca!=-1){
-                //System.out.println("Cadastrou banca:"+idBanca);
-                String result = saveIdBancaTCC(tcc.getId(),idBanca);
                 tcc.getBanca().setId(idBanca);
+                //System.out.println("Cadastrou banca:"+idBanca);
+                String result = updateTcc(tcc);
                 if(result.equals("OK")){
                     //System.out.println("Salvou banca TCC");
                     //salvar discentes
@@ -138,8 +138,32 @@ public class TCCDAO implements IBaseDAO{
     }
 
     @Override
-    public List<Concurso> listWithParams(Object object) {
-        return null;
+    public List<TCC> listWithParams(Object object) {
+        ArrayList<TCC> lista = new ArrayList<TCC>();
+        conn = Conexao.getConexao();
+        TCC tcc = ((TCC)object);
+        String sql = "SELECT * FROM tcc " +
+                     "INNER JOIN cursos ON tcc.id_curso = cursos.id_curso " +
+                     "INNER JOIN discentes on discentes.id_discente = tcc.id_discente " +
+                     "INNER JOIN servidor on servidor.id_servidor =  tcc.id_orientador ";
+        
+        if(tcc.getTitulo()!=null)
+            sql+= "WHERE tcc.titulo_TCC LIKE ? ";       
+       
+        try{
+            PreparedStatement st = conn.prepareStatement(sql);
+            ResultSet rs;
+            if(tcc.getTitulo()!=null)
+                st.setString(1, "%"+tcc.getTitulo()+"%");
+
+            rs = st.executeQuery();
+            lista = mapearResultSet(rs);
+            //conexao.close();
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return null;
+        }
+        return lista;
     }
     
      public ArrayList<TCC> mapearResultSet(ResultSet rs) throws SQLException{
@@ -194,6 +218,28 @@ public class TCCDAO implements IBaseDAO{
         }        
 	return codigo;
     } 
+     
+    private String updateTcc(TCC tcc){
+       this.conn = Conexao.getConexao();
+        String sql = "UPDATE tcc SET id_curso = ?, id_discente = ?, id_orientador = ?, titulo_tcc = ?, data_inicio = ?, data_fim = ?, id_banca_tcc = ? WHERE id_tcc = ?";   
+        try{
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, tcc.getCurso().getId());
+            st.setInt(2, tcc.getDiscente().getId());   
+            st.setInt(3, tcc.getOrientador().getId());  
+            st.setString(4, tcc.getTitulo());
+            st.setDate(5, new java.sql.Date(tcc.getDataInicio().getTime()));
+            st.setDate(6, new java.sql.Date(tcc.getDataFim().getTime()));
+            st.setInt(7, tcc.getBanca().getId());
+            st.setInt(8, tcc.getId());
+            
+            st.execute();
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return "ERROR";
+        }
+        return "OK";
+    }
 
     private int saveBancaTCC(int id) {
         this.conn = Conexao.getConexao();
@@ -292,11 +338,11 @@ public class TCCDAO implements IBaseDAO{
         this.conn = Conexao.getConexao();
         String sql = "SELECT * FROM participantebancatcc p " +
                      "INNER JOIN servidor ON servidor.id_servidor =  p.id_servidor " +
-                     "WHERE id_banca_TCC = ?";
+                     "WHERE p.id_banca_TCC = ?";
         
         try{
             PreparedStatement st = this.conn.prepareStatement(sql);
-            System.out.println(tcc.getBanca().getId().toString());
+            //System.out.println(tcc.getBanca().getId().toString());
             st.setInt(1, tcc.getBanca().getId());
             
             ResultSet rs;
@@ -325,11 +371,11 @@ public class TCCDAO implements IBaseDAO{
         this.conn = Conexao.getConexao();
         String sql = "SELECT * FROM participantebancatcc p " +
                      "INNER JOIN discentes ON discentes.id_discente = p.id_discente " +
-                     "WHERE id_banca_TCC = ?";
+                     "WHERE p.id_banca_TCC = ?";
         
         try{
             PreparedStatement st = this.conn.prepareStatement(sql);
-            System.out.println(tcc.getBanca().getId().toString());
+            //System.out.println(tcc.getBanca().getId().toString());
             st.setInt(1, tcc.getBanca().getId());
             
             ResultSet rs;
@@ -356,12 +402,12 @@ public class TCCDAO implements IBaseDAO{
     ArrayList<Convidado> listaConvidadoBanca = new ArrayList<>();
         this.conn = Conexao.getConexao();
         String sql = "SELECT * FROM participantebancatcc p " +
-                     "INNER JOIN convidado ON convidado.id_convidado =  p.id_discente " +
-                     "WHERE id_banca_TCC = ?";
+                     "INNER JOIN convidado ON convidado.id_convidado =  p.id_convidado " +
+                     "WHERE p.id_banca_TCC = ?";
         
         try{
             PreparedStatement st = this.conn.prepareStatement(sql);
-            System.out.println(tcc.getBanca().getId().toString());
+            //System.out.println(tcc.getBanca().getId().toString());
             st.setInt(1, tcc.getBanca().getId());
             
             ResultSet rs;

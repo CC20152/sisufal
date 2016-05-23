@@ -130,39 +130,45 @@ public class ServidorDAO implements IBaseDAO {
     public List<Servidor> listWithParams(Object object){
         ArrayList<Servidor> lista = new ArrayList<Servidor>();
         conexao = Conexao.getConexao();
+        Servidor servidor = ((Servidor)object);
+        String sql = "SELECT * FROM servidor LEFT JOIN classedocente on servidor.id_classe = classedocente.id_classe_docente ";
         
-        String tipo = ((HashMap) object).get("tipo").toString().toLowerCase();
-        String pesquisa = ((HashMap) object).get("texto").toString();
-        String sql;
-        //System.out.println(tipo);
-        if(tipo.equals("siape") ||tipo.equals("nome") || tipo.equals("cargo") ){
-            sql = "SELECT * FROM servidor "
-                + "LEFT JOIN classedocente on servidor.id_classe = classedocente.id_classe_docente "
-                + "WHERE servidor."+tipo+" LIKE '%"+pesquisa+"%'";
-        }else{
-             sql = "SELECT * FROM servidor "
-                + "LEFT JOIN classedocente on servidor.id_classe = classedocente.id_classe_docente "
-                + "WHERE classedocente.nome LIKE '%"+pesquisa+"%'";
-        }
+        if(servidor.getNome()!=null)
+            sql+= "WHERE servidor.nome LIKE ?";
+        else if(servidor.getCargo()!=null)
+            sql+= "WHERE servidor.cargo LIKE ?";
+        else if (servidor.getSiape() != null)
+            sql+= "WHERE servidor.siape LIKE ?";
+        else if (servidor.getClasse().getNome()!=null)
+            sql+= "WHERE classedocente.nome LIKE ?";
+        
        
         try{
             PreparedStatement st = conexao.prepareStatement(sql);
             ResultSet rs;
+            if(servidor.getNome()!=null)
+                st.setString(1, "%"+servidor.getNome()+"%");
+            else if(servidor.getCargo()!=null)
+                st.setString(1, "%"+servidor.getCargo()+"%");
+            else if (servidor.getSiape() != null)
+                st.setString(1, "%"+servidor.getSiape()+"%");
+            else if (servidor.getClasse().getNome()!=null)
+                st.setString(1, "%"+servidor.getClasse().getNome()+"%");
 
             rs = st.executeQuery();
             while ( rs.next() ) {
-                Servidor servidor = new Servidor();
-                servidor.setId(rs.getInt("servidor.id_servidor"));
-                servidor.setNome(rs.getString("servidor.nome"));
-                servidor.setSiape(rs.getString("servidor.siape"));
-                servidor.setCargo(rs.getString("servidor.cargo"));
-                servidor.setCPF(rs.getString("servidor.cpf"));
+                Servidor s = new Servidor();
+                s.setId(rs.getInt("servidor.id_servidor"));
+                s.setNome(rs.getString("servidor.nome"));
+                s.setSiape(rs.getString("servidor.siape"));
+                s.setCargo(rs.getString("servidor.cargo"));
+                s.setCPF(rs.getString("servidor.cpf"));
                 int docente = rs.getInt("servidor.docente");
                 if(docente==1){
-                    servidor.getClasse().setId(rs.getInt("classedocente.id_classe_docente"));
-                    servidor.getClasse().setNome(rs.getString("classedocente.nome"));
+                    s.getClasse().setId(rs.getInt("classedocente.id_classe_docente"));
+                    s.getClasse().setNome(rs.getString("classedocente.nome"));
                 }
-                lista.add(servidor);
+                lista.add(s);
             }
             //conexao.close();
         }catch(Exception ex){

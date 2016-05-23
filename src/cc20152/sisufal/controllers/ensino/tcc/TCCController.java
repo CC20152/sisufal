@@ -332,9 +332,10 @@ public class TCCController implements Initializable {
     }
     
     public void listarGridTCCsPesquisa(){
-        String tccNome = txtPesquisa.getText();
-        //List<TCC> lista = tcc.listWithParams(tccNome);
-        //data.setAll(lista);
+        TCC tcc = new TCC();
+        tcc.setTitulo(txtPesquisa.getText());
+        List<TCC> lista = new TCCDAO().listWithParams(tcc);
+        data.setAll(lista);
     }
     
     public void setEditar(String tipo, ObservableList<?> data, TCC tcc){

@@ -121,7 +121,7 @@ public class ServidorController implements Initializable {
         if(txtPesquisa.getText().equals(""))
             listarGridServidores();
         else{
-            listarGridServidoresPesquisa(cmbPesquisa.getValue());
+            listarGridServidoresPesquisa();
         }
     }
     
@@ -209,7 +209,7 @@ public class ServidorController implements Initializable {
         }
     }    
     
-       public void setData(ObservableList<Servidor> data){
+    public void setData(ObservableList<Servidor> data){
         this.data = data;
     }
     
@@ -260,11 +260,18 @@ public class ServidorController implements Initializable {
     }
     
     
-    private void listarGridServidoresPesquisa(String tipo){
-        HashMap hashPesquisa = new HashMap();
-        hashPesquisa.put("tipo", tipo);
-        hashPesquisa.put("texto", txtPesquisa.getText());
-        List<Servidor> lista = servidorDAO.listWithParams(hashPesquisa);
+    private void listarGridServidoresPesquisa(){
+        Servidor s = new Servidor();
+        if(cmbPesquisa.getValue().equals("Nome")){
+            s.setNome(txtPesquisa.getText());
+        }else if(cmbPesquisa.getValue().equals("Siape")){
+            s.setSiape(txtPesquisa.getText());
+        }if(cmbPesquisa.getValue().equals("Cargo")){
+            s.setCargo(txtPesquisa.getText());
+        }if(cmbPesquisa.getValue().equals("Classe")){
+            s.getClasse().setNome(txtPesquisa.getText());
+        }
+        List<Servidor> lista = servidorDAO.listWithParams(s);
         data.setAll(lista);
     }
     
@@ -298,15 +305,22 @@ public class ServidorController implements Initializable {
     }
     
     
-        public void deletar(Servidor servidor, ObservableList<?> _data){
+    public void deletar(Servidor servidor, ObservableList<?> _data){
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
         alerta.setTitle("Atençao!");
         alerta.setHeaderText("Deseja realmente excluir este registro?");
         alerta.setContentText("Você não poderá voltar atrás!");
         Optional<ButtonType> res = alerta.showAndWait();
         if(res.get() == ButtonType.OK){
-            servidorDAO.delete(servidor);
-            _data.remove(servidor);
+            String result  = servidorDAO.delete(servidor);
+            if(result.equals("OK"))
+                _data.remove(servidor);
+            else{
+                alerta = new Alert(Alert.AlertType.ERROR);
+                alerta.setTitle("Erro");
+                alerta.setHeaderText("Erro ao deletar servidor!");
+                alerta.show();
+            }
         }
     }
     
