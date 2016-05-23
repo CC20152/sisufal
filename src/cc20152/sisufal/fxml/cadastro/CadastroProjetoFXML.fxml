@@ -13,28 +13,45 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="432.0" prefWidth="553.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cc20152.sisufal.controllers.pesquisa.projeto.ProjetoController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="594.0" prefWidth="813.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cc20152.sisufal.controllers.pesquisa.projeto.ProjetoController">
    <children>
-      <ImageView fitHeight="108.0" fitWidth="553.0" layoutY="-2.0" pickOnBounds="true">
+      <ImageView fitHeight="123.0" fitWidth="813.0" pickOnBounds="true">
          <image>
             <Image url="@../imgs/IC.png" />
          </image>
       </ImageView>
       <Label layoutX="35.0" layoutY="146.0" prefHeight="15.0" prefWidth="46.0" text="Titulo:" />
-      <Label layoutX="35.0" layoutY="205.0" text="Data de Inicio:" />
-      <Label layoutX="301.0" layoutY="205.0" text="Data de Fim:" />
+      <Label layoutX="550.0" layoutY="148.0" text="Data de Inicio:" />
+      <Label layoutX="552.0" layoutY="205.0" text="Data de Fim:" />
       <Label layoutX="366.0" layoutY="146.0" text="Tipo:" />
       <TextField fx:id="txtTitulo" layoutX="36.0" layoutY="162.0" prefHeight="26.0" prefWidth="312.0" promptText="Titulo" />
-      <DatePicker fx:id="datInicio" layoutX="35.0" layoutY="220.0" prefHeight="25.0" prefWidth="225.0" promptText="Data de Inicio" />
-      <DatePicker fx:id="datFim" layoutX="301.0" layoutY="220.0" prefHeight="25.0" prefWidth="225.0" promptText="Data de Fim" />
+      <DatePicker fx:id="datInicio" layoutX="550.0" layoutY="163.0" prefHeight="25.0" prefWidth="225.0" promptText="Data de Inicio" />
+      <DatePicker fx:id="datFim" layoutX="552.0" layoutY="220.0" prefHeight="25.0" prefWidth="225.0" promptText="Data de Fim" />
       <TextField fx:id="txtTipo" layoutX="365.0" layoutY="163.0" prefHeight="25.0" prefWidth="160.0" promptText="Tipo" />
-      <Label layoutX="35.0" layoutY="270.0" text="Coordenador:" />
-      <ComboBox fx:id="cmbCoodenador" layoutX="35.0" layoutY="285.0" prefHeight="25.0" prefWidth="225.0" promptText="Coordenador" />
-      <ComboBox fx:id="cmbFinanciadora" layoutX="302.0" layoutY="285.0" prefHeight="25.0" prefWidth="225.0" promptText="Instituiçao Financiadora" />
-      <Label layoutX="302.0" layoutY="270.0" text="Instituiçao Financiadora:" />
-      <Button layoutX="373.0" layoutY="384.0" mnemonicParsing="false" onAction="#salvarProjeto" text="Salvar" />
-      <Button fx:id="btnCancelarCadastro" layoutX="454.0" layoutY="384.0" mnemonicParsing="false" onAction="#cancelarCadastro" text="Cancelar" />
-      <Button fx:id="btnGrupo" layoutX="40.0" layoutY="341.0" mnemonicParsing="false" text="Grupo" />
-      <Button fx:id="btnBolsa" layoutX="114.0" layoutY="342.0" mnemonicParsing="false" text="Bolsa" />
+      <Label layoutX="38.0" layoutY="204.0" text="Coordenador:" />
+      <ComboBox fx:id="cmbCoodenador" layoutX="38.0" layoutY="219.0" prefHeight="25.0" prefWidth="225.0" promptText="Coordenador" />
+      <ComboBox fx:id="cmbFinanciadora" layoutX="301.0" layoutY="219.0" prefHeight="25.0" prefWidth="225.0" promptText="Instituiçao Financiadora" />
+      <Label layoutX="301.0" layoutY="204.0" text="Instituiçao Financiadora:" />
+      <Button layoutX="635.0" layoutY="544.0" mnemonicParsing="false" onAction="#salvarProjeto" text="Salvar" />
+      <Button fx:id="btnCancelarCadastro" layoutX="706.0" layoutY="545.0" mnemonicParsing="false" onAction="#cancelarCadastro" text="Cancelar" />
+      <TableView fx:id="tableDocentes" layoutX="34.0" layoutY="296.0" prefHeight="200.0" prefWidth="312.0">
+        <columns>
+          <TableColumn prefWidth="221.0" text="Nome" />
+          <TableColumn prefWidth="90.0" text="Remover" />
+        </columns>
+      </TableView>
+      <Label layoutX="170.0" layoutY="277.0" text="Grupo" />
+      <ComboBox fx:id="cmbServidores" layoutX="35.0" layoutY="496.0" prefHeight="25.0" prefWidth="219.0" />
+      <Button layoutX="262.0" layoutY="496.0" mnemonicParsing="false" onAction="#adicionarDocente" prefHeight="25.0" prefWidth="84.0" text="Adicionar" />
+      <ComboBox fx:id="cmbDiscentes" layoutX="374.0" layoutY="499.0" prefHeight="25.0" prefWidth="319.0" />
+      <Button layoutX="698.0" layoutY="498.0" mnemonicParsing="false" onAction="#adicionarDiscente" prefHeight="25.0" prefWidth="84.0" text="Adicionar" />
+      <TableView fx:id="tableDiscentes" layoutX="373.0" layoutY="298.0" prefHeight="200.0" prefWidth="409.0">
+         <columns>
+            <TableColumn prefWidth="241.0" text="Nome" />
+            <TableColumn prefWidth="94.0" text="Tipo" />
+            <TableColumn prefWidth="90.0" text="Remover" />
+         </columns>
+      </TableView>
+      <Label layoutX="564.0" layoutY="277.0" text="Bolsa" />
    </children>
 </AnchorPane>
