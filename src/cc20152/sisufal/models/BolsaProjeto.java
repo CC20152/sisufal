@@ -4,6 +4,7 @@ import java.util.ArrayList;
 public class BolsaProjeto {
 
     private Integer id;
+    private String tipo;
     private Projeto projeto;
     private ArrayList<Discente> listaDiscentes;
 
@@ -29,6 +30,14 @@ public class BolsaProjeto {
 
     public void setProjeto(Projeto projeto) {
         this.projeto = projeto;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
 }

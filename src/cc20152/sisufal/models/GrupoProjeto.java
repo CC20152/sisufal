@@ -7,6 +7,10 @@ public class GrupoProjeto {
     private Projeto projeto;
     private ArrayList<Servidor> listaServidores;
 
+    public GrupoProjeto(){
+        listaServidores = new ArrayList<Servidor>();
+    }
+    
     public int getId() {
         return id;
     }
