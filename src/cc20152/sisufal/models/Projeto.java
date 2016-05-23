@@ -16,7 +16,15 @@ public class Projeto {
     private Servidor servidorCoordenador;
 
     private InstituicaoFinanciadora financiadora;
+    
+    private GrupoProjeto grupoProjeto;
 
+    public Projeto() {
+        servidorCoordenador = new Servidor();
+        financiadora = new InstituicaoFinanciadora();
+        grupoProjeto = new GrupoProjeto();
+    }
+    
     public int getId() {
         return id;
     }
@@ -73,6 +81,14 @@ public class Projeto {
         this.financiadora = financiadora;
     }
 
+    public GrupoProjeto getGrupoProjeto() {
+        return grupoProjeto;
+    }
+
+    public void setGrupoProjeto(GrupoProjeto grupoProjeto) {
+        this.grupoProjeto = grupoProjeto;
+    }
+    
     public String toString() {
         return this.titulo;
     }

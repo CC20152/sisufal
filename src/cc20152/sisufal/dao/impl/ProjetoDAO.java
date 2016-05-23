@@ -7,6 +7,7 @@ package cc20152.sisufal.dao.impl;
 
 import cc20152.sisufal.dao.IBaseDAO;
 import cc20152.sisufal.db.Conexao;
+import cc20152.sisufal.models.GrupoProjeto;
 import cc20152.sisufal.models.InstituicaoFinanciadora;
 import cc20152.sisufal.models.Projeto;
 import cc20152.sisufal.models.Servidor;
@@ -29,6 +30,8 @@ public class ProjetoDAO implements IBaseDAO {
 
     @Override
     public String save(Object object) {
+        Projeto projeto = (Projeto) object;
+        
         int idSalvo = -1;
         
         conexao = Conexao.getConexao();
@@ -38,12 +41,12 @@ public class ProjetoDAO implements IBaseDAO {
         try{
             PreparedStatement st = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             
-            st.setString(1, ((Projeto) object).getTitulo());
-            st.setDate(2, new Date(((Projeto) object).getDataInicio().getTime()));
-            st.setDate(3, new Date(((Projeto) object).getDataFim().getTime()));
-            st.setInt(4, ((Projeto) object).getServidorCoordenador().getId());
-            st.setString(5, ((Projeto) object).getTipo());
-            st.setInt(6, ((Projeto) object).getFinanciadora().getId());
+            st.setString(1, projeto.getTitulo());
+            st.setDate(2, new Date(projeto.getDataInicio().getTime()));
+            st.setDate(3, new Date(projeto.getDataFim().getTime()));
+            st.setInt(4, projeto.getServidorCoordenador().getId());
+            st.setString(5, projeto.getTipo());
+            st.setInt(6, projeto.getFinanciadora().getId());
             
             st.execute();
             
@@ -52,13 +55,24 @@ public class ProjetoDAO implements IBaseDAO {
             if(rs.next()) {
                 idSalvo = rs.getInt(1);
             }
+        
+            Conexao.desconectar();
+            
+            projeto.setId(idSalvo);
+            projeto.getGrupoProjeto().setProjeto(projeto);
                 
+            saveGrupo(projeto.getGrupoProjeto());
         }catch(Exception ex){
             ex.printStackTrace();
-        }finally{
-            Conexao.desconectar();
         }
+        
         return String.valueOf(idSalvo);
+    }
+    
+    private void saveGrupo(GrupoProjeto grupoProjeto) {
+        GrupoProjetoDAO grupoProjetoDAO = new GrupoProjetoDAO();
+        String result = grupoProjetoDAO.save(grupoProjeto);
+        System.out.println(result);
     }
 
     @Override
@@ -122,6 +136,11 @@ public class ProjetoDAO implements IBaseDAO {
         }catch(Exception ex){
             ex.printStackTrace();
         }
+        
+        for (Projeto projeto : listaProjetos) {
+            projeto.getGrupoProjeto().setListaServidores(new ServidorDAO().allByProjeto(projeto));
+        }
+        
         return listaProjetos;
     }
 

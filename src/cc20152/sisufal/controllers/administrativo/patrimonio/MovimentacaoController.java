@@ -201,14 +201,13 @@ public class MovimentacaoController implements Initializable {
     }
 
     private void listarGridMovPermanente(){
-       List<Patrimonio> listaPatrimonio = new ArrayList<>();
-       listaPatrimonio = new PatrimonioPermanenteDAO().listAll();
+       List<Patrimonio> listaMovimentacao = new ArrayList<>();
+       listaMovimentacao = new PatrimonioPermanenteDAO().listAll();
        this.tablePatrimonio.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("nome"));
        this.tablePatrimonio.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("numero"));
-       this.tablePatrimonio.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("nomeSala"));
-       this.tablePatrimonio.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("nomeBloco"));
-      
-       for (Patrimonio e : listaPatrimonio) {
+       this.tablePatrimonio.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("nomeBloco"));
+       this.tablePatrimonio.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("nomeSala"));
+       for (Patrimonio e : listaMovimentacao) {
            data.add(e);
        }
        
@@ -216,14 +215,14 @@ public class MovimentacaoController implements Initializable {
     }
 
     private void listarGridMovConsumo(){
-       List<Patrimonio> listaPatrimonio = new ArrayList<>();
-       listaPatrimonio = new PatrimonioDAO().listAll();
+       List<Patrimonio> listaMovimentacao = new ArrayList<>();
+       listaMovimentacao = new PatrimonioDAO().listAll();
        this.tablePatrimonio.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("nome"));
        this.tablePatrimonio.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("numero"));
-       this.tablePatrimonio.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("nomeSala"));
-       this.tablePatrimonio.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("nomeBloco"));
+       this.tablePatrimonio.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("nomeBloco"));
+       this.tablePatrimonio.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("nomeSala"));
       
-       for (Patrimonio e : listaPatrimonio) {
+       for (Patrimonio e : listaMovimentacao) {
            data.add(e);
        }
        

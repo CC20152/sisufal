@@ -210,4 +210,37 @@ public class ServidorDAO implements IBaseDAO {
         }
         return s;
     }
+    
+    public ArrayList<Servidor> allByProjeto(Projeto projeto) {
+        ArrayList<Servidor> listaServidores = new ArrayList();
+        
+        this.conexao = Conexao.getConexao();
+        String sql = "SELECT s.id_servidor, s.nome as nome_servidor "
+                + "FROM servidor s, grupoprojeto gp, projeto p "
+                + "WHERE p.id_projeto = ? "
+                + "AND gp.id_servidor = s.id_servidor "
+                + "AND gp.id_projeto = p.id_projeto";
+        
+        try{
+            PreparedStatement st = this.conexao.prepareStatement(sql);
+            st.setInt(1, projeto.getId());
+            ResultSet rs;
+
+            rs = st.executeQuery();
+            
+            while(rs.next()){
+                Servidor servidor = new Servidor();
+                
+                servidor.setId(rs.getInt("id_servidor"));
+                servidor.setNome(rs.getString("nome_servidor"));
+
+                listaServidores.add(servidor);
+            }
+            
+            Conexao.desconectar();
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+        return listaServidores;
+    }
 }
