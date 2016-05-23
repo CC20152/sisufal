@@ -5,16 +5,21 @@
  */
 package cc20152.sisufal.controllers.pesquisa.projeto;
 
+import cc20152.sisufal.dao.impl.DiscenteDAO;
+import cc20152.sisufal.dao.impl.GrupoProjetoDAO;
 import cc20152.sisufal.util.InstituicaoFinanciadoraConverter;
 import cc20152.sisufal.dao.impl.InstituicaoFinanciadoraDAO;
 import cc20152.sisufal.dao.impl.ProjetoDAO;
 import cc20152.sisufal.dao.impl.ServidorDAO;
+import cc20152.sisufal.models.Discente;
+import cc20152.sisufal.models.GrupoProjeto;
 import cc20152.sisufal.models.InstituicaoFinanciadora;
 import cc20152.sisufal.models.Projeto;
 import cc20152.sisufal.models.Servidor;
 import cc20152.sisufal.util.AutoCompleteComboBoxListener;
 import cc20152.sisufal.util.BotoesLista;
 import cc20152.sisufal.util.DataUtil;
+import cc20152.sisufal.util.DiscenteConverter;
 import cc20152.sisufal.util.ServidorConverter;
 import com.sun.prism.impl.Disposer;
 import java.io.IOException;
@@ -46,6 +51,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -54,13 +60,16 @@ import javafx.util.Callback;
  * @author anderson
  */
 public class ProjetoController implements Initializable {
-   private ObservableList<Projeto> data;
+    
+    private ObservableList<Projeto> data;
     
     final String pacote = "controllers/pesquisa/projeto/";
     private String fxmlCadastro = "fxml/cadastro/CadastroProjetoFXML.fxml";
     
     private String tipo;
     private Projeto projeto;
+    ObservableValue<Integer> grupoId;
+    private GrupoProjeto grupoProjeto;
     
     @FXML
     private TextField txtTitulo;
@@ -87,25 +96,87 @@ public class ProjetoController implements Initializable {
     private Button btnCancelarCadastro;
     
     @FXML
+    private ComboBox cmbServidores;
+    
+    @FXML
+    private ComboBox cmbDiscentes;
+    
+    @FXML
     private TableView<Projeto> tableProjetos;
+    
+    @FXML
+    private TableView<Servidor> tableDocentes;
+    
+    @FXML
+    private TableView<Discente> tableDiscentes;
     
     @Override
     public void initialize(URL url, ResourceBundle resources) {
         if(!url.getPath().contains(this.fxmlCadastro)){
             listarProjetos();
         } else {
-            this.cmbCoodenador.getItems().addAll(new ServidorDAO().listAll());
-            this.cmbCoodenador.setConverter(new ServidorConverter());
-            new AutoCompleteComboBoxListener<>(this.cmbCoodenador, "Escolha um coordenador");
-            
-            this.cmbFinanciadora.getItems().addAll(new InstituicaoFinanciadoraDAO().listAll());
-            this.cmbFinanciadora.setConverter(new InstituicaoFinanciadoraConverter());
-            new AutoCompleteComboBoxListener<>(this.cmbFinanciadora, "Escolha uma instituiçao financiadora");
+            listarDadosCadastro();
         }
+    }
+    
+    public void listarDadosCadastro() {
+        this.tableDocentes.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("nome"));
+        TableColumn colRemoverDocente = this.tableDocentes.getColumns().get(1);
+        colRemoverDocente.setCellFactory(new Callback<TableColumn<Disposer.Record, Boolean>, TableCell<Disposer.Record, Boolean>>() {
+            @Override
+            public TableCell<Disposer.Record, Boolean> call(TableColumn<Disposer.Record, Boolean> p) {
+                return new BotoesLista(tableDocentes.getItems(), Servidor.class, fxmlCadastro, "removerDocente", "Remover", "").new BotaoCell();
+            }
+        });
+        
+        this.tableDiscentes.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("nome"));
+        this.tableDiscentes.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("tipo"));
+        TableColumn colRemoverDiscente = this.tableDiscentes.getColumns().get(2);
+        colRemoverDiscente.setCellFactory(new Callback<TableColumn<Disposer.Record, Boolean>, TableCell<Disposer.Record, Boolean>>() {
+            @Override
+            public TableCell<Disposer.Record, Boolean> call(TableColumn<Disposer.Record, Boolean> p) {
+                return new BotoesLista(tableDiscentes.getItems(), Discente.class, fxmlCadastro, "removerDiscente", "Remover", "").new BotaoCell();
+            }
+        });
+        
+        this.cmbCoodenador.getItems().addAll(new ServidorDAO().listAll());
+        this.cmbCoodenador.setConverter(new ServidorConverter());
+        new AutoCompleteComboBoxListener<>(this.cmbCoodenador, "Escolha um coordenador");
+
+        this.cmbFinanciadora.getItems().addAll(new InstituicaoFinanciadoraDAO().listAll());
+        this.cmbFinanciadora.setConverter(new InstituicaoFinanciadoraConverter());
+        new AutoCompleteComboBoxListener<>(this.cmbFinanciadora, "Escolha uma instituiçao financiadora");
+
+        List<Servidor> servidores = new ServidorDAO().listAll();
+        for (Servidor servidor : servidores) {
+            if(!tableDocentes.getItems().contains(servidor)) {
+                this.cmbServidores.getItems().add(servidor);
+            }
+        }
+        this.cmbServidores.setConverter(new ServidorConverter());
+        new AutoCompleteComboBoxListener<>(this.cmbServidores, "Adicionar Docente");
+
+        this.cmbDiscentes.getItems().addAll(new DiscenteDAO().listAll());
+        this.cmbDiscentes.setConverter(new DiscenteConverter());
+        new AutoCompleteComboBoxListener<>(this.cmbDiscentes, "Adicionar Discente");
     }
     
     @FXML
     private void btnBuscar(ActionEvent event){
+
+    }
+    
+    @FXML
+    private void adicionarDocente(ActionEvent event){
+        if(this.cmbServidores.getValue() != null) {
+            Servidor servidor = (Servidor) this.cmbServidores.getValue();
+            this.tableDocentes.getItems().add(servidor);
+            this.cmbServidores.getSelectionModel().clearSelection();
+        }
+    }
+    
+    @FXML
+    private void adicionarDiscente(ActionEvent event){
 
     }
     
@@ -168,31 +239,35 @@ public class ProjetoController implements Initializable {
         this.projeto.setServidorCoordenador((Servidor) this.cmbCoodenador.getValue());
         this.projeto.setFinanciadora((InstituicaoFinanciadora) this.cmbFinanciadora.getValue());
         
+        for (Servidor s : tableDocentes.getItems()){
+            this.projeto.getGrupoProjeto().getListaServidores().add(s);
+        }
+        
         ProjetoDAO projetoDAO = new ProjetoDAO();
         String result = null;
         
-         if(this.tipo == null){
+        if(this.tipo == null){
             result = projetoDAO.save(projeto);
         }else{
             result = projetoDAO.update(projeto);
         }
         
         System.out.println(result);
-        if(!result.equals("-1")){ 
-           if(this.tipo == null) this.data.add(projeto); 
-           else this.data.set(this.data.indexOf(projeto), projeto);
-               
-           Alert alerta = new Alert(Alert.AlertType.INFORMATION);
-           alerta.setTitle("Sucesso");
-           alerta.setHeaderText("Projeto cadastrado com sucesso!");
-           alerta.show();
-           Stage stage = (Stage) btnCancelarCadastro.getScene().getWindow();
-           stage.close();
+        if(!result.equals("-1")){
+            if(this.tipo == null) this.data.add(projeto); 
+            else this.data.set(this.data.indexOf(projeto), projeto);
+
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+            alerta.setTitle("Sucesso");
+            alerta.setHeaderText("Projeto cadastrado com sucesso!");
+            alerta.show();
+            Stage stage = (Stage) btnCancelarCadastro.getScene().getWindow();
+            stage.close();
         }else{
-           Alert alerta = new Alert(Alert.AlertType.ERROR);
-           alerta.setTitle("Erro");
-           alerta.setHeaderText("Erro ao cadastrar projeto!");
-           alerta.show();
+            Alert alerta = new Alert(Alert.AlertType.ERROR);
+            alerta.setTitle("Erro");
+            alerta.setHeaderText("Erro ao cadastrar projeto!");
+            alerta.show();
         }
     }
     
@@ -302,7 +377,7 @@ public class ProjetoController implements Initializable {
         this.datInicio.setValue(new Date(this.projeto.getDataInicio().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         this.datFim.setValue(new Date(this.projeto.getDataFim().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         
-//        TODO Preencher grupo e bolsa
+        this.tableDocentes.setItems(FXCollections.observableArrayList(this.projeto.getGrupoProjeto().getListaServidores()));
 
         ObservableList<Servidor> servidores = this.cmbCoodenador.getItems();
         int i = 0;
@@ -323,5 +398,9 @@ public class ProjetoController implements Initializable {
             i++;
         }
         if(i == 0) this.cmbFinanciadora.getSelectionModel().select(i);
+    }
+    
+    public void removerDocente(String tipo, ObservableList<Servidor> servidores, Servidor servidor) {
+        servidores.remove(servidor);
     }
 }
