@@ -67,31 +67,17 @@ public class SalaController implements Initializable {
     @FXML
         private TextField txtNumero;
     @FXML
+        private TextField txtPesquisa;
+    @FXML
+        private ComboBox<String> cmbPesquisa;
+    @FXML
     	private ComboBox<Bloco> cmbBloco;
     @FXML
         private TableView<Sala> tableSala;   
     
     @FXML
-    private void btnBuscar(ActionEvent event){
-        SalaDAO salaDAO = new SalaDAO();
-        Sala sala = new Sala();
-        
-        if(!this.txtNome.getText().equals("")){
-            sala.setNome(this.txtNome.getText());
-        }
-        
-        if(this.cmbBloco.getSelectionModel() != null && !this.cmbBloco.getSelectionModel().isSelected(0)){
-            sala.setBloco(this.cmbBloco.getValue().getId());
-        }
-        /*
-        if(this.cmbSala.getSelectionModel() != null && !this.cmbSala.getSelectionModel().isSelected(0)){
-            sala.getSala().setId(this.cmbSala.getValue().getId());
-        }
-        */
-        List<Sala> list = salaDAO.listWithParams(sala);
-        
-        this.data.clear();
-        this.data.addAll(list);
+    private void pesquisar(ActionEvent event){
+        listarGridSalaPesquisa(cmbPesquisa.getValue());
     }
     
     @FXML
@@ -128,19 +114,49 @@ public class SalaController implements Initializable {
             aviso.setHeaderText("Campo numero não pode estar vazio");
             aviso.show();
             return ;
+        }else if(this.cmbBloco.getValue() == null){
+            aviso.setHeaderText("Campo bloco não pode estar vazio");
+            aviso.show();
+            return ;
+        }
+
+        Sala old = this.sala;
+        if(this.sala == null){
+            this.sala = new Sala();
         }
         Sala sala = new Sala();
         sala.setNome(this.txtNome.getText());
         sala.setCodigo(this.txtNumero.getText());
-        sala.setBloco(this.cmbBloco.getValue().getId());
+        sala.setBloco(this.cmbBloco.getValue());
+        //sala.setNomeBloco(this.cmbBloco.getValue().getNome());
+        this.cmbBloco.getValue().addSalas(sala);
 
-        String result = salaDAO.save(sala);
+        String result = null;
+
+        if(this.tipo == null){
+            result = salaDAO.save(sala);
+        }else{
+            sala.setId(old.getId());
+            result = salaDAO.update(sala);
+        }
+
         System.out.println(result);
         if(result.equals("OK")){
            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
            alerta.setTitle("Sucesso");
-           alerta.setHeaderText("Sala cadastrada com sucesso!");
-           alerta.show();
+           
+
+           if(this.tipo == null){
+                alerta.setHeaderText("Sala cadastrada com sucesso!");
+                alerta.show();
+                this.data.add(sala);
+           }else{
+                alerta.setHeaderText("Sala editada com sucesso!");
+                alerta.show();
+                this.data.remove(old);
+                this.data.add(sala);
+           }
+
            Stage stage = (Stage) btnCancelarCadastro.getScene().getWindow();
            stage.close();
         }else{
@@ -167,9 +183,10 @@ public class SalaController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         if(!url.getPath().contains(this.fxml)){
             listarGridSala();
+            listarComboPesquisa();
         }
         else{
-            listarComboBloco();
+            listarComboBloco();           
         }   
     }
     /*
@@ -196,7 +213,7 @@ public class SalaController implements Initializable {
         List<Bloco> listaBloco = new ArrayList<>();
         listaBloco = new BlocoDAO().listAll();
         this.cmbBloco.getItems().addAll(listaBloco);
-        this.cmbBloco.getSelectionModel().selectFirst();
+        this.cmbBloco.getSelectionModel();
     }
     
     private void listarGridSala(){
@@ -204,8 +221,9 @@ public class SalaController implements Initializable {
        listaSala = new SalaDAO().listAll();
        this.tableSala.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("nome"));
        this.tableSala.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("codigo"));
+       this.tableSala.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("bloco"));
       
-       TableColumn colEditar = this.tableSala.getColumns().get(2);
+       TableColumn colEditar = this.tableSala.getColumns().get(3);
        colEditar.setCellFactory(new Callback<TableColumn<Record, Boolean>, TableCell<Record, Boolean>>() {
            @Override
            public TableCell<Record, Boolean> call(TableColumn<Record, Boolean> p) {
@@ -213,7 +231,7 @@ public class SalaController implements Initializable {
            }
        });
        
-       TableColumn colDeletar = this.tableSala.getColumns().get(3);
+       TableColumn colDeletar = this.tableSala.getColumns().get(4);
        colDeletar.setCellFactory(new Callback<TableColumn<Record, Boolean>, TableCell<Record, Boolean>>() {
            @Override
            public TableCell<Record, Boolean> call(TableColumn<Record, Boolean> p) {
@@ -226,6 +244,23 @@ public class SalaController implements Initializable {
        }
        
        tableSala.setItems(data);
+    }
+
+    private void listarComboPesquisa() {
+        ArrayList<String> listaPesquisa = new ArrayList<>();
+        listaPesquisa.add("Nome");
+        listaPesquisa.add("Codigo");
+        listaPesquisa.add("Bloco");
+        this.cmbPesquisa.getItems().addAll(listaPesquisa);
+        this.cmbPesquisa.getSelectionModel().selectFirst();
+    }
+
+    private void listarGridSalaPesquisa(String tipo){
+        HashMap hashPesquisa = new HashMap();
+        hashPesquisa.put("tipo", tipo);
+        hashPesquisa.put("texto", txtPesquisa.getText());
+        List<Sala> lista = salaDAO.listWithParams(hashPesquisa);
+        data.setAll(lista);
     }
 
     public void setData(ObservableList<Sala> data){
@@ -255,7 +290,7 @@ public class SalaController implements Initializable {
     private void preencherCampos(){
         this.txtNome.setText(this.sala.getNome());
         this.txtNumero.setText(this.sala.getCodigo());
-            
+
     }
 
     

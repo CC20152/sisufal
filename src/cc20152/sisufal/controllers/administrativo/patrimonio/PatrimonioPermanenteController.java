@@ -67,6 +67,10 @@ public class PatrimonioPermanenteController implements Initializable {
     @FXML
         private TextField txtNumero;
     @FXML
+        private TextField txtPesquisa;
+    @FXML
+        private ComboBox<String> cmbPesquisa;
+    @FXML
         private ComboBox<Bloco> cmbBloco;
     @FXML
         private ComboBox<Sala> cmbSala;
@@ -119,6 +123,11 @@ public class PatrimonioPermanenteController implements Initializable {
     }
 
     @FXML
+    private void pesquisar(ActionEvent event){
+        listarGridPatrimonioPesquisa(cmbPesquisa.getValue());
+    }
+
+    @FXML
     private void btnSalvar(ActionEvent event) {
         
         Alert aviso = new Alert(Alert.AlertType.ERROR);
@@ -132,20 +141,64 @@ public class PatrimonioPermanenteController implements Initializable {
             aviso.setHeaderText("Campo numero não pode estar vazio");
             aviso.show();
             return ;
+        }else if(this.cmbBloco.getValue() == null || this.cmbBloco.getSelectionModel().isSelected(0)){
+            aviso.setHeaderText("Selecione um bloco e uma sala");
+            aviso.show();
+            return ;
+        }
+
+        Patrimonio old = this.patrimonio;
+        if(this.patrimonio == null){
+            this.patrimonio = new Patrimonio();
         }
         Patrimonio patrimonio = new Patrimonio();
         patrimonio.setNome(this.txtNome.getText());
         patrimonio.setNumero(this.txtNumero.getText());
         patrimonio.setBloco(this.cmbBloco.getValue().getId());
         patrimonio.setSala(this.tableSala.getSelectionModel().getSelectedItem().getId());
+        if(this.tipo == null){
+            Movimentacao movimentacao = new Movimentacao();
+            patrimonio.setUltimaMovimentacao(movimentacao);
+        }
         
-        String result = patrimonioDAO.save(patrimonio);
+        
+        String result = null;
+
+        if(this.tipo == null){
+            result = "ERROR";
+            patrimonio.getUltimaMovimentacao().setSala(this.tableSala.getSelectionModel().getSelectedItem().getId());
+            patrimonio.getUltimaMovimentacao().setPatrimonio(this.patrimonio.getId());
+            patrimonio.getUltimaMovimentacao().setPatrimonio(patrimonioDAO.savePatrimonio(patrimonio));
+            if(patrimonio.getUltimaMovimentacao().getPatrimonio() != null)
+                result = "OK";
+            patrimonio.getUltimaMovimentacao().setId(patrimonioDAO.saveMovimentacao(patrimonio.getUltimaMovimentacao()));
+            if(patrimonio.getUltimaMovimentacao().getId() != null)
+                result = "OK";
+        }else{
+            patrimonio.setId(old.getId());
+            //falta terminar
+            patrimonio.getUltimaMovimentacao().setId(patrimonioDAO.saveMovimentacao(patrimonio.getUltimaMovimentacao()));
+            if(patrimonio.getUltimaMovimentacao().getId() != null)
+                result = "OK";
+            result = patrimonioDAO.update(patrimonio);
+        }
+
         System.out.println(result);
         if(result.equals("OK")){
            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
            alerta.setTitle("Sucesso");
-           alerta.setHeaderText("Patrimônio cadastrado com sucesso!");
-           alerta.show();
+           
+           if(this.tipo == null){
+                alerta.setHeaderText("Patrimônio cadastrado com sucesso!");
+                alerta.show();
+                this.data.add(patrimonio);
+           }else{
+                alerta.setHeaderText("Patrimônio editado com sucesso!");
+                alerta.show();
+                this.data.remove(old);
+                this.data.add(patrimonio);
+           }
+
            Stage stage = (Stage) btnCancelarCadastro.getScene().getWindow();
            stage.close();
         }else{
@@ -172,9 +225,9 @@ public class PatrimonioPermanenteController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         if(!url.getPath().contains(this.fxml)){
             listarGridPatrimonio();
+            listarComboPesquisa();
         }else{
             listarComboBloco();
-            listarTableSala();
         }     
     }
     /*
@@ -200,10 +253,30 @@ public class PatrimonioPermanenteController implements Initializable {
     private void listarComboBloco() {
         List<Bloco> listaBloco = new ArrayList<>();
         listaBloco = new BlocoDAO().listAll();
+        Bloco b = new Bloco();
+        b.setId(0); b.setNome("Escolha um bloco");
+        this.cmbBloco.getItems().add(b);
         this.cmbBloco.getItems().addAll(listaBloco);
-        //this.cmbBloco.getItems().setAll(listaBloco);
         this.cmbBloco.getSelectionModel().selectFirst();
 
+
+    }
+    private void listarComboPesquisa() {
+        ArrayList<String> listaPesquisa = new ArrayList<>();
+        listaPesquisa.add("Nome");
+        listaPesquisa.add("Numero");
+        listaPesquisa.add("Sala");
+        listaPesquisa.add("Bloco");
+        this.cmbPesquisa.getItems().addAll(listaPesquisa);
+        this.cmbPesquisa.getSelectionModel().selectFirst();
+    }
+    
+    private void listarGridPatrimonioPesquisa(String tipo){
+        HashMap hashPesquisa = new HashMap();
+        hashPesquisa.put("tipo", tipo);
+        hashPesquisa.put("texto", txtPesquisa.getText());
+        List<Patrimonio> lista = patrimonioDAO.listWithParams(hashPesquisa);
+        data.setAll(lista);
     }
     /*
     private void listarCombotxtNumero() {
@@ -213,11 +286,22 @@ public class PatrimonioPermanenteController implements Initializable {
         this.cmbBloco.getSelectionModel().selectFirst();
     }
     */
-    private void listarTableSala() {
+    @FXML
+    private void listarTableSala(ActionEvent event) {
+        /*
         List<Sala> listaSala = this.cmbBloco.getValue().getSalas();
         listaSala = new SalaDAO().listAll();
-        this.tableSala.getItems().setAll(listaSala);
+        Sala s = new Sala();
+        s.setId(0); s.setNome("Escolha uma sala");
+        this.tableSala.getItems().add(s);
+        this.tableSala.getItems().addAll(this.cmbBloco.getValue().getSalas());
         this.tableSala.getSelectionModel().selectFirst();
+        */
+        Bloco b = this.cmbBloco.getValue();
+        b.setSalas(new SalaDAO().listSalas(b));
+        this.tableSala.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("nome"));
+        this.tableSala.getItems().setAll(b.getSalas());
+        
     }
 
     private void listarGridPatrimonio(){
@@ -225,8 +309,8 @@ public class PatrimonioPermanenteController implements Initializable {
        listaPatrimonio = new PatrimonioPermanenteDAO().listAll();
        this.tablePatrimonio.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("nome"));
        this.tablePatrimonio.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("numero"));
-       this.tablePatrimonio.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("bloco"));
-       this.tablePatrimonio.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("sala"));
+       this.tablePatrimonio.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("nomeBloco"));
+       this.tablePatrimonio.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("nomeSala"));
        TableColumn colEditar = this.tablePatrimonio.getColumns().get(4);
        colEditar.setCellFactory(new Callback<TableColumn<Record, Boolean>, TableCell<Record, Boolean>>() {
            @Override

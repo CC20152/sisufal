@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -26,12 +27,13 @@ public class SalaDAO implements IBaseDAO {
     @Override
     public String save(Object object){
         this.conn = Conexao.getConexao();
-        String sql = "INSERT INTO sala(nome, codigo, id_bloco) VALUES(?, ?, ?)";   
+        String sql = "INSERT INTO sala(nome, codigo, id_bloco, nome_bloco) VALUES(?, ?, ?, ?)";   
         try{
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, ((Sala) object).getNome());
             st.setString(2, ((Sala) object).getCodigo());
-            st.setInt(3, ((Sala) object).getBloco());
+            st.setInt(3, ((Sala) object).getBloco().getId());
+            st.setString(4, ((Sala) object).getBloco().getNome());
             st.execute();
         }catch(Exception ex){
             ex.printStackTrace();
@@ -43,13 +45,14 @@ public class SalaDAO implements IBaseDAO {
     @Override
     public String update(Object object){
         this.conn = Conexao.getConexao();
-        String sql = "UPDATE sala SET nome = ?, codigo = ?, id_bloco = ? WHERE id_sala = ?";   
+        String sql = "UPDATE sala SET nome = ?, codigo = ?, id_bloco = ?, nome_bloco = ? WHERE id_sala = ?";   
         try{
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, ((Sala) object).getNome());
             st.setString(2, ((Sala) object).getCodigo());
-            st.setInt(3, ((Sala) object).getBloco());
-            st.setInt(3, ((Sala) object).getId());
+            st.setInt(3, ((Sala) object).getBloco().getId());
+            st.setString(4, ((Sala) object).getBloco().getNome());
+            st.setInt(5, ((Sala) object).getId());
             st.execute();
         }catch(Exception ex){
             ex.printStackTrace();
@@ -77,63 +80,77 @@ public class SalaDAO implements IBaseDAO {
     public List<Sala> listAll(){
         ArrayList<Sala> listaSala = new ArrayList();
         this.conn = Conexao.getConexao();
-        String sql = "SELECT d.id_sala, d.nome, c.nome as NOME_BLOCO, d.codigo, d.id_bloco FROM sala d, bloco c WHERE d.id_bloco = c.id_bloco";
-        
+        String sql = "SELECT * FROM sala "
+                    + "INNER JOIN bloco ON bloco.id_bloco = sala.id_bloco ";
+
         try{
             PreparedStatement st = this.conn.prepareStatement(sql);
             ResultSet rs;
 
             rs = st.executeQuery();
             listaSala = mapearResultSet(rs);
-            //conexao.close();
+            
         }catch(Exception ex){
             ex.printStackTrace();
         }
         return listaSala;
     }
     
-    /*
-    * Eu escrevi isso sem ter a certeza se é um bom método
-    */
     @Override
     public List<Sala> listWithParams(Object object){
-        ArrayList<Sala> listaSala = new ArrayList();
+        ArrayList<Sala> lista = new ArrayList<Sala>();
         this.conn = Conexao.getConexao();
-        Sala sala = (Sala) object;
-        String sql = "SELECT d.id_sala, d.nome, c.nome as NOME_BLOCO, d.codigo, d.id_bloco FROM bloco c, sala d WHERE d.id_bloco = c.id_bloco";
         
+        String tipo = ((HashMap) object).get("tipo").toString().toLowerCase();
+        String pesquisa = ((HashMap) object).get("texto").toString();
+        String sql;
+        //System.out.println(tipo);
+        if(tipo.equals("codigo") ||tipo.equals("nome") ){
+            sql = "SELECT * FROM sala "
+                    + "INNER JOIN bloco ON bloco.id_bloco = sala.id_bloco "
+                    + "WHERE sala."+tipo+" LIKE '%"+pesquisa+"%'";
+        }else{
+             sql = "SELECT * FROM sala "
+                     + "INNER JOIN bloco ON bloco.id_bloco = sala.id_bloco "
+                     + "WHERE bloco.nome LIKE '%"+pesquisa+"%'";
+        }
+       
         try{
-            
-            
-            int i = 1;
-            
-            if(sala.getBloco() != null){
-                sql += " AND c.id_bloco = ?";
-            }
-            
-            if(sala.getNome() != null){
-                sql += " AND upper(d.nome) LIKE upper(?)";
-            }
-
-            if(sala.getCodigo() != null){
-                sql += " AND upper(d.codigo) LIKE upper(?)";
-            }
-            
             PreparedStatement st = this.conn.prepareStatement(sql);
             ResultSet rs;
-            /*
-            if(sala.getBloco().getId() != null){
-                st.setInt(i, sala.getBloco().getId());
-                i++;
+
+            rs = st.executeQuery();
+            while(rs.next()){
+            Sala sala = new Sala();
+            sala.setId(rs.getInt("ID_SALA"));
+            sala.setNome(rs.getString("NOME"));
+            sala.setCodigo(rs.getString("CODIGO"));
+            sala.getBloco().setId(rs.getInt("ID_BLOCO"));
+            sala.getBloco().setNome(rs.getString("BLOCO.NOME"));
+            lista.add(sala);
             }
-            */
-            if(sala.getNome() != null){
-                st.setString(i, "%" + sala.getNome() + "%");
-                i++;
-            }
-            
+            Conexao.desconectar();
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return null;
+        }
+        return lista;
+    }
+    
+    public ArrayList<Sala> listSalas(Bloco bloco){
+        ArrayList<Sala> listaSala = new ArrayList();
+        this.conn = Conexao.getConexao();
+        String sql = "SELECT * FROM sala "
+                + "INNER JOIN bloco c ON c.id_bloco = sala.id_bloco"
+                + " WHERE sala.id_bloco = ?";
+        
+        try{
+            PreparedStatement st = this.conn.prepareStatement(sql);
+            ResultSet rs;
+            st.setInt(1, bloco.getId());
             rs = st.executeQuery();
             listaSala = mapearResultSet(rs);
+            
         }catch(Exception ex){
             ex.printStackTrace();
         }
@@ -150,7 +167,8 @@ public class SalaDAO implements IBaseDAO {
             sala.setId(rs.getInt("ID_SALA"));
             sala.setNome(rs.getString("NOME"));
             sala.setCodigo(rs.getString("CODIGO"));
-            sala.setBloco(rs.getInt("ID_BLOCO"));
+            sala.getBloco().setId(rs.getInt("ID_BLOCO"));
+            sala.getBloco().setNome(rs.getString("BLOCO.NOME"));
             listaSala.add(sala);
     }
 

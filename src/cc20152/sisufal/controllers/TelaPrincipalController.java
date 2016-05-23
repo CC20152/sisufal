@@ -33,9 +33,9 @@ public class TelaPrincipalController implements Initializable {
     final String fxmlListaBloco = "fxml/lista/ListaBlocoFXML.fxml";
     final String fxmlListaSala = "fxml/lista/ListaSalaFXML.fxml";
     final String fxmlListaPatrimonio = "fxml/lista/ListaPatrimonioFXML.fxml";
-    final String fxmlMovimentaçãoPatrimonioConsumo = "fxml/cadastro/MovimentacaoPatrimonio(C)FXML.fxml";
+    final String fxmlMovimentaçãoPatrimonioConsumo = "fxml/lista/ListaMovimentacaoConsumoFXML.fxml";
     final String fxmlListaPatrimonioPermanente = "fxml/lista/ListaPatrimonioPermanenteFXML.fxml";
-    final String fxmlMovimentaçãoPatrimonioPermanente = "fxml/cadastro/MovimentacaoPatrimonio(P)FXML.fxml";
+    final String fxmlMovimentaçãoPatrimonioPermanente = "fxml/lista/ListaMovimentacaoPermanenteFXML.fxml";
     final String fxmlListaProjeto = "fxml/lista/ListaProjetoFXML.fxml"; 
     final String fxmlListainstituicaoFinanciadora = "fxml/lista/ListaInstituicaoFinanciadoraFXML.fxml"; 
     final String listaMonitoriaFXML = "fxml/lista/ListaMonitoriaFXML.fxml"; 

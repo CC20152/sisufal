@@ -12,6 +12,7 @@ import cc20152.sisufal.models.BancaConcurso;
 import cc20152.sisufal.models.Concurso;
 import cc20152.sisufal.models.Orientador;
 import cc20152.sisufal.models.Servidor;
+import cc20152.sisufal.relatorio.impl.RelatorioConcurso;
 import cc20152.sisufal.util.AutoCompleteComboBoxListener;
 import cc20152.sisufal.util.BotoesLista;
 import cc20152.sisufal.util.DataUtil;
@@ -24,10 +25,14 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -53,6 +58,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import net.sf.jasperreports.engine.JRException;
 import org.controlsfx.control.ListSelectionView;
 
 /**
@@ -77,6 +83,32 @@ public class BancaConcursoController implements Initializable {
     private void btnCancelar(ActionEvent event) {
         Stage stage = (Stage) tbBancaConcurso.getScene().getWindow();
         stage.close();
+    }
+    
+    @FXML
+    private void declaracaoParticipante(ActionEvent event){
+        RelatorioConcurso relatorio = new RelatorioConcurso();
+        
+        if(this.tbBancaConcurso.getSelectionModel().getSelectedIndex() < 0){
+            Alert aviso = new Alert(Alert.AlertType.ERROR);
+            aviso.setTitle("Erro");
+            aviso.setHeaderText("É necessário selecionar um participante da banca");
+            aviso.show();
+            return ;
+        }
+        Map parametros = new HashMap();
+        parametros.put("EDITAL", this.concurso.getNumeroEdital());
+        parametros.put("SUPERVISOR", this.concurso.getSupervisor());
+        parametros.put("DATA_INICIO", DataUtil.getDataApresentacao(this.concurso.getDataInicio()));
+        parametros.put("DATA_FIM", DataUtil.getDataApresentacao(this.concurso.getDataFim()));
+        
+        try {
+           relatorio.gerarDeclaracao(this.tbBancaConcurso.getSelectionModel().getSelectedItem(), parametros);
+        } catch (JRException ex) {
+            Logger.getLogger(BancaConcursoController.class.getName()).log(Level.SEVERE, null, ex);
+       } catch (IOException ex) {
+           Logger.getLogger(BancaConcursoController.class.getName()).log(Level.SEVERE, null, ex);
+       }
     }
     
     private void listarBancaConcurso(){

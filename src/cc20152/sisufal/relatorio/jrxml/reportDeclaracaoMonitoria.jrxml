@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.2.2.final using JasperReports Library version 6.2.2  -->
+<!-- 2016-05-22T17:38:48 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportDeclaracaoMonitoria" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="29987680-bf48-4d0e-bd57-251ca30fe7c0">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="CAMINHO" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="discente.nome" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="orientador.nome" class="java.lang.String"/>
+	<field name="disciplina.nome" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="183" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="70" height="90" uuid="7359f5df-c3a8-4b72-b2f1-11d9ea652e86"/>
+				<imageExpression><![CDATA[$P{CAMINHO}+"ufal.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="82" y="0" width="398" height="30" uuid="9fc0653f-9eb0-47fc-8d44-c39a546204a6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[UNIVERSIDADE FEDERAL DE ALAGOAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="82" y="30" width="398" height="20" uuid="10a0e563-3c96-4312-a0ae-def87a170e6a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="false" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Campus A.C Simões]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="82" y="50" width="398" height="20" uuid="70d4ab3c-a411-44b7-91fe-acfbbcfe2171"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Instituto de Computação - IC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="82" y="70" width="398" height="20" uuid="2c3add87-4264-42b4-83e7-a990aca1763b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Av Lourival Melo Mota, S/N - Tabuleiro dos Martins, Maceió - AL, 57072-900, Brasil]]></text>
+			</staticText>
+			<image>
+				<reportElement x="480" y="0" width="69" height="80" uuid="78407904-1738-4d76-9b66-3498e3e0bd6b"/>
+				<imageExpression><![CDATA[$P{CAMINHO}+"ic.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="0" y="112" width="548" height="20" uuid="693c35df-de97-4ab2-95b2-0ad57c90c652"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Declaração de Orientação - Monitoria]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="348" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="76" width="190" height="20" uuid="d5968c9a-f4dd-46c2-a631-699b80a8908e"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[       Declaro, para os devidos fins, que eu, ]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="190" y="76" width="203" height="20" uuid="ecfb7f08-f223-412b-ab1b-e642e9c91093"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{orientador.nome}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="393" y="76" width="156" height="20" uuid="1b7bcf70-3ef2-4861-82f7-fee7a28d8f7f"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[, professor(a) da Universidade ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="99" width="170" height="20" uuid="0f31da92-9e0a-46ed-b74a-661335d3345e"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Federal de Alagoas - UFAL, oriento ]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="170" y="99" width="223" height="20" uuid="3d99836e-d1c5-42cb-b584-26700b6b9d81"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{discente.nome}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="393" y="99" width="156" height="20" uuid="3c7f5397-7e3e-404e-9107-21c044807100"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[, monitor da disciplina ]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="" x="0" y="119" width="110" height="20" uuid="fb754427-00f9-4801-8a86-ba9ea0aedcb8"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{disciplina.nome}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="147" y="280" width="260" height="15" uuid="895722ef-18f4-4a28-8676-b7973fdfb47a">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[_____________________________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="175" y="302" width="204" height="21" uuid="a25382fd-c549-4e88-9eeb-fa3f3ad393a7"/>
+				<text><![CDATA[Assinatura do(a) Professor(a) Orientador]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="369" y="228" width="181" height="30" uuid="f2a2b2a7-3eab-464b-9a2a-d7cee4f14c3e"/>
+				<text><![CDATA[Maceió, __ de ________ de 2016.]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

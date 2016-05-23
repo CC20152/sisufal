@@ -3,10 +3,10 @@ import java.util.Date;
 
 public class Movimentacao {
 
-	    private Integer id;
-        private Integer id_patrimonio;
-        private Integer id_sala_destino;
-	    private Date data;
+	private Integer id;
+    private Integer idPatrimonio;
+    private Integer idSalaDestino;
+	private Date data;
 
         public Integer getId() {
             return id;
@@ -17,19 +17,19 @@ public class Movimentacao {
         }
 
         public Integer getSala() {
-            return id_sala_destino;
+            return idSalaDestino;
         }
 
-        public void setSala(Integer id_sala_destino) {
-            this.id_sala_destino = id_sala_destino;
+        public void setSala(Integer idSalaDestino) {
+            this.idSalaDestino = idSalaDestino;
         }
 
         public Integer getPatrimonio() {
-            return id_patrimonio;
+            return idPatrimonio;
         }
 
-        public void setPatrimonio(Integer patrimonio) {
-            this.id_patrimonio = id_patrimonio;
+        public void setPatrimonio(Integer idPatrimonio) {
+            this.idPatrimonio = idPatrimonio;
         }
 
         public Date getData() {

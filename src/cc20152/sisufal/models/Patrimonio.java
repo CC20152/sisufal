@@ -2,14 +2,20 @@ package cc20152.sisufal.models;
 
 public class Patrimonio {
 
-	private Integer id;
-	private String numero;
-	private String nome;
-    private Movimentacao ultimaMovimentacao;
-    private Integer id_sala;
-    private Integer id_bloco;
-	private Integer idServidorResponsavel;
-	private Integer idDiscenteResponsavel;
+	    private Integer id;
+	    private String numero;
+	    private String nome;
+        private Movimentacao ultimaMovimentacao;
+        private Integer id_sala;
+        private String nomeSala;
+        private Integer id_bloco;
+        private String nomeBloco;
+	    private Integer idServidorResponsavel;
+	    private Integer idDiscenteResponsavel;
+        
+        public Patrimonio(){
+            ultimaMovimentacao = new Movimentacao();
+        }
 
         public Integer getId() {
             return id;
@@ -43,6 +49,14 @@ public class Patrimonio {
             this.id_sala = id_sala;
         }
 
+        public String getNomeSala() {
+            return nomeSala;
+        }
+
+        public void setNomeSala(String nomeSala) {
+            this.nomeSala = nomeSala;
+        }
+
         public Integer getBloco() {
             return id_bloco;
         }
@@ -51,12 +65,25 @@ public class Patrimonio {
             this.id_bloco = id_bloco;
         }
 
+        public String getNomeBloco() {
+            return nomeBloco;
+        }
+
+        public void setNomeBloco(String nomeBloco) {
+            this.nomeBloco = nomeBloco;
+        }
+
+
         public Movimentacao getUltimaMovimentacao() {
             return ultimaMovimentacao;
         }
 
         public void setUltimaMovimentacao(Movimentacao ultimaMovimentacao) {
             this.ultimaMovimentacao = ultimaMovimentacao;
+        }
+
+        public Integer getIdUltimaMovimentacao() {
+            return ultimaMovimentacao.getId();
         }
 
         public Integer getIdServidorResponsavel() {
