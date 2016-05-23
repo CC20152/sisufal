@@ -1,4 +1,4 @@
-/*
+﻿/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -284,6 +284,7 @@ public class DiscenteController implements Initializable {
             if(result.equals("OK"))
                 _data.remove(discente);
             else{
+		//lol
                 alerta = new Alert(Alert.AlertType.ERROR);
                 alerta.setTitle("Erro");
                 alerta.setHeaderText("Erro ao deletar discente!");
