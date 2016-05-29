@@ -33,7 +33,6 @@ public class CursoDAO implements IBaseDAO {
             st.setString(2, ((Curso) object).getCodigo());
             st.execute();
         }catch(Exception ex){
-            ex.printStackTrace();
             return "ERROR";
         }
         return "OK";
@@ -50,7 +49,6 @@ public class CursoDAO implements IBaseDAO {
             st.setInt(3, ((Curso) object).getId());
             st.execute();
         }catch(Exception ex){
-            ex.printStackTrace();
             return "ERROR";
         }
         return "OK";
@@ -65,7 +63,6 @@ public class CursoDAO implements IBaseDAO {
             st.setInt(1, ((Curso) object).getId());
             st.execute();
         }catch(Exception ex){
-            ex.printStackTrace();
             return "ERROR";
         }
         return "OK";
@@ -75,7 +72,7 @@ public class CursoDAO implements IBaseDAO {
     public List<Curso> listAll(){
         ArrayList<Curso> listaCurso = new ArrayList();
         this.conn = Conexao.getConexao();
-        String sql = "SELECT  *FROM cursos d";
+        String sql = "SELECT * FROM cursos";
         
         try{
             PreparedStatement st = this.conn.prepareStatement(sql);
@@ -85,16 +82,49 @@ public class CursoDAO implements IBaseDAO {
             listaCurso = mapearResultSet(rs);
             //conexao.close();
         }catch(Exception ex){
-            ex.printStackTrace();
         }
         return listaCurso;
     }
     
     @Override
     public List<Curso> listWithParams(Object object){
-        return new ArrayList<>();
+        ArrayList<Curso> listaCurso = new ArrayList();
+        
+        this.conn = Conexao.getConexao();
+        Curso curso = (Curso) object;
+        String sql = "SELECT * FROM cursos c WHERE 1 = 1";
+        
+        try {
+            
+            int i = 1;
+            
+            if(curso.getNome() != null){
+                sql += " AND UPPER(c.nome) LIKE UPPER(?)";
+            }
+        
+            if(curso.getCodigo() != null){
+                sql += " AND UPPER(c.codigo) LIKE UPPER(?)";
+            }
+
+            PreparedStatement st = this.conn.prepareStatement(sql);
+            ResultSet rs;
+            
+            if(curso.getNome() != null){
+                st.setString(i, "%" + curso.getNome() + "%");
+                i++;
+            }
+        
+            if(curso.getCodigo() != null){
+                st.setString(i, "%" + curso.getCodigo() + "%");
+                i++;
+            }
+
+            rs = st.executeQuery();
+            listaCurso = mapearResultSet(rs);
+        }catch(Exception ex){}
+        
+        return listaCurso;
     }
-    
     
     public ArrayList<Curso> mapearResultSet(ResultSet rs) throws SQLException{
 		
