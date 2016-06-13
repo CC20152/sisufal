@@ -6,7 +6,7 @@ public class Sala {
 	private Integer id;
 	private String nome;
 	private String codigo;
-    private Bloco bloco;
+        private Bloco bloco;
         
         public Sala(){
             bloco = new Bloco();

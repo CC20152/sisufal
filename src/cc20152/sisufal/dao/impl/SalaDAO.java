@@ -149,7 +149,7 @@ public class SalaDAO implements IBaseDAO {
             ResultSet rs;
             st.setInt(1, bloco.getId());
             rs = st.executeQuery();
-            listaSala = mapearResultSet(rs);
+            listaSala = mapearResultSetEditarPatrimonio(rs);
             
         }catch(Exception ex){
             ex.printStackTrace();
@@ -169,6 +169,23 @@ public class SalaDAO implements IBaseDAO {
             sala.setCodigo(rs.getString("CODIGO"));
             sala.getBloco().setId(rs.getInt("ID_BLOCO"));
             sala.getBloco().setNome(rs.getString("BLOCO.NOME"));
+            listaSala.add(sala);
+    }
+
+    return listaSala;
+    }
+    
+    public ArrayList<Sala> mapearResultSetEditarPatrimonio(ResultSet rs) throws SQLException{
+        
+    ArrayList<Sala> listaSala = new ArrayList();
+        
+    while(rs.next()){
+            Sala sala = new Sala();
+            sala.setId(rs.getInt("ID_SALA"));
+            sala.setNome(rs.getString("NOME"));
+            sala.setCodigo(rs.getString("CODIGO"));
+            //sala.getBloco().setId(rs.getInt("ID_BLOCO"));
+            //sala.getBloco().setNome(rs.getString("BLOCO.NOME"));
             listaSala.add(sala);
     }
 
