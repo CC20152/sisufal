@@ -118,11 +118,11 @@ public class DiscenteController implements Initializable {
             aviso.show();
             return ;
         }else if(this.txtMatricula.getText().equals("")){
-            aviso.setHeaderText("Campo matricula não pode estar vazio");
+            aviso.setHeaderText("Campo matrícula não pode estar vazio");
             aviso.show();
             return ;
         }else if(this.txtCPF.getText().equals("")){
-            aviso.setHeaderText("Campo cpf não pode estar vazio");
+            aviso.setHeaderText("Campo CPF não pode estar vazio");
             aviso.show();
             return ;
         }

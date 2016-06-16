@@ -3,8 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/D:/sisufal/src/cc20152/sisufal/dao/impl/CursoDAO.java</file>
+            <file>file:/D:/sisufal/src/cc20152/sisufal/models/Usuario.java</file>
+            <file>file:/D:/sisufal/src/cc20152/sisufal/controllers/TelaPrincipalController.java</file>
+            <file>file:/D:/sisufal/src/cc20152/sisufal/controllers/ensino/monitoria/MonitoriaController.java</file>
             <file>file:/D:/sisufal/src/cc20152/sisufal/dao/impl/ServidorDAO.java</file>
+            <file>file:/D:/sisufal/src/cc20152/sisufal/controllers/ensino/monitoria/DisciplinaController.java</file>
+            <file>file:/D:/sisufal/src/cc20152/sisufal/controllers/sistema/UsuarioController.java</file>
             <file>file:/D:/sisufal/src/cc20152/sisufal/dao/impl/TCCDAO.java</file>
+            <file>file:/D:/sisufal/src/cc20152/sisufal/dao/impl/ConcursoDAO.java</file>
+            <file>file:/D:/sisufal/src/cc20152/sisufal/dao/impl/UsuarioDAO.java</file>
+            <file>file:/D:/sisufal/src/cc20152/sisufal/dao/impl/MonitoriaDAO.java</file>
+            <file>file:/D:/sisufal/src/cc20152/sisufal/controllers/ensino/CursoController.java</file>
+            <file>file:/D:/sisufal/src/cc20152/sisufal/db/Conexao.java</file>
         </group>
     </open-files>
 </project-private>
