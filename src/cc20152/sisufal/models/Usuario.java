@@ -14,7 +14,8 @@ public class Usuario {
 	private Date dataCriacao;
 	private Date ultimoLogin;
         private Servidor servidor;
-                
+        private String hash;
+
         public Usuario(){
             this.servidor = new Servidor();
         }
@@ -85,5 +86,12 @@ public class Usuario {
         public void setListaPermissao(ArrayList<PermissaoUsuario> listaPermissao) {
             this.listaPermissao = listaPermissao;
         }
+        
+        public String getHash() {
+            return hash;
+        }
 
+        public void setHash(String hash) {
+            this.hash = hash;
+        }
 }

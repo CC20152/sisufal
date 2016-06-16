@@ -86,7 +86,7 @@ public class UsuarioDAO implements IBaseDAO {
             ResultSet rs;
 
             rs = st.executeQuery();
-            listaUsuario = mapearResultSet(rs);
+            listaUsuario = mapearResultSet(rs, false);
             //conexao.close();
         }catch(Exception ex){
             ex.printStackTrace();
@@ -94,7 +94,28 @@ public class UsuarioDAO implements IBaseDAO {
         return listaUsuario;
     }
     
-    public ArrayList<Usuario> mapearResultSet(ResultSet rs) throws SQLException{
+    public Usuario logar(Usuario usuario){
+        
+        ArrayList<Usuario> listaUsuario = new ArrayList();
+        this.conn = Conexao.getConexao();
+        String sql = "SELECT * FROM usuario u LEFT JOIN servidor s ON s.id_servidor = u.id_servidor WHERE login = ?";
+        
+        try{
+            PreparedStatement st = this.conn.prepareStatement(sql);
+            ResultSet rs;
+            st.setString(1, usuario.getLogin());
+            
+            rs = st.executeQuery();
+            listaUsuario = mapearResultSet(rs, true);
+            //conexao.close();
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+        
+        return listaUsuario.size() > 0 ? listaUsuario.get(0) : null;
+    }
+    
+    public ArrayList<Usuario> mapearResultSet(ResultSet rs, boolean hash) throws SQLException{
 		
 	ArrayList<Usuario> listaUsuario = new ArrayList();
         
@@ -104,6 +125,8 @@ public class UsuarioDAO implements IBaseDAO {
             usuario.setLogin(rs.getString("LOGIN"));
             usuario.setIsAdmin(rs.getBoolean("ADMIN"));
             usuario.setDataCriacao(rs.getDate("DATA_CRIACAO"));
+            if(hash)
+                usuario.setHash(rs.getString("PASSWORD"));
             listaUsuario.add(usuario);
 	}
         

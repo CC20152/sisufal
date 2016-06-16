@@ -17,9 +17,9 @@
       <Button fx:id="btnNovo" layoutX="23.0" layoutY="22.0" mnemonicParsing="false" onAction="#novoUsuario" prefHeight="47.0" prefWidth="139.0" text="Novo Usuário" textAlignment="CENTER" />
       <TableView fx:id="tbUsuario" editable="true" layoutX="18.0" layoutY="100.0" prefHeight="386.0" prefWidth="697.0">
         <columns>
-          <TableColumn prefWidth="266.0" text="Nome" />
-            <TableColumn prefWidth="111.0" text="Login" />
-            <TableColumn prefWidth="158.0" text="Siape" />
+          <TableColumn prefWidth="266.0" text="Login" />
+            <TableColumn prefWidth="111.0" text="Siape" />
+            <TableColumn prefWidth="158.0" text="Admin" />
             <TableColumn prefWidth="60.0" text="Editar" />
             <TableColumn prefWidth="100.0" text="Deletar" />
         </columns>
