@@ -41,6 +41,7 @@ public class TelaPrincipalController implements Initializable {
     final String listaMonitoriaFXML = "fxml/lista/ListaMonitoriaFXML.fxml"; 
     final String listaDisciplinaFXML = "fxml/lista/ListaDisciplinaFXML.fxml"; 
     final String listaConcursoFXML = "fxml/lista/ListaConcursoFXML.fxml";
+    final String listaPeriodoFXML = "fxml/lista/ListaPeriodoFXML.fxml";
 
     
     @FXML
@@ -257,6 +258,20 @@ public class TelaPrincipalController implements Initializable {
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setTitle("Blocos");
+        stage.setScene(scene);
+        stage.show();
+    }
+    
+    @FXML
+    private void menuPeriodo (ActionEvent event) throws IOException{
+        String path = getClass().getResource("").toString();
+        path = path.replace(pacote,"");
+        URL url = new URL(path + this.listaPeriodoFXML);
+        //System.out.println(url);
+        Parent root = FXMLLoader.load(url);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setTitle("Períodos");
         stage.setScene(scene);
         stage.show();
     }
