@@ -13,7 +13,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="524.0" prefWidth="732.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cc20152.sisufal.controllers.sistema.UsuarioController">
    <children>
-      <Button fx:id="btnVoltarLista" layoutX="669.0" layoutY="486.0" mnemonicParsing="false" onAction="#btnCancelar" text="Voltar" />
+      <Button fx:id="btnVoltar" layoutX="669.0" layoutY="486.0" mnemonicParsing="false" onAction="#btnCancelar" text="Voltar" />
       <Button fx:id="btnNovo" layoutX="23.0" layoutY="22.0" mnemonicParsing="false" onAction="#novoUsuario" prefHeight="47.0" prefWidth="139.0" text="Novo Usuário" textAlignment="CENTER" />
       <TableView fx:id="tbUsuario" editable="true" layoutX="18.0" layoutY="100.0" prefHeight="386.0" prefWidth="697.0">
         <columns>
