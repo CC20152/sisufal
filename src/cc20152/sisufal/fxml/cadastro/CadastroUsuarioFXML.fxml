@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -9,10 +13,10 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cc20152.sisufal.controllers.sistema.UsuarioController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cc20152.sisufal.controllers.sistema.UsuarioController">
    <children>
-      <Button layoutX="159.0" layoutY="356.0" mnemonicParsing="false" onAction="#cadastroUsuario" text="Salvar" />
-      <Button fx:id="btnCancelarCadastro" layoutX="224.0" layoutY="356.0" mnemonicParsing="false" onAction="#cancelarCadastro" text="Cancelar" />
+      <Button layoutX="159.0" layoutY="356.0" mnemonicParsing="false" onAction="#btnSalvar" text="Salvar" />
+      <Button fx:id="btnVoltar" layoutX="224.0" layoutY="356.0" mnemonicParsing="false" onAction="#btnCancelar" text="Cancelar" />
       <Label layoutX="20.0" layoutY="92.0" text="Servidor" />
       <Label layoutX="21.0" layoutY="191.0" text="Senha" />
       <ImageView fitHeight="76.0" fitWidth="307.0" layoutX="-5.0" layoutY="-1.0" pickOnBounds="true">
@@ -21,9 +25,10 @@
          </image>
       </ImageView>
       <Label layoutX="20.0" layoutY="140.0" text="Login" />
-      <TextField layoutX="16.0" layoutY="161.0" prefWidth="270.0" />
-      <PasswordField layoutX="16.0" layoutY="211.0" prefHeight="25.0" prefWidth="270.0" />
-      <Button layoutX="16.0" layoutY="247.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="148.0" text="Permissões" />
-      <ComboBox fx:id="cmbServidores" layoutX="18.0" layoutY="111.0" prefHeight="25.0" prefWidth="270.0" />
+      <TextField fx:id="txtLogin" layoutX="16.0" layoutY="161.0" prefWidth="270.0" />
+      <PasswordField fx:id="txtSenha" layoutX="16.0" layoutY="211.0" prefHeight="25.0" prefWidth="270.0" />
+      <ComboBox fx:id="cmbServidor" layoutX="18.0" layoutY="111.0" prefHeight="25.0" prefWidth="270.0" />
+      <CheckBox fx:id="checkAdmin" layoutX="18.0" layoutY="269.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="270.0" text="Administrador" />
+      <CheckBox fx:id="checkAlterar" layoutX="18.0" layoutY="244.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="270.0" text="Alterar senha?" />
    </children>
 </AnchorPane>
