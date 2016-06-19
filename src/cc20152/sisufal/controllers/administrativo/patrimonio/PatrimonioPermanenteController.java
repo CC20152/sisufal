@@ -19,6 +19,7 @@ import java.net.URL;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -171,13 +172,13 @@ public class PatrimonioPermanenteController implements Initializable {
             patrimonio.getUltimaMovimentacao().setPatrimonio(patrimonioDAO.savePatrimonio(patrimonio));
             if(patrimonio.getUltimaMovimentacao().getPatrimonio() != null)
                 result = "OK";
-            patrimonio.getUltimaMovimentacao().setId(patrimonioDAO.saveMovimentacao(patrimonio.getUltimaMovimentacao()));
+            patrimonio.getUltimaMovimentacao().setId(patrimonioDAO.saveMovimentacaoPermanente(patrimonio.getUltimaMovimentacao()));
             if(patrimonio.getUltimaMovimentacao().getId() != null)
                 result = "OK";
         }else{
             patrimonio.setId(old.getId());
             //falta terminar
-            patrimonio.getUltimaMovimentacao().setId(patrimonioDAO.saveMovimentacao(patrimonio.getUltimaMovimentacao()));
+            patrimonio.getUltimaMovimentacao().setId(patrimonioDAO.saveMovimentacaoPermanente(patrimonio.getUltimaMovimentacao()));
             if(patrimonio.getUltimaMovimentacao().getId() != null)
                 result = "OK";
             result = patrimonioDAO.update(patrimonio);
@@ -230,26 +231,7 @@ public class PatrimonioPermanenteController implements Initializable {
             listarComboBloco();
         }     
     }
-    /*
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        this.txtNome.setTooltip(new Tooltip("Digite o nome do patrimônio"));
-        Bloco c = new Bloco();
-        Sala g = new Sala();
-        c.setId(0); c.setNome("Escolha um bloco");
-        
-        this.cmbBloco.getItems().add(c);
-        this.cmbBloco.getItems().addAll(new BlocoDAO().listAll());
-        this.cmbSala.getItems().add(g);
-        this.cmbSala.getItems().addAll(new SalaDAO().listAll());
-        this.cmbBloco.getSelectionModel().selectFirst();
-        this.cmbSala.getSelectionModel().selectFirst();
-        
-        if(!url.getPath().contains(this.fxml)){
-            listarGridPatrimonio();
-        }
-    }
-    */
+    
     private void listarComboBloco() {
         List<Bloco> listaBloco = new ArrayList<>();
         listaBloco = new BlocoDAO().listAll();
@@ -278,14 +260,24 @@ public class PatrimonioPermanenteController implements Initializable {
         List<Patrimonio> lista = patrimonioDAO.listWithParams(hashPesquisa);
         data.setAll(lista);
     }
-    /*
-    private void listarCombotxtNumero() {
-        List<Bloco> listaBloco = new ArrayList<>();
-        listaBloco = new BlocoDAO().listAll();
-        this.cmbBloco.getItems().setAll(listaBloco);
-        this.cmbBloco.getSelectionModel().selectFirst();
+
+    private void listarTableSala() {
+        Bloco b = this.cmbBloco.getValue();
+        b.setSalas(new SalaDAO().listSalas(b));
+        this.tableSala.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("nome"));
+        this.tableSala.getItems().setAll(b.getSalas());
+        ObservableList<Sala> gg = this.tableSala.getItems();
+        int i = 0;
+        for(Sala g : gg){
+            if(Objects.equals(g.getId(), this.patrimonio.getSala())){
+                this.tableSala.getSelectionModel().select(i);
+            }
+            i++;
+        }
+        if(i == 0) this.tableSala.getSelectionModel().select(i);
+        
     }
-    */
+    
     @FXML
     private void listarTableSala(ActionEvent event) {
         /*
@@ -304,6 +296,21 @@ public class PatrimonioPermanenteController implements Initializable {
         
     }
 
+    /*
+    @FXML
+    private void relatorioGeral(ActionEvent event) {
+       Map parametros = new HashMap();
+       RelatorioPatrimonioPermanente relatorio = new RelatorioPatrimonioPermanente();
+       try {
+           relatorio.gerarRelatorio(dadosPreenchidos(), parametros);
+       } catch (JRException ex) {
+           Logger.getLogger(PatrimonioPermanenteController.class.getName()).log(Level.SEVERE, null, ex);
+       } catch (IOException ex) {
+           Logger.getLogger(PatrimonioPermanenteController.class.getName()).log(Level.SEVERE, null, ex);
+       }
+    }
+    */
+    
     private void listarGridPatrimonio(){
        List<Patrimonio> listaPatrimonio = new ArrayList<>();
        listaPatrimonio = new PatrimonioPermanenteDAO().listAll();
@@ -343,6 +350,7 @@ public class PatrimonioPermanenteController implements Initializable {
         this.data = (ObservableList<Patrimonio>)data;
         this.patrimonio = (Patrimonio) patrimonio;
         preencherCampos();
+        listarTableSala();
     }
 
     public void deletar(Patrimonio patrimonio, ObservableList<?> _data){
@@ -381,5 +389,23 @@ public class PatrimonioPermanenteController implements Initializable {
     
     }
 
+    private Patrimonio dadosPreenchidos(){
+        Patrimonio patrimonio = new Patrimonio();
+        if(!this.txtNome.getText().equals("")){
+            patrimonio.setNome(this.txtNome.getText());
+        }
+        if(!this.txtNumero.getText().equals("")){
+            patrimonio.setNumero(this.txtNumero.getText());
+        }
+        if(this.cmbBloco.getValue() != null && !this.cmbBloco.getSelectionModel().isSelected(0)){
+            patrimonio.setNomeBloco(this.cmbBloco.getValue().getNome());
+        }
+        if(this.tableSala.getSelectionModel() != null && !this.tableSala.getSelectionModel().isSelected(0)){
+            patrimonio.setNomeSala(this.tableSala.getSelectionModel().getSelectedItem().getNome());
+        }
+        
+        return patrimonio;
+        
+    }
     
 }

@@ -48,10 +48,7 @@
             <Menu mnemonicParsing="false" text="Patrimônio">
               <items>
                 <MenuItem mnemonicParsing="false" onAction="#menuPatrimonioPermanente" text="Patrimônios Permanentes" />
-                  <MenuItem mnemonicParsing="false" onAction="#movimentacaoPatrimonioPermanente" text="Movimentação de Patrimônio Permanente" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" onAction="#menuPatrimonioConsumo" text="Patrimônios de Consumo" />
-                  <MenuItem mnemonicParsing="false" onAction="#movimentacaoPatrimonioConsumo" text="Movimentação de Patrimônio de Consumo" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" onAction="#menuBloco" text="Blocos" />
                   <MenuItem mnemonicParsing="false" onAction="#menuSala" text="Salas" />
