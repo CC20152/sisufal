@@ -63,7 +63,7 @@ public class PatrimonioDAO implements IBaseDAO {
         return id;
     }
     
-    public Integer saveMovimentacao(Movimentacao movimentacao){
+    public Integer saveMovimentacaoConsumo(Movimentacao movimentacao){
         this.conn = Conexao.getConexao();
         String sql = "INSERT INTO movimentacaoconsumo(id_sala, id_patrimonio, data) VALUES(?, ?, ?)";   
         Integer id = -1;
