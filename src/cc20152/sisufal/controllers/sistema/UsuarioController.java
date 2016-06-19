@@ -32,6 +32,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -70,7 +71,13 @@ public class UsuarioController implements Initializable{
     private CheckBox checkAlterar;
     
     @FXML
+    private CheckBox checkAdmin;
+    
+    @FXML
     private TableView<Usuario> tbUsuario;
+    
+    @FXML
+    private Button btnVoltar;
     
     @FXML
     private void btnBuscar(ActionEvent event){
@@ -115,6 +122,8 @@ public class UsuarioController implements Initializable{
         if(!this.cmbServidor.getSelectionModel().isEmpty())
             this.usuario.setServidor((Servidor) this.cmbServidor.getValue());
         
+        this.usuario.setIsAdmin(this.checkAdmin.isSelected());
+        
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         String result = null;
         if(this.tipo == null){
@@ -140,7 +149,7 @@ public class UsuarioController implements Initializable{
            stage.close();
         }else{
            Alert alerta = new Alert(Alert.AlertType.ERROR);
-           alerta.setTitle("Sucesso");
+           alerta.setTitle("Error");
            alerta.setHeaderText("Erro ao salvar usuário!");
            alerta.show();
         }
@@ -148,7 +157,7 @@ public class UsuarioController implements Initializable{
     
     @FXML
     private void btnCancelar(ActionEvent event) {
-        Stage stage = (Stage) txtLogin.getScene().getWindow();
+        Stage stage = (Stage) btnVoltar.getScene().getWindow();
         stage.close();
     }
     
@@ -184,7 +193,16 @@ public class UsuarioController implements Initializable{
                     return new SimpleObjectProperty<>(p.getValue().getServidor().getNome().toUpperCase());
            }
        });
-       this.tbUsuario.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("isAdmin"));
+       
+        TableColumn colAdmin =  this.tbUsuario.getColumns().get(2);
+       colAdmin.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Usuario, String>, ObservableValue<String>>() {
+           public ObservableValue<String> call(TableColumn.CellDataFeatures<Usuario, String> p) {
+               if(p.getValue().isIsAdmin())
+                    return new SimpleObjectProperty<>("Não");
+               else
+                    return new SimpleObjectProperty<>("Sim");
+           }
+       });
        
        TableColumn colEditar = this.tbUsuario.getColumns().get(3);
        colEditar.setCellFactory(new Callback<TableColumn<Disposer.Record, Boolean>, TableCell<Disposer.Record, Boolean>>() {
