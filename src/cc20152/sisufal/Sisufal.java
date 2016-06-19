@@ -24,7 +24,6 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -80,10 +79,7 @@ public class Sisufal extends Application {
             }
             return null;
         });
-
-        Optional<Pair<String, String>> result = dialog.showAndWait();
         Parent root = FXMLLoader.load(getClass().getResource("fxml/TelaPrincipalFXML.fxml"));
-        
         Scene scene = new Scene(root);
         stage.setTitle("Principal");
         stage.setScene(scene);
@@ -102,6 +98,11 @@ public class Sisufal extends Application {
                 }
             }
         }));
+        showLogin(dialog, stage);
+    }
+    
+    public void showLogin(Dialog dialog, Stage stage){
+        Optional<Pair<String, String>> result = dialog.showAndWait();
         
         result.ifPresent(usernamePassword -> {
             UsuarioDAO usuarioDAO = new UsuarioDAO();
@@ -116,17 +117,16 @@ public class Sisufal extends Application {
                     sessao.setUsuario(usuario);
                     stage.show();
                 }else{
-                    dialog.setHeaderText("Usuário ou senha incorretos");
-                    dialog.showAndWait();
+                    dialog.setHeaderText("Usuário ou senha incorretos");   
+                    showLogin(dialog, stage);
                 }
             }else{
                 dialog.setHeaderText("Usuário ou senha incorretos");
-                dialog.showAndWait();
+                showLogin(dialog, stage);
             }
         });
- 
     }
-
+    
     /**
      * @param args the command line arguments
      */

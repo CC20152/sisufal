@@ -10,10 +10,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import javax.naming.NamingException;
-/**
- *
- * @author Dayvson
- */
 
 public class Conexao
 {
@@ -23,12 +19,9 @@ public class Conexao
     public static void conectar()
         throws ClassNotFoundException, SQLException, NamingException
     {
-       // Este é um dos meios para registrar um driver  
         Class.forName("com.mysql.jdbc.Driver");  
-       
-        // Registrado o driver, vamos estabelecer uma conexão  
+        
         conexao = DriverManager.getConnection("jdbc:mysql://localhost:3306/sisufal?allowMultiQueries=true", "root", "1234"); 
-       
     }
 
     public static Connection getConexao()
