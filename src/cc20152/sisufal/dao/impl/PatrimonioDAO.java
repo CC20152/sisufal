@@ -65,15 +65,14 @@ public class PatrimonioDAO implements IBaseDAO {
     
     public Integer saveMovimentacaoConsumo(Movimentacao movimentacao){
         this.conn = Conexao.getConexao();
-        String sql = "INSERT INTO movimentacaoconsumo(id_sala, id_patrimonio, data) VALUES(?, ?, ?)";   
+        String sql = "INSERT INTO movimentacaoconsumo(id_sala, data) VALUES(?, ?)";    
         Integer id = -1;
         try{
             PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             st.setInt(1, ((Movimentacao) movimentacao).getSala());
-            st.setInt(2, ((Movimentacao) movimentacao).getPatrimonio());
             Calendar cal = Calendar.getInstance();
             java.sql.Timestamp timestamp = new java.sql.Timestamp(cal.getTimeInMillis());
-            st.setTimestamp(3, timestamp);
+            st.setTimestamp(2, timestamp);
             ResultSet rs;
             st.executeUpdate();
             rs = st.getGeneratedKeys();            
@@ -124,10 +123,10 @@ public class PatrimonioDAO implements IBaseDAO {
         ArrayList<Patrimonio> listaPatrimonio = new ArrayList();
         this.conn = Conexao.getConexao();
         String sql = "SELECT * FROM patrimonioconsumo "
-                + "INNER JOIN movimentacaoconsumo c ON c.id_patrimonio = patrimonioconsumo.id_patrimonio "
+                + "INNER JOIN movimentacaoconsumo c ON c.id_movimentacao = patrimonioconsumo.id_movimentacao "
                 + "INNER JOIN sala ON sala.id_sala = c.id_sala "
-                + "INNER JOIN bloco ON bloco.id_bloco = sala.id_bloco "
-                + "ORDER BY c.id_movimentacao DESC ";
+                + "INNER JOIN bloco ON bloco.id_bloco = sala.id_bloco ";
+
         try{
             PreparedStatement st = this.conn.prepareStatement(sql);
             ResultSet rs;
@@ -162,7 +161,7 @@ public class PatrimonioDAO implements IBaseDAO {
         //System.out.println(tipo);
         if(tipo.equals("nome") ||tipo.equals("numero") ){
             sql = "SELECT * FROM patrimonioconsumo "
-                + "INNER JOIN movimentacaoconsumo c ON c.id_patrimonio = patrimonioconsumo.id_patrimonio "
+                + "INNER JOIN movimentacaoconsumo c ON c.id_movimentacao = patrimonioconsumo.id_movimentacao "
                 + "INNER JOIN sala ON sala.id_sala = c.id_sala "
                 + "INNER JOIN bloco ON bloco.id_bloco = sala.id_bloco "
                 + "WHERE patrimonioconsumo."+tipo+"_patrimonio LIKE '%"+pesquisa+"%'";

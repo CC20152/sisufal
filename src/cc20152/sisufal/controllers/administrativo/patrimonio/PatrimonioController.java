@@ -133,32 +133,28 @@ public class PatrimonioController implements Initializable {
         patrimonio.setNome(this.txtNome.getText());
         patrimonio.setNumero(this.txtNumero.getText());
         patrimonio.setBloco(this.cmbBloco.getValue().getId());
-        patrimonio.setSala(this.tableSala.getSelectionModel().getSelectedItem().getId());
-        if(this.tipo == null){
-            Movimentacao movimentacao = new Movimentacao();
-            patrimonio.setUltimaMovimentacao(movimentacao);
-        }
-        
+        patrimonio.setSala(this.tableSala.getSelectionModel().getSelectedItem().getId());        
         
         String result = null;
+        Movimentacao mov = new Movimentacao();
 
         if(this.tipo == null){
-            result = "ERROR";
-            patrimonio.getUltimaMovimentacao().setSala(this.tableSala.getSelectionModel().getSelectedItem().getId());
-            patrimonio.getUltimaMovimentacao().setPatrimonio(this.patrimonio.getId());
-            patrimonio.getUltimaMovimentacao().setPatrimonio(patrimonioDAO.savePatrimonio(patrimonio));
-            if(patrimonio.getUltimaMovimentacao().getPatrimonio() != null)
-                result = "OK";
-            patrimonio.getUltimaMovimentacao().setId(patrimonioDAO.saveMovimentacaoConsumo(patrimonio.getUltimaMovimentacao()));
-            if(patrimonio.getUltimaMovimentacao().getId() != null)
-                result = "OK";
+            mov.setSala(patrimonio.getSala());
+            mov.setId(patrimonioDAO.saveMovimentacaoConsumo(mov));
+            patrimonio.setUltimaMovimentacao(mov);
+            if(mov.getId()==-1)
+                result = "ERROR";      
+            else
+                result = patrimonioDAO.save(patrimonio);
         }else{
             patrimonio.setId(old.getId());
-            //falta terminar
-            patrimonio.getUltimaMovimentacao().setId(patrimonioDAO.saveMovimentacaoConsumo(patrimonio.getUltimaMovimentacao()));
-            if(patrimonio.getUltimaMovimentacao().getId() != null)
-                result = "OK";
-            result = patrimonioDAO.update(patrimonio);
+            mov.setSala(patrimonio.getSala());
+            mov.setId(patrimonioDAO.saveMovimentacaoConsumo(mov));
+            patrimonio.setUltimaMovimentacao(mov);
+            if( mov.getId()==-1)
+                result = "ERROR";
+            else
+                result = patrimonioDAO.update(patrimonio);
         }
 
         System.out.println(result);
