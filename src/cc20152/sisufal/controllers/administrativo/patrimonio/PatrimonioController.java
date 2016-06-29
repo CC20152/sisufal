@@ -87,7 +87,10 @@ public class PatrimonioController implements Initializable {
         path = path.replace(pacote,"");
         URL url =  new URL(path+fxml);
         //System.out.println(url);
-        Parent root = FXMLLoader.load(url);
+        FXMLLoader loader = new FXMLLoader(url);
+        Parent root = (Parent)loader.load();
+        PatrimonioController controller = loader.getController();
+        controller.setData(this.data);
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setTitle("Cadastro Patrimônio");
@@ -137,7 +140,7 @@ public class PatrimonioController implements Initializable {
         
         String result = null;
         Movimentacao mov = new Movimentacao();
-
+        int idPatrimonio = -1;
         if(this.tipo == null){
             mov.setSala(patrimonio.getSala());
             mov.setId(patrimonioDAO.saveMovimentacaoConsumo(mov));
@@ -145,16 +148,22 @@ public class PatrimonioController implements Initializable {
             if(mov.getId()==-1)
                 result = "ERROR";      
             else
-                result = patrimonioDAO.save(patrimonio);
+                idPatrimonio = patrimonioDAO.savePatrimonio(patrimonio);
+
+            if(idPatrimonio != -1)
+                result = patrimonioDAO.updateMovimentacaoConsumo(idPatrimonio, mov.getId());
         }else{
             patrimonio.setId(old.getId());
             mov.setSala(patrimonio.getSala());
             mov.setId(patrimonioDAO.saveMovimentacaoConsumo(mov));
-            patrimonio.setUltimaMovimentacao(mov);
-            if( mov.getId()==-1)
-                result = "ERROR";
-            else
-                result = patrimonioDAO.update(patrimonio);
+            result = patrimonioDAO.updateMovimentacaoConsumo(patrimonio.getId(), mov.getId());
+            if(!result.equals("ERROR")){
+                patrimonio.setUltimaMovimentacao(mov);
+                if( mov.getId()==-1)
+                    result = "ERROR";
+                else
+                    result = patrimonioDAO.update(patrimonio);
+            }
         }
 
         System.out.println(result);
@@ -165,7 +174,9 @@ public class PatrimonioController implements Initializable {
            if(this.tipo == null){
                 alerta.setHeaderText("Patrimônio cadastrado com sucesso!");
                 alerta.show();
-                this.data.add(patrimonio);
+                //this.data.add(patrimonio);
+                List<Patrimonio> lista = patrimonioDAO.listAll();
+                data.setAll(lista);
            }else{
                 alerta.setHeaderText("Patrimônio editado com sucesso!");
                 alerta.show();

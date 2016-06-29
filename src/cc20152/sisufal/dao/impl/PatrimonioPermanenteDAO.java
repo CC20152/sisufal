@@ -45,12 +45,13 @@ public class PatrimonioPermanenteDAO implements IBaseDAO {
     
     public Integer savePatrimonio(Patrimonio object){
         this.conn = Conexao.getConexao();
-        String sql = "INSERT INTO patrimoniopermanente(nome_patrimonio, numero_patrimonio) VALUES(?, ?)";  
+        String sql = "INSERT INTO patrimoniopermanente(nome_patrimonio, numero_patrimonio, id_movimentacao) VALUES(?, ?, ?)";  
         Integer id = -1;
         try{
             PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            st.setString(1, ((Patrimonio) object).getNome());
-            st.setString(2, ((Patrimonio) object).getNumero());
+            st.setString(1, object.getNome());
+            st.setString(2, object.getNumero());
+            st.setInt(3, object.getUltimaMovimentacao().getId());
             ResultSet rs;
             st.executeUpdate();
             rs = st.getGeneratedKeys();            
@@ -83,6 +84,20 @@ public class PatrimonioPermanenteDAO implements IBaseDAO {
             return -1;
         }
         return id;
+    }
+    public String updateMovimentacaoPermanente(int id_patrimonio, int id_movimentacao){
+        this.conn = Conexao.getConexao();
+        String sql = "UPDATE movimentacaopermanente SET id_patrimonio = ? WHERE id_movimentacao = ?";   
+        try{
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, id_patrimonio);
+            st.setInt(2, id_movimentacao);
+            st.execute();
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return "ERROR";
+        }
+        return "OK";
     }
     
     @Override

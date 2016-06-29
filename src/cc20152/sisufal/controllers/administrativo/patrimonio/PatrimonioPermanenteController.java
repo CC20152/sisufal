@@ -14,6 +14,7 @@ import cc20152.sisufal.models.Patrimonio;
 import cc20152.sisufal.models.Movimentacao;
 import cc20152.sisufal.models.Bloco;
 import cc20152.sisufal.models.Sala;
+import com.sun.prism.impl.Disposer;
 import java.io.IOException;
 import java.net.URL;
 import java.time.Period;
@@ -78,30 +79,7 @@ public class PatrimonioPermanenteController implements Initializable {
     @FXML
         private TableView<Sala> tableSala;
     @FXML
-        private TableView<Patrimonio> tablePatrimonio;    
-    
-    @FXML
-    private void btnBuscar(ActionEvent event){
-        PatrimonioPermanenteDAO patrimonioDAO = new PatrimonioPermanenteDAO();
-        Patrimonio patrimonio = new Patrimonio();
-                
-        if(!this.txtNome.getText().equals("")){
-            patrimonio.setNome(this.txtNome.getText());
-        }
-        
-        if(this.cmbBloco.getSelectionModel() != null && !this.cmbBloco.getSelectionModel().isSelected(0)){
-            patrimonio.setBloco(this.cmbBloco.getValue().getId());
-        }
-        
-        if(this.cmbSala.getSelectionModel() != null && !this.cmbSala.getSelectionModel().isSelected(0)){
-            patrimonio.setSala(this.cmbSala.getValue().getId());
-        }
-        
-        List<Patrimonio> list = patrimonioDAO.listWithParams(patrimonio);
-        
-        this.data.clear();
-        this.data.addAll(list);
-    }
+        private TableView<Patrimonio> tablePatrimonio;
     
     @FXML
     private void novoPatrimonio (ActionEvent event) throws IOException{
@@ -110,7 +88,10 @@ public class PatrimonioPermanenteController implements Initializable {
         path = path.replace(pacote,"");
         URL url =  new URL(path+fxml);
         //System.out.println(url);
-        Parent root = FXMLLoader.load(url);
+        FXMLLoader loader = new FXMLLoader(url);
+        Parent root = (Parent)loader.load();
+        PatrimonioPermanenteController controller = loader.getController();
+        controller.setData(this.data);
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setTitle("Cadastro Patrimônio");
@@ -160,7 +141,7 @@ public class PatrimonioPermanenteController implements Initializable {
                
         String result = null;
         Movimentacao mov = new Movimentacao();
-        
+        int idPatrimonio = -1;
         if(this.tipo == null){
             mov.setSala(patrimonio.getSala());
             mov.setId(patrimonioDAO.saveMovimentacaoPermanente(mov));
@@ -168,16 +149,23 @@ public class PatrimonioPermanenteController implements Initializable {
             if( mov.getId()==-1)
                 result = "ERROR";
             else
-                result = patrimonioDAO.save(patrimonio);
+                idPatrimonio = patrimonioDAO.savePatrimonio(patrimonio);
+
+            if(idPatrimonio != -1)
+                result = patrimonioDAO.updateMovimentacaoPermanente(idPatrimonio, mov.getId());
         }else{
             patrimonio.setId(old.getId());
             mov.setSala(patrimonio.getSala());
             mov.setId(patrimonioDAO.saveMovimentacaoPermanente(mov));
-            patrimonio.setUltimaMovimentacao(mov);
-            if( mov.getId()==-1)
-                result = "ERROR";
-            else
-                result = patrimonioDAO.update(patrimonio);
+            result = patrimonioDAO.updateMovimentacaoPermanente(patrimonio.getId(), mov.getId());
+            if(!result.equals("ERROR")){
+                patrimonio.setUltimaMovimentacao(mov);
+                if( mov.getId()==-1)
+                    result = "ERROR";
+                else
+                    result = patrimonioDAO.update(patrimonio);
+            }
+
         }
 
         System.out.println(result);
@@ -188,7 +176,9 @@ public class PatrimonioPermanenteController implements Initializable {
            if(this.tipo == null){
                 alerta.setHeaderText("Patrimônio cadastrado com sucesso!");
                 alerta.show();
-                this.data.add(patrimonio);
+                //this.data.add(patrimonio);
+                List<Patrimonio> lista = patrimonioDAO.listAll();
+                data.setAll(lista);
            }else{
                 alerta.setHeaderText("Patrimônio editado com sucesso!");
                 alerta.show();
@@ -314,19 +304,20 @@ public class PatrimonioPermanenteController implements Initializable {
        this.tablePatrimonio.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("numero"));
        this.tablePatrimonio.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("nomeBloco"));
        this.tablePatrimonio.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("nomeSala"));
+       
        TableColumn colEditar = this.tablePatrimonio.getColumns().get(4);
-       colEditar.setCellFactory(new Callback<TableColumn<Record, Boolean>, TableCell<Record, Boolean>>() {
+       colEditar.setCellFactory(new Callback<TableColumn<Disposer.Record, Boolean>, TableCell<Disposer.Record, Boolean>>() {
            @Override
-           public TableCell<Record, Boolean> call(TableColumn<Record, Boolean> p) {
+           public TableCell<Disposer.Record, Boolean> call(TableColumn<Disposer.Record, Boolean> p) {
                return new BotoesLista(data, Patrimonio.class, fxml).new EditarCell();
            }
        });
        
        TableColumn colDeletar = this.tablePatrimonio.getColumns().get(5);
-       colDeletar.setCellFactory(new Callback<TableColumn<Record, Boolean>, TableCell<Record, Boolean>>() {
+       colDeletar.setCellFactory(new Callback<TableColumn<Disposer.Record, Boolean>, TableCell<Disposer.Record, Boolean>>() {
            @Override
-           public TableCell<Record, Boolean> call(TableColumn<Record, Boolean> p) {
-               return new BotoesLista(data, Patrimonio.class, PatrimonioController.class).new DeletarCell();
+           public TableCell<Disposer.Record, Boolean> call(TableColumn<Disposer.Record, Boolean> p) {
+               return new BotoesLista(data, Patrimonio.class, PatrimonioPermanenteController.class).new DeletarCell();
            }
        });
       
