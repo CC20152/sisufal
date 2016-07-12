@@ -181,18 +181,18 @@ public class PatrimonioDAO implements IBaseDAO {
                 + "INNER JOIN sala ON sala.id_sala = c.id_sala "
                 + "INNER JOIN bloco ON bloco.id_bloco = sala.id_bloco "
                 + "WHERE patrimonioconsumo."+tipo+"_patrimonio LIKE '%"+pesquisa+"%'";
-        }else if(tipo.equals("bloco")){
+        }/*else if(tipo.equals("bloco")){
              sql = "SELECT * FROM patrimonioconsumo "
                 + "INNER JOIN movimentacaoconsumo c ON c.id_patrimonio = patrimonioconsumo.id_patrimonio "
                 + "INNER JOIN sala ON sala.id_sala = c.id_sala "
                 + "INNER JOIN bloco ON bloco.id_bloco = sala.id_bloco "
                 + "WHERE bloco.nome LIKE '%"+pesquisa+"%'";
-        }else{
+        }*/else{
              sql = "SELECT * FROM patrimonioconsumo "
-                + "INNER JOIN movimentacaoconsumo c ON c.id_patrimonio = patrimonioconsumo.id_patrimonio "
+                + "INNER JOIN movimentacaoconsumo c ON c.id_movimentacao = patrimonioconsumo.id_movimentacao "
                 + "INNER JOIN sala ON sala.id_sala = c.id_sala "
                 + "INNER JOIN bloco ON bloco.id_bloco = sala.id_bloco "
-                + "WHERE sala.nome LIKE '%"+pesquisa+"%'";
+                + "WHERE "+tipo+".nome LIKE '%"+pesquisa+"%'";
         }
        
         try{

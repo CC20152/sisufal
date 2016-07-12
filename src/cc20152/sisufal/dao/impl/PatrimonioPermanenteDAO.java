@@ -179,20 +179,25 @@ public class PatrimonioPermanenteDAO implements IBaseDAO {
                 + "INNER JOIN sala ON sala.id_sala = c.id_sala "
                 + "INNER JOIN bloco ON bloco.id_bloco = sala.id_bloco "
                 + "WHERE patrimoniopermanente."+tipo+"_patrimonio LIKE '%"+pesquisa+"%'";
-        }else if(tipo.equals("bloco")){
+        }/*else if(tipo.equals("bloco")){
              sql = "SELECT * FROM patrimoniopermanente "
                 + "INNER JOIN movimentacaopermanente c ON c.id_patrimonio = patrimoniopermanente.id_patrimonio "
                 + "INNER JOIN sala ON sala.id_sala = c.id_sala "
                 + "INNER JOIN bloco ON bloco.id_bloco = sala.id_bloco "
                 + "WHERE bloco.nome LIKE '%"+pesquisa+"%'";
-        }else{
+        }*/else{
              sql = "SELECT * FROM patrimoniopermanente "
-                + "INNER JOIN movimentacaopermanente c ON c.id_patrimonio = patrimoniopermanente.id_patrimonio "
+                + "INNER JOIN movimentacaopermanente c ON c.id_movimentacao = patrimoniopermanente.id_movimentacao "
                 + "INNER JOIN sala ON sala.id_sala = c.id_sala "
                 + "INNER JOIN bloco ON bloco.id_bloco = sala.id_bloco "
-                + "WHERE sala.nome LIKE '%"+pesquisa+"%'";
+                + "WHERE "+tipo+".nome LIKE '%"+pesquisa+"%'";
         }
-       
+        
+                
+                
+        
+                
+                                               
         try{
             PreparedStatement st = this.conn.prepareStatement(sql);
             ResultSet rs;
